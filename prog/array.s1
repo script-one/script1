@@ -1,8 +1,7 @@
-fn mean(a:int*) {
-    s:=0
-    for i in a s = s+a[i]
+fn:num mean(a) {
+    s:=0.0
+    for x of a s = s+x
     return s/a.length
 }
 
-print('mean([1 2 3 4 5])=', mean([1,2,3,4,5]))
- 
+print('mean([1 2 3 4 5])=${mean([1.0,2,3,4,5])}')

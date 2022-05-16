@@ -70,6 +70,7 @@ struct list_t {
 char *ifile, *ofile;
 FILE *ofp;
 int src, dbg, o_run, o_dump;
+char *source;
 
 // API
 char* key_name(int key, char *name);

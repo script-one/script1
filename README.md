@@ -19,7 +19,7 @@ $ deno run out/hello.js
 hello script1
 ```
 
-## test
+## s1 to js test
 
 ```js
 $ ./js_test.sh

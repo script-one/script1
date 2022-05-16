@@ -21,7 +21,8 @@ static void gen_class(node_t *nid, node_t *nmap) {
             } else {
                 gen_code(nkey);
             }
-            node_t *params = nval->array[1], *block=nval->array[2];
+            node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
+            if (ntype) gen_code(ntype);
             gen_code(params);
             gen_code(block);
         }
@@ -43,7 +44,8 @@ static void gen_import(node_t *str1, node_t *id2) {
     emit("import * as ");
     gen_code(id2);
     emit(" from ");
-    gen_code(str1);
+    // gen_code(str1);
+    emit("'%.*s'", str1->ptk->len-2, str1->ptk->str+1);
 }
 
 // pid = (@|$)? id
@@ -161,5 +163,6 @@ void gen_js(node_t *root) {
     emit("import '../sys/s1.js'\n");
     line(0);
     gen_code(root);
+    emit("if (typeof main == 'function') main()");
     emit("\n");
 }

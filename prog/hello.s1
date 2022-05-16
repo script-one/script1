@@ -1,2 +1,2 @@
 name:='script1'
-print('hello', name)
+print('hello '+name)

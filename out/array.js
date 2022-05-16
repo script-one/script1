@@ -2,10 +2,10 @@
 import '../sys/s1.js'
 
 function mean(a) {                                 // (1) 
-  let s=0                                          // (2) 
-  for (let i in a) s=(s+a[i])                      // (3) 
-                                                   // (3) 
-  return (s/a.length)                              // (4) 
+  let s=0.0;                                       // (2) 
+  for (let x of a) s=(s+x);                        // (3) 
+;                                                  // (3) 
+  return (s/a.length);                             // (4) 
 }                                                  // (1) 
-print('mean([1 2 3 4 5])=',mean([1,2,3,4,5]))      // (7) 
-
+print(`mean([1 2 3 4 5])=${mean([1.0,2,3,4,5])}`); // (7) 
+if (typeof main == 'function') main()

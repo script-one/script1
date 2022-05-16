@@ -2,14 +2,14 @@
 import '../sys/s1.js'
 
 let sum=function (n) {                             // (1) 
-  let i=1                                          // (2) 
-  let s=0                                          // (3) 
+  let i=1;                                         // (2) 
+  let s=0;                                         // (3) 
   while (i<=n)    {                                // (4) 
-    s=(s+i)                                        // (5) 
-    i=(i+1)                                        // (6) 
+    s=(s+i);                                       // (5) 
+    i=(i+1);                                       // (6) 
   }                                                // (4) 
-                                                   // (4) 
-  return s                                         // (8) 
+;                                                  // (4) 
+  return s;                                        // (8) 
 }                                                  // (1) 
-print('sum(10)=',sum(10))                          // (11) 
-
+print(`sum(10)=`,sum(10));                         // (11) 
+if (typeof main == 'function') main()

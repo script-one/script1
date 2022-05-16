@@ -81,7 +81,7 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    if (type) emit("let ");
+    if (type) emit("var ");
     gen_code(pid);
     if (exp) {
         emit("=");
@@ -107,7 +107,7 @@ static void gen_return(int op, node_t *exp) {
 
 // for id op expr stmt
 static void gen_for3(char *op, node_t *id, node_t *exp, node_t *stmt) {
-    emit("for (let ");
+    emit("for (var ");
     gen_code(id);
     emit("%s", op);
     gen_code(exp);
@@ -122,12 +122,12 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 
 // for id of expr stmt
 static void gen_for_of(node_t *id, node_t *exp, node_t *stmt) {
-    gen_for3(" of ", id, exp, stmt);
+    gen_for3(" in ", id, exp, stmt); // dart 的 for in 就是 js 的 for of
 }
 
 // for id=expr to expr (step expr) stmt
 static void gen_for_to(node_t *id, node_t *from, node_t *to, node_t *step, node_t *stmt) {
-    emit("for (let ");
+    emit("for (var ");
     gen_code(id);
     emit("=");
     gen_code(from);
@@ -157,8 +157,10 @@ static void gen_function(node_t *id, node_t *ret, node_t *params, node_t *block)
 
 void gen_dart(node_t *root) {
     emit("// source file: %s\n", ifile);
-    // emit("import '../sys/s1.js'\n");
+    bool has_main = strstr(source, " main(")!=NULL;
+    if (!has_main) emit("void main() {");
     line(0);
     gen_code(root);
+    if (!has_main) emit("}");
     emit("\n");
 }
