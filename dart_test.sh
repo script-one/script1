@@ -1,6 +1,6 @@
 set -x
-./js_run.sh hello
-./js_run.sh array
-./js_run.sh fn_t
-./js_run.sh if_t
+./dart_run.sh hello
+./dart_run.sh array
+./dart_run.sh fn_t
+./dart_run.sh if_t
 
