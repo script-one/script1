@@ -1,2 +1,2 @@
-name:='cj'
+name:='script1'
 print('hello', name)

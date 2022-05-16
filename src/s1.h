@@ -5,8 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define debug(...) printf(__VA_ARGS__)
-// #define debug(...) 
+#define debug(...) { if (dbg) printf(__VA_ARGS__); }
 #define NMAX 100000
 #define error(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
 #define size(x) (sizeof(x)/sizeof(typeof (x)))
@@ -70,6 +69,7 @@ struct list_t {
 
 char *ifile, *ofile;
 FILE *ofp;
+int src, dbg, o_run, o_dump;
 
 // API
 char* key_name(int key, char *name);

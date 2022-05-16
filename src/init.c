@@ -1,5 +1,5 @@
 char *ifile=NULL, *ofile=NULL;
-int src, debug, o_run, o_dump;
+int src, dbg, o_run, o_dump;
 char *source;
 
 char *key_names[] = {
