@@ -16,10 +16,6 @@ static void gen_array(link_t *head) {
     emit("]");
 }
 
-static void gen_str(node_t *node) {
-    gen_token(node);
-}
-
 static void gen_key(node_t *node) {
     node_t *nkey = node->array[0];
     emit("%.*s", nkey->ptk->len, nkey->ptk->str);

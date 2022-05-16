@@ -1,0 +1,10 @@
+fn:int inc(x) {?x+1}
+
+fn:double add(x,y) {?x+y}
+
+fn main() {
+    print('inc(2)=${inc(2)}')
+    print('add(2,3)=${add(2,3)}')
+}
+
+main()

@@ -30,8 +30,9 @@ int main(int argc, char **argv) {
   node_t *ast = parse(source);
   if (ofile) ofp = fopen(ofile, "w"); else ofp = stdout;
   if (!ofile) {}
-  else if (tail_eq(ofile, ".cj")) gen_cj(ast);
+  else if (tail_eq(ofile, ".s1")) gen_s1(ast);
   else if (tail_eq(ofile, ".js")) gen_js(ast);
+  else if (tail_eq(ofile, ".dart")) gen_dart(ast);
   else error("%s: file type not supported!\n", ofile);
   pool_free();
 }

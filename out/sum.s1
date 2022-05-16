@@ -1,0 +1,10 @@
+// source file: prog/sum.s1
+
+sum:=fn (n) {                                      // (1) 
+  s:=0                                             // (2) 
+  for i:=1 to n s=(s+i)                            // (3) 
+                                                   // (3) 
+  return s                                         // (4) 
+}                                                  // (1) 
+print('sum(10)=',sum(10))                          // (7) 
+

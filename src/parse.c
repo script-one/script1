@@ -193,15 +193,17 @@ node_t *params() {
     return r;
 }
 
-// function = fn id?(params) block
+// function = fn(:id)? id(params) block
 node_t *function() {
+    node_t *nret = NULL;
     skip(Fn);
+    if (tk == ':') { next(); nret = id(); }
     node_t *nid = (tk==Id) ? id() : NULL;
     skip('(');
     node_t *p1 = params();
     skip(')');
     node_t *b1 = block();
-    return op3(Function, nid, p1, b1);
+    return op4(Function, nid, nret, p1, b1);
 }
 // stmt = block                     |
 //        while expr stmt           | 
@@ -218,7 +220,7 @@ node_t *stmt() {
         r->node = block();
     } else if (tk == Import) { // import name as id
         next();
-        node_t *str1, *id2;
+        node_t *str1, *id2=NULL;
         str1 = str();
         if (tk == As) {
             next();

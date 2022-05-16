@@ -1,0 +1,4 @@
+// source file: prog/hello.s1
+name:='script1'      // (1) 
+print('hello',name)                                // (2) 
+

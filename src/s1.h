@@ -21,7 +21,7 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   Pair, Block, Args, Params, Param, 
   ForIn, ForOf, ForTo, Stmts, Stmt, 
   Expr, Item, Term, Assign, Type, 
-  Token, Pid, Key,
+  Token, Pid, Key, 
   KeyBegin=199, 
   Import, As, If, While, For, 
   Else, In, Of, To, Step, 
@@ -78,6 +78,7 @@ bool head_eq(char *str1, int len1, char *str2);
 bool tail_eq( char *str, char *end);
 void lex(char *source);
 node_t *parse(char *source);
-void gen_cj(node_t *root);
+void gen_s1(node_t *root);
 void gen_js(node_t *root);
-void gen_c(node_t *root);
+void gen_dart(node_t *root);
+// void gen_c(node_t *root);

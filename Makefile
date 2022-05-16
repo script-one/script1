@@ -4,7 +4,7 @@ OBJS = s1
 
 all: $(OBJS)
 
-s1: src/s1.c src/gen_js.c src/gen_s1.c
+s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 run: $(OBJS)

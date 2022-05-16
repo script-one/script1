@@ -62,12 +62,7 @@ static void gen_stmt(node_t *stmt) {
         emit(" ");
     }
     gen_code(stmt->node);
-    /*
-    int type = stmt->node->type;
-    printf("type=%d\n", type);
-    if (!(type == Block || type == Function))
-        line(stmt->ptk->line);
-    */
+    if (*(ep-1) != '}') emit(";")
     line(stmt->ptk->line);
 }
 

@@ -1,5 +1,9 @@
 #include <gen_j.c>
 
+static void gen_str(node_t *node) {
+    emit("`%.*s`", node->ptk->len-2, node->ptk->str+1);
+}
+
 // class = 'class' id map
 static void gen_class(node_t *nid, node_t *nmap) {
     emit("class ");
@@ -144,8 +148,9 @@ static void gen_for_to(node_t *id, node_t *from, node_t *to, node_t *step, node_
 }
 
 // function = fn id?(params) block
-static void gen_function(node_t *id, node_t *params, node_t *block) {
+static void gen_function(node_t *id, node_t *ret, node_t *params, node_t *block) {
     emit("function ");
+    // if (ret) { emit(":"); gen_code(ret); }
     if (id) gen_code(id);
     gen_code(params);
     gen_code(block);
