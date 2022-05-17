@@ -9,8 +9,7 @@ stmt = block                     |
        fn id(params) block       |
        while expr stmt           | 
        if expr stmt (else stmt)? |
-       for id (in|of) expr stmt  |
-       for id=expr to expr step expr stmt |
+       for id in expr stmt  |
        (return|?) expr               |
        continue                  |
        break                     |
@@ -29,7 +28,7 @@ term = pid ( [expr] | . id | args )*
 
 pid = (@|$)? id
 
-function = fn (params) block
+function = fn(:id)? id(params) block
 
 array = [ expr* ]
 
