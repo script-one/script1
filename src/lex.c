@@ -72,7 +72,7 @@ void scan() { // 詞彙解析 lexer
   int kc = key_code(token.str, token.len);
   if (kc >= 0) tk = kc;
   token.tk = tk;
-  // debug("%.*s ", token.len, token.str);
+  debug("%.*s ", token.len, token.str);
   ptoken = &tokens[tk_top++];
   *ptoken = token;
 }

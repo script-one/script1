@@ -1,6 +1,6 @@
 sum:=fn(n) {
     s:=0
-    for i:=1 to n s=s+i
+    for i in range(1, n+1) s=s+i
     return s
 }
 

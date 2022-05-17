@@ -46,8 +46,6 @@ static void gen_import(node_t *id1, node_t *id2);
 static void gen_while(node_t *exp, node_t *stmt);
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2);
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt);
-static void gen_for_of(node_t *id, node_t *exp, node_t *stmt);
-static void gen_for_to(node_t *id, node_t *from, node_t *to, node_t *step, node_t *stmt);
 static void gen_function(node_t *id, node_t *ret, node_t *params, node_t *block);
 static void gen_block(node_t *block);
 static void gen_stmts(node_t *node);
@@ -110,14 +108,6 @@ static void gen_code(node_t *me) {
         push(ForIn);
         gen_for_in(args[0], args[1], args[2]);
         pop(ForIn);
-    } else if (type == ForOf) {
-        push(ForOf);
-        gen_for_of(args[0], args[1], args[2]);
-        pop(ForOf);
-    } else if (type == ForTo) {
-        push(ForTo);
-        gen_for_to(args[0], args[1], args[2], args[3], args[4]);
-        pop(ForTo);
     } else if (type == Function) {
         push(Function); fn_level++;
         gen_function(args[0], args[1], args[2], args[3]);
@@ -135,7 +125,7 @@ static void gen_code(node_t *me) {
     } else if (type == Class) {
         gen_class(args[0], args[1]);
     } else if (type == Map) {
-        gen_map(me); // gen_map(me->list->head);
+        gen_map(me);
     } else if (type == Args) { // args  = ( expr* )
         gen_args(me->list->head);
     } else if (type == Term) { // term =  (async|new) pid ([expr] | . id | args )*
@@ -157,11 +147,11 @@ static void gen_code(node_t *me) {
         gen_token(me);
     } else if (type == Key) {
         gen_key(me);
-    } else if (me->len == 0) { // op0 或 type 中的 * ...
+    } else if (me->len == 0) {
         gen_op0(type);
-    } else if (me->len == 1) { // (is_op1(type)) 不能用，因為 type 中可能出現該運算
+    } else if (me->len == 1) {
         gen_op1(type, args[0]);
-    } else if (me->len == 2) { // (is_op2(type)) 不能用，因為 type 中可能出現該運算
+    } else if (me->len == 2) {
         gen_op2(args[0], type, args[1]);
     } else if (type==Id) {
         gen_id(me);

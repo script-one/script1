@@ -1,12 +1,10 @@
-a := [5,4,3,2,1]
+a := [5, 4, 3, 2, 1]
 
-for i in a print(a[i])
+for o in a print(o)
 
-for o of a print(o)
+for i in range(1, 10, 2) print(i)
 
-for i:=1 to 10 step 2 print(i)
-
-for i:=1 to 10 {
+for i in range(1, 10) {
     if (i == 2) continue
     print(i)
     if (i == 5) break

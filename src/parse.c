@@ -261,27 +261,10 @@ node_t *stmt() {
     } else if (tk == For) { // for id in expr stmt
         next();
         node_t *nid = id();
-        // if (tk == ':') next();
-        if (tk == In || tk == Of) {
-            token_t opt = next();
-            int op = (opt.tk == In)?ForIn:ForOf;
-            e = expr();
-            s = stmt();
-            r->node = op3(op, nid, e, s);
-        } else if (tk == ':') {
-            skip(':');
-            skip('=');
-            node_t *step=NULL, *from, *to;
-            from = expr();
-            skip(To);
-            to = expr();
-            if (tk == Step) {
-                next();
-                step = expr();
-            }
-            s = stmt();
-            r->node = op5(ForTo, nid, from, to, step, s);
-        }
+        skip(In);
+        e = expr();
+        s = stmt();
+        r->node = op3(ForIn, nid, e, s);
     } else if (tk == Return || tk == '?') { // ?exp = return exp
         token_t t = next();
         e = expr();
@@ -289,11 +272,9 @@ node_t *stmt() {
         r->node = op1(op, e);
     } else if (tk == Continue || tk == Break) {
         token_t t = next();
-        next();
         r->node = op0(t.tk);
     } else { // term(:type?)?(= expr)?
         r->node = assign();
-        // if (!r->node) r->node = expr();
     }
     return r;
 }

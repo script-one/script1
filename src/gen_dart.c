@@ -105,44 +105,12 @@ static void gen_return(int op, node_t *exp) {
     gen_code(exp);
 }
 
-// for id op expr stmt
-static void gen_for3(char *op, node_t *id, node_t *exp, node_t *stmt) {
-    emit("for (var ");
-    gen_code(id);
-    emit("%s", op);
-    gen_code(exp);
-    emit(")");
-    gen_code(stmt);
-}
-
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
-    gen_for3(" in ", id, exp, stmt);
-}
-
-// for id of expr stmt
-static void gen_for_of(node_t *id, node_t *exp, node_t *stmt) {
-    gen_for3(" in ", id, exp, stmt); // dart 的 for in 就是 js 的 for of
-}
-
-// for id=expr to expr (step expr) stmt
-static void gen_for_to(node_t *id, node_t *from, node_t *to, node_t *step, node_t *stmt) {
     emit("for (var ");
     gen_code(id);
-    emit("=");
-    gen_code(from);
-    emit(";");
-    gen_code(id);
-    emit("<=");
-    gen_code(to);
-    emit(";")
-    gen_code(id);
-    if (step) {
-        emit("+=");
-        gen_code(step);
-    } else {
-        emit("++");
-    }
+    emit(" in ");
+    gen_code(exp);
     emit(")");
     gen_code(stmt);
 }
