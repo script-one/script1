@@ -6,4 +6,4 @@ ccc := {
     }
 }
 
-print(ccc.str())
+log(ccc.str())

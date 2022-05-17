@@ -2,5 +2,5 @@
 import '../sys/s1.js'
 
 let name=`script1`;                                // (1) 
-print((`hello `+name));                            // (2) 
+log((`hello `+name));                              // (2) 
 if (typeof main == 'function') main()

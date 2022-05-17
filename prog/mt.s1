@@ -9,5 +9,5 @@ translate:=fn(ewords:=[]) {
 }
 
 c := translate(['a','dog','chase','a','cat'])
-print(c)
+log(c)
  

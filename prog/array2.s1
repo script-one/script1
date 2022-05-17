@@ -4,4 +4,4 @@ fn mean(a:int*, len:int) {
     return s/len
 }
 
-print('mean([1 2 3 4 5])=', mean([1 2 3 4 5], 5))
+log('mean([1 2 3 4 5])=', mean([1 2 3 4 5], 5))

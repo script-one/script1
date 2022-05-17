@@ -8,8 +8,8 @@ class Person {
     }
 }
 
-print(Person)
+log(Person)
 
 p:=new Person('ccc', 52)
-print(str(p))
-print(p)
+log(str(p))
+log(p)

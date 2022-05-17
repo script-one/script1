@@ -1,6 +1,6 @@
 window.global = window
 
-export function print(...args) {
+export function log(...args) {
     console.log(...args)
 }
 
@@ -28,7 +28,7 @@ export function range(from, to, step=1) {
     return list;
 }
 
-global.print = print
+global.log = log
 global.str = str
 global.keys = keys
 global.values = values

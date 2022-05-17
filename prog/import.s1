@@ -6,4 +6,4 @@ fn hash(text) {
   return str(h1)
 }
 
-print('hash(hello)=', hash('hello'))
+log('hash(hello)=', hash('hello'))

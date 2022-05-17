@@ -8,4 +8,4 @@ sum:=fn(n) {
     return s
 }
 
-print('sum(10)=', sum(10))
+log('sum(10)=', sum(10))

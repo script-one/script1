@@ -1,12 +1,12 @@
 a := [5, 4, 3, 2, 1]
 
-for o in a print(o)
+for o in a log(o)
 
-for i in range(1, 10, 2) print(i)
+for i in range(1, 10, 2) log(i)
 
 for i in range(1, 10) {
     if (i == 2) continue
-    print(i)
+    log(i)
     if (i == 5) break
 }
 

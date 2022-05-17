@@ -12,7 +12,7 @@ record := {
 }
 
 json := JSON.stringify(record, null, 2)
-print('json=', json)
+log('json=', json)
 
 digest := hash(json)
-print('digest=', digest)
+log('digest=', digest)

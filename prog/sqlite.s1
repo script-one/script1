@@ -10,9 +10,9 @@ names := ['Peter Parker', 'Clark Kent', 'Bruce Wayne']
 for name in names
   db.query('INSERT INTO people (name) VALUES (?)', [name])
 
-// Print out data in table
+// log out data in table
 for r in db.query('SELECT id, name FROM people')
-  print(r[0], r[1])
+  log(r[0], r[1])
 
 // Close connection
 db.close()

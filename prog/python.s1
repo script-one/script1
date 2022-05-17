@@ -6,8 +6,8 @@ np := python['import']('numpy')
 xpoints := np.array([1, 8])
 ypoints := np.array([3, 10])
 
-print('xpoints=', xpoints)
-print('ypoints=', ypoints)
+log('xpoints=', xpoints)
+log('ypoints=', ypoints)
 
 plt := python['import']('matplotlib.pyplot')
 plt.plot(xpoints, ypoints)
