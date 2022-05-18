@@ -10,4 +10,7 @@ void main() {
     log(values(map));
     log(range(1,10));
     log(range(1,10,2));
+    global['name'] = 'dart';
+    log(global);
+    // global.name = "dart in script1";
 }

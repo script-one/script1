@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
   }
   pool_init();
   p = lp = source = file_read(ifile);
-  // printf("%s", source);
+  printf("%s", source);
   if (o_lex) { lex(source); return 1; }
   node_t *ast = parse(source);
   if (ofile) ofp = fopen(ofile, "w"); else ofp = stdout;

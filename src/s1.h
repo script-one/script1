@@ -77,6 +77,7 @@ char* key_name(int key, char *name);
 int read_source(char *file);
 bool head_eq(char *str1, int len1, char *str2);
 bool tail_eq( char *str, char *end);
+char back_skip(char *end, char *set);
 void lex(char *source);
 node_t *parse(char *source);
 void gen_s1(node_t *root);

@@ -28,8 +28,15 @@ export function range(from, to, step=1) {
     return list;
 }
 
+export function re(exp, attr) {
+    let r = new RegExp(exp, attr)
+    r.lastIndex = 0
+    return r
+}
+
 global.log = log
 global.str = str
 global.keys = keys
 global.values = values
 global.range = range
+global.re = re

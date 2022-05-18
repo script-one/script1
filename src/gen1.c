@@ -54,6 +54,13 @@ static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     }
 }
 
+// should emit semicolon
+static bool semicolon() {
+    char *p = ep-1;
+    while (p > ebuf && strchr("\t ", *p)) p--;
+    return !(p==ebuf || strchr("};", *p));
+}
+
 // stmt
 static void gen_stmt(node_t *stmt) {
     if (top == 0 || peek() == Block) {
@@ -62,7 +69,7 @@ static void gen_stmt(node_t *stmt) {
         emit(" ");
     }
     gen_code(stmt->node);
-    if (*(ep-1) != '}') emit(";")
+    if (semicolon()) emit(";");
     line(stmt->ptk->line);
 }
 

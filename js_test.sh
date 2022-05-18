@@ -17,3 +17,4 @@ set -x
 ./js_run.sh sqlite
 ./js_run.sh map
 ./js_run.sh class
+./js_run.sh regexp
