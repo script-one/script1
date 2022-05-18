@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
   else if (tail_eq(ofile, ".s1")) gen_s1(ast);
   else if (tail_eq(ofile, ".js")) gen_js(ast);
   else if (tail_eq(ofile, ".dart")) gen_dart(ast);
+  else if (tail_eq(ofile, ".py")) gen_py(ast);
   else error("%s: file type not supported!\n", ofile);
   pool_free();
 }

@@ -83,4 +83,6 @@ node_t *parse(char *source);
 void gen_s1(node_t *root);
 void gen_js(node_t *root);
 void gen_dart(node_t *root);
+void gen_py(node_t *root);
+
 // void gen_c(node_t *root);
