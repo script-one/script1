@@ -1,4 +1,4 @@
-sum:=fn(n) {
+fn:int sum(n) {
     i:=1
     s:=0
     while (i<=n) {

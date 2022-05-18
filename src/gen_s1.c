@@ -100,7 +100,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 }
 
 // function = fn(:id)? id(params) block
-static void gen_function(node_t *id, node_t *ret, node_t *params, node_t *block) {
+static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
     emit("fn");
     if (ret) { emit(":"); gen_code(ret); }
     if (id) gen_code(id);

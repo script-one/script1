@@ -1,7 +1,0 @@
-fn mean(a:int*, len:int) {
-    s:=0
-    for i in range(0,len) s = s+a[i]
-    return s/len
-}
-
-log('mean([1 2 3 4 5])=', mean([1 2 3 4 5], 5))

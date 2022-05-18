@@ -1,7 +1,7 @@
 node_t *expr();
 node_t *block();
 node_t *params();
-node_t *function();
+node_t *function(int type);
 
 node_t *base(int type) {
     node_t *r = node(type);
@@ -143,7 +143,7 @@ node_t *item() {
     } else if (tk == '[') { // array
         return array();
     } else if (tk == Fn) {
-        return function();
+        return function(Lambda);
     } else if (tk == '{') { // map
         return map();
     } else {
@@ -194,16 +194,16 @@ node_t *params() {
 }
 
 // function = fn(:id)? id(params) block
-node_t *function() {
+node_t *function(int type) { // type=Function | Lambda
     node_t *nret = NULL;
     skip(Fn);
     if (tk == ':') { next(); nret = id(); }
-    node_t *nid = (tk==Id) ? id() : NULL;
+    node_t *nid = (type==Function)?id():NULL;
     skip('(');
     node_t *p1 = params();
     skip(')');
     node_t *b1 = block();
-    return op4(Function, nid, nret, p1, b1);
+    return op4(type, nid, nret, p1, b1);
 }
 // stmt = block                     |
 //        while expr stmt           | 
@@ -227,17 +227,8 @@ node_t *stmt() {
             id2 = id();
         }
         r->node = op2(Import, str1, id2);
-    } else if (tk == Try) {
-        next();
-        node_t *nbody = stmt();
-        skip(Catch);
-        node_t *nexp = expr();
-        node_t *ncatch = stmt();
-        r->node = op3(Try, nbody, nexp, ncatch);
-    } else if (tk == Throw) {
-        next();
-        e = expr();
-        r->node = op1(Throw, e);
+    } else if (tk == Fn) {
+        r->node = function(Function);
     } else if (tk == Class) {
         next();
         node_t *nid = id();
@@ -265,6 +256,17 @@ node_t *stmt() {
         e = expr();
         s = stmt();
         r->node = op3(ForIn, nid, e, s);
+    } else if (tk == Try) {
+        next();
+        node_t *nbody = stmt();
+        skip(Catch);
+        node_t *nexp = expr();
+        node_t *ncatch = stmt();
+        r->node = op3(Try, nbody, nexp, ncatch);
+    } else if (tk == Throw) {
+        next();
+        e = expr();
+        r->node = op1(Throw, e);
     } else if (tk == Return || tk == '?') { // ?exp = return exp
         token_t t = next();
         e = expr();
