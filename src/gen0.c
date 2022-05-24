@@ -19,7 +19,7 @@ static char ebuf[1024], *ep=ebuf;
     if (i>0) { \
       int len = 50-(int)(ep-ebuf); \
       emit("%*s", max(len, 0), ""); \
-      emit(" // (%d) \n", i); \
+      emit(" # (%d) \n", i); \
     } \
     else { emit("\n"); }; ep = ebuf; \
   }

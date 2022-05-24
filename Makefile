@@ -4,12 +4,12 @@ OBJS = s1
 
 all: $(OBJS)
 
-s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c
+s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c src/gen_py.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 run: $(OBJS)
-	./cj prog/sum.cj -o out/sum.js
-	deno run out/sum.js
+	./s1 prog/hello.s1 -o out/hello.py
+	python3 out/hello.py
 
 test: $(OBJS)
 	./cj2js.sh
