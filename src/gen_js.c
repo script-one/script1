@@ -119,18 +119,18 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 
-// function = fn id?(params) block
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
+// function = fn id?(params) body
+static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
     emit("function ");
     // if (ret) { emit(":"); gen_code(ret); }
     if (id) gen_code(id);
     gen_code(params);
     if (type == Lambda) {
         emit(" { return ");
-        gen_code(block);
+        gen_code(body);
         emit(" } ");
     } else {
-        gen_code(block);
+        gen_code(body);
     }
 }
 

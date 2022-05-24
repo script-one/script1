@@ -214,17 +214,17 @@ node_t *function(int type) { // type=Function | Lambda
     if (tk == ':') { next(); nret = id(); }
     node_t *nid = (type==Function)?id():NULL;
     skip('(');
-    node_t *p1 = params();
+    node_t *nparam = params();
     skip(')');
-    node_t *b1 = NULL;
+    node_t *nbody = NULL;
     if (type == Lambda) {
         skip('{');
-        b1 = expr(); // expr();
+        nbody = expr(); // expr();
         skip('}');
     } else {
-        b1 = block();
+        nbody = block();
     }
-    return op4(type, nid, nret, p1, b1);
+    return op4(type, nid, nret, nparam, nbody);
 }
 
 node_t *class() {
