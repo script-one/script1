@@ -1,2 +1,2 @@
-./s1 prog/$1.cj -o out/$1.cj
+./s1 prog/$1.s1 -o out/$1.s1
 

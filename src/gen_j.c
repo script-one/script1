@@ -1,5 +1,13 @@
 #include <gen1.c>
 
+static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
+    gen_code(e1);
+    emit("?");
+    gen_code(e2);
+    emit(":");
+    gen_code(e3);
+}
+
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
     emit("try ");
     gen_code(nbody);

@@ -1,4 +1,9 @@
+fn inc(x) { return x+1; }
+
 a := [1,2,3]
 b := map(a, fn (x) { x*x })
+c := map(a, inc)
 
-log('b='+b)
+log('a=', a)
+log('b=', b)
+log('c=', c)

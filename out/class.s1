@@ -1,0 +1,16 @@
+// source file: prog/class.s1
+
+class Person {
+fn __init(name,age) {                              // (2) 
+  $name=name;                                      // (3) 
+  $age=age;                                        // (4) 
+}
+fn __str() {                                     // (6) 
+  return ($name+(' '+$age));                       // (7) 
+}
+}                                                  // (1) 
+log(Person);                                       // (11) 
+p:=new Person('ccc',52);                           // (13) 
+log(str(p));                                       // (14) 
+log(p);                                            // (15) 
+

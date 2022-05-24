@@ -4,12 +4,14 @@ static void gen_str(node_t *node) {
     gen_token(node);
 }
 
-// map = [ (expr:expr)* ]
-static void gen_class(node_t *nid, node_t *nmap) {
+static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");
     gen_code(nid);
-    emit("{");
-    gen_map(nmap);
+    emit(" {");
+    line(0);
+    gen_list(nbody->list->head, "\n");
+    // gen_map(nbody);
+    line(0);
     emit("}");
 }
 
@@ -103,6 +105,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
     emit("fn");
     if (ret) { emit(":"); gen_code(ret); }
+    emit(" ");
     if (id) gen_code(id);
     gen_code(params);
     gen_code(block);

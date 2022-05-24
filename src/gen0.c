@@ -38,6 +38,7 @@ static void gen_key(node_t *node);
 static void gen_op0(int op);
 static void gen_op1(int op, node_t *node);
 static void gen_op2(node_t *node1, int op, node_t *node2);
+static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3);
 static void gen_term(node_t *key, node_t *pid, link_t *head);
 static void gen_pid(node_t *pid);
 static void gen_params(link_t *head);
@@ -135,6 +136,8 @@ static void gen_code(node_t *me) {
         gen_map(me);
     } else if (type == Args) { // args  = ( expr* )
         gen_args(me->list->head);
+    } else if (type == CExpr) { // e1 ? e2 : e3
+        gen_cexpr(args[0], args[1], args[2]);
     } else if (type == Term) { // term =  (async|new) pid ([expr] | . id | args )*
         link_t *head = me->list->head;
         node_t *nkey=NULL, *nid=NULL;

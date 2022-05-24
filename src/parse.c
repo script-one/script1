@@ -151,8 +151,8 @@ node_t *item() {
     }
 }
 
-// expr = item (op2 expr)?
-node_t *expr() {
+// bexpr = item (op2 expr)?
+node_t *bexpr() {
     node_t *r = item();
     if (is_op2(tk)) {
         token_t op = next();
@@ -160,6 +160,20 @@ node_t *expr() {
         r = op2(op.tk, r, e);
     }
     return r;
+}
+
+// expr = bexpr (? expr : expr)
+node_t *expr() {
+    node_t *e1 = bexpr();
+    if (tk == '?') {
+        next();
+        node_t *e2 = expr();
+        skip(':');
+        node_t *e3 = expr();
+        node_t *r = op3(CExpr, e1, e2, e3);
+        return r;
+    }
+    return e1;
 }
 
 // type = id**
@@ -205,7 +219,7 @@ node_t *function(int type) { // type=Function | Lambda
     node_t *b1 = NULL;
     if (type == Lambda) {
         skip('{');
-        b1 = expr();
+        b1 = expr(); // expr();
         skip('}');
     } else {
         b1 = block();
@@ -253,11 +267,6 @@ node_t *stmt() {
         r->node = function(Function);
     } else if (tk == Class) {
         r->node = class();
-/*        next();
-        node_t *nid = id();
-        node_t *nmap = map();
-        r->node = op2(Class, nid, nmap);
-*/
     } else if (tk == While) { // while expr stmt
         next();
         e = expr();
