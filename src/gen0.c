@@ -14,12 +14,19 @@ static char ebuf[1024], *ep=ebuf;
   debug(__VA_ARGS__); \
   if (ofp) fprintf(ofp, __VA_ARGS__); \
 }
+
+#ifdef __PYTHON__
+#define Spliter "#"
+#else
+#define Spliter "//"
+#endif
+
 #define line(i) \
   if (show_line) { \
     if (i>0) { \
       int len = 50-(int)(ep-ebuf); \
       emit("%*s", max(len, 0), ""); \
-      emit(" # (%d) \n", i); \
+      emit(" %s (%d) \n", Spliter, i); \
     } \
     else { emit("\n"); }; ep = ebuf; \
   }

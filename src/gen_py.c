@@ -1,3 +1,4 @@
+#define __PYTHON__
 #include <gen_j.c>
 
 static void gen_str(node_t *node) {
@@ -135,3 +136,5 @@ void gen_py(node_t *root) {
     // emit("\tmain()");
     emit("\n");
 }
+
+#undef __PYTHON__
