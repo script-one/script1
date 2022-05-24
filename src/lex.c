@@ -11,7 +11,10 @@ int tk0, tk_top0, line0;
 void scan_save() { tk0 = tk; token0 = token; p0=p; lp0=lp; ptoken0 = ptoken; tk_top0 = tk_top; line0=line; }
 void scan_restore() { tk = tk0; token = token0; p=p0; lp=lp0; ptoken = ptoken0; tk_top = tk_top0; line=line0; }
 
-#define syntax_error() { printf("Error at line=%d, pos=%d. C halt at file=%s line=%d, tk=%d(%c) %.*s\n", line, (int)(p-lp), __FILE__, __LINE__, tk, (char)tk, token.len, token.str); exit(1); }
+#define syntax_error() { \
+  printf("Error at line=%d, pos=%d. C halt at file=%s line=%d, tk=%d(%c) %.*s\n", line, (int)(p-lp), __FILE__, __LINE__, tk, (char)tk, token.len, token.str); \
+  exit(1); \
+}
 
 void scan() { // 詞彙解析 lexer
   tk = End;
@@ -100,7 +103,11 @@ token_t next() {
   return r;
 }
 
-#define skip(t) ({token_t r=token; if (tk==t) next(); else syntax_error(); r; })
+#define skip(t) ({ \
+  token_t r=token; \
+  if (tk==t) next(); else syntax_error(); \
+  r; \
+})
 // #define skip_str(str) ({token_t r=token; if (match(str)) next(); else syntax_error(); r; })
 
 void lex(char *source) {

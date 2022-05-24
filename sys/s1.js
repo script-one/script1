@@ -34,9 +34,14 @@ export function re(exp, attr) {
     return r
 }
 
+export function map(a, f) {
+    return a.map(f)
+}
+
 global.log = log
 global.str = str
 global.keys = keys
 global.values = values
 global.range = range
 global.re = re
+global.map = map

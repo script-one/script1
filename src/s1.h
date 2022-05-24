@@ -21,7 +21,7 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   Pair, Block, Args, Params, Param, 
   ForIn, ForOf, ForTo, Stmts, Stmt, 
   Expr, Item, Term, Assign, Type, 
-  Token, Pid, Key, Lambda,
+  Token, Pid, Key, Lambda, ClassBody,
   KeyBegin=199, 
   Import, As, If, While, For, 
   Else, In, Of, To, Step, 

@@ -1,7 +1,7 @@
 // source file: prog/array.s1
 import '../sys/s1.js'
 
-let mean=function (a) {                            // (1) 
+function mean(a) {                                 // (1) 
   let s=0.0;                                       // (2) 
   for (let x of a) s=(s+x);                        // (3) 
                                                    // (3) 

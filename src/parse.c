@@ -202,9 +202,31 @@ node_t *function(int type) { // type=Function | Lambda
     skip('(');
     node_t *p1 = params();
     skip(')');
-    node_t *b1 = block();
+    node_t *b1 = NULL;
+    if (type == Lambda) {
+        skip('{');
+        b1 = expr();
+        skip('}');
+    } else {
+        b1 = block();
+    }
     return op4(type, nid, nret, p1, b1);
 }
+
+node_t *class() {
+    skip(Class);
+    node_t *nid = id();
+    skip('{');
+    node_t *nbody = node(ClassBody);
+    nbody->list = list();
+    while (tk != End && tk != '}') {
+        list_add(nbody->list, function(Function));
+    }
+    list_reverse(nbody->list);
+    skip('}');
+    return op2(Class, nid, nbody);
+}
+
 // stmt = block                     |
 //        while expr stmt           | 
 //        if expr stmt (else stmt)? |
@@ -230,10 +252,12 @@ node_t *stmt() {
     } else if (tk == Fn) {
         r->node = function(Function);
     } else if (tk == Class) {
-        next();
+        r->node = class();
+/*        next();
         node_t *nid = id();
         node_t *nmap = map();
         r->node = op2(Class, nid, nmap);
+*/
     } else if (tk == While) { // while expr stmt
         next();
         e = expr();

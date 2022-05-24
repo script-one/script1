@@ -1,9 +1,9 @@
 class Person {
-    fn __init(name, age) {
+    __init:fn(name, age) {
         $name = name
         $age = age
-    }
-    fn __str() {
+    },
+    __str:fn() {
         return $name+' '+$age
     }
 }
