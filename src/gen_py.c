@@ -1,5 +1,26 @@
 #define __PYTHON__
-#include <gen_j.c>
+#include <gen1.c>
+
+// if expr stmt (else stmt)?
+static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
+    emit("if "); gen_code(exp);
+    emit(":");
+    gen_code(stmt1);
+    if (stmt2) {
+        emit(" else");
+        emit(":");
+        gen_code(stmt2);
+    }
+}
+
+
+static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
+    gen_code(e2);
+    emit(" if ");
+    gen_code(e1);
+    emit(" else ");
+    gen_code(e3);
+}
 
 static void gen_str(node_t *node) {
     emit("\'%.*s\'", node->ptk->len-2, node->ptk->str+1);
@@ -84,7 +105,6 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    // if (type) emit("let ");
     gen_code(pid);
     if (exp) {
         emit("=");
@@ -120,7 +140,6 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
     if (id){
         emit("def ");
-        // if (ret) { emit(":"); gen_code(ret); }
         gen_code(id);
         gen_code(params);
         emit(":");
