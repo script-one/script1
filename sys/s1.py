@@ -1,8 +1,8 @@
 # window.global = window
 
-def log(arg):
-    print(arg)
-
+def log(*args):
+    [print(arg, end='') for arg in args]
+    print(' ')
 
 """
 export function str(o) {

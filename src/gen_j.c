@@ -1,11 +1,21 @@
 #include <gen1.c>
 
 static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
+    #ifdef __PYTHON__
+    gen_code(e2);
+    emit(" if ");
+    gen_code(e1);
+    emit(" else ");
+    gen_code(e3);
+    #endif 
+   
+    #ifndef __PYTHON__
     gen_code(e1);
     emit("?");
     gen_code(e2);
     emit(":");
     gen_code(e3);
+    #endif 
 }
 
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {

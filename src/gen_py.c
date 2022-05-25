@@ -118,12 +118,19 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
-    emit("def ");
-    // if (ret) { emit(":"); gen_code(ret); }
-    if (id) gen_code(id);
-    gen_code(params);
-    emit(":");
-    gen_code(block);
+    if (id){
+        emit("def ");
+        // if (ret) { emit(":"); gen_code(ret); }
+        gen_code(id);
+        gen_code(params);
+        emit(":");
+        gen_code(block);
+    } else {
+        emit("lambda ");
+        gen_list(params->list->head, ",");
+        emit(":");
+        gen_code(block);
+    }
 }
 
 void gen_py(node_t *root) {

@@ -40,16 +40,26 @@ static void gen_args(link_t *head) {
 
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
-    emit("while "); gen_code(exp);
+    emit("while "); 
+    gen_code(exp);
+    #ifdef __PYTHON__
+    emit(":");
+    #endif
     gen_code(stmt);
 }
 
 // if expr stmt (else stmt)?
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     emit("if "); gen_code(exp);
+    #ifdef __PYTHON__
+    emit(":");
+    #endif
     gen_code(stmt1);
     if (stmt2) {
         emit(" else");
+        #ifdef __PYTHON__
+        emit(":");
+        #endif
         gen_code(stmt2);
     }
 }
@@ -85,7 +95,17 @@ static void gen_stmts(node_t *node) {
 // block = { stmts }
 static void gen_block(node_t *block) {
     indent(block_level-1);
-    emit(" {"); line(block->ptk->line);
+    #ifndef __PYTHON__
+    emit(" {"); 
+    #endif 
+
+    line(block->ptk->line);
     gen_stmts(block->node); // stmts
-    indent(block_level-1); emit("}"); // line(0);
+    indent(block_level-1);
+
+    #ifndef __PYTHON__ 
+    emit(" }"); // line(0);
+    #endif  
 }
+
+
