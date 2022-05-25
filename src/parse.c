@@ -156,7 +156,7 @@ node_t *bexpr() {
     node_t *r = item();
     if (is_op2(tk)) {
         token_t op = next();
-        node_t *e = expr();
+        node_t *e = bexpr();
         r = op2(op.tk, r, e);
     }
     return r;
