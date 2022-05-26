@@ -16,9 +16,13 @@ static char ebuf[1024], *ep=ebuf;
 }
 
 #ifdef __PYTHON__
-#define Spliter "#"
+#define TailComment "#"
+#define BlockBegin  " "
+#define BlockEnd    " "
 #else
-#define Spliter "//"
+#define TailComment "//"
+#define BlockBegin  "{"
+#define BlockEnd    "}"
 #endif
 
 #define line(i) \
@@ -26,7 +30,7 @@ static char ebuf[1024], *ep=ebuf;
     if (i>0) { \
       int len = 50-(int)(ep-ebuf); \
       emit("%*s", max(len, 0), ""); \
-      emit(" %s (%d) \n", Spliter, i); \
+      emit(" %s (%d) \n", TailComment, i); \
     } \
     else { emit("\n"); }; ep = ebuf; \
   }
