@@ -54,7 +54,7 @@ static void gen_class(node_t *nid, node_t *nmap) {
     indent(block_level); emit("}");
 }
 
-// map = [ (expr:expr)* ]
+// map = [ (str:expr)* ]
 static void gen_map(node_t *nmap) {
     emit("{");
     link_t *head = nmap->list->head;
@@ -128,6 +128,14 @@ static void gen_return(int op, node_t *exp) {
     gen_code(exp);
 }
 
+// while expr stmt
+static void gen_while(node_t *exp, node_t *stmt) {
+    emit("while "); 
+    gen_code(exp);
+    emit(":");
+    gen_code(stmt);
+}
+
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit("for ");
@@ -150,6 +158,15 @@ static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node
         emit(":");
         gen_code(block);
     }
+}
+
+static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
+    emit("try: ");
+    gen_code(nbody);
+    emit("except ");
+    gen_code(nexp);
+    emit(": ");
+    gen_code(ncatch);
 }
 
 void gen_py(node_t *root) {

@@ -38,12 +38,14 @@ static void gen_args(link_t *head) {
     emit(")");
 }
 
+#ifndef __PYTHON__
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
     emit("while "); 
     gen_code(exp);
     gen_code(stmt);
 }
+#endif
 
 // should emit semicolon
 static bool semicolon() {
@@ -84,6 +86,7 @@ static void gen_block(node_t *block) {
 }
 
 // ------------- moved from gen_j.c to here -------------------
+#ifndef __PYTHON__
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
     emit("try ");
     gen_code(nbody);
@@ -92,6 +95,7 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
     emit(")");
     gen_code(ncatch);
 }
+#endif
 
 // array = [ expr* ]
 static void gen_array(link_t *head) {
@@ -106,7 +110,11 @@ static void gen_key(node_t *node) {
 }
 
 static void gen_pair(node_t *n1, node_t *n2) {
+    #ifdef __PYTHON__
+    emit("\'%.*s\'", n1->ptk->len, n1->ptk->str);
+    #else
     gen_code(n1);
+    #endif
     emit(":");
     gen_code(n2);
 }
