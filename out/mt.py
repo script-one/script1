@@ -7,7 +7,7 @@ e2c={'dog':'狗','cat':'貓','a':'一隻','the':'這隻','chase':'追','bite':'�
 def translate(ewords):                             # (3) 
   cwords=[];                                       # (4) 
   for e in ewords:                                 # (5) 
-    cwords.push(e2c[e]);                           # (6) 
+    cwords=push(cwords,e2c[e]);                    # (6) 
                                                    # (5) 
                                                    # (5) 
   return cwords;                                   # (8) 
