@@ -38,6 +38,11 @@ export function map(a, f) {
     return a.map(f)
 }
 
+export function push(list, a) {
+    list.push(a)
+    return list
+}
+
 global.log = log
 global.str = str
 global.keys = keys
@@ -45,3 +50,4 @@ global.values = values
 global.range = range
 global.re = re
 global.map = map
+global.push = push
