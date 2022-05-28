@@ -4,6 +4,10 @@ def log(*args):
     [print(arg, end='') for arg in args]
     print(' ')
 
+def push(l, a):
+    l.append(a)
+    return l
+
 """
 export function str(o) {
     if (o.__str) return o.__str()
