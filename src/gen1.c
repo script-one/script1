@@ -108,12 +108,12 @@ static void gen_array(link_t *head) {
     gen_list(head, ",");
     emit("]");
 }
-/*
+
 static void gen_key(node_t *node) {
     node_t *nkey = node->array[0];
     emit("%.*s", nkey->ptk->len, nkey->ptk->str);
 }
-*/
+
 static void gen_pair(node_t *n1, node_t *n2) {
     gen_code(n1);
     emit(":");
