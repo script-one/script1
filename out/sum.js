@@ -1,7 +1,7 @@
 // source file: prog/sum.s1
 import '../sys/s1.js'
 
-function sum(n) {                                  // (1) 
+function sum(n){                                   // (1) 
   let s=0;                                         // (2) 
   for (let i of range(1,(n+1))) s=(s+i);           // (3) 
                                                    // (3) 

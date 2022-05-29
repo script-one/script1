@@ -1,7 +1,7 @@
 // source file: prog/array.s1
 import '../sys/s1.dart';
 void main() {
-num mean(a) {                                      // (1) 
+num mean(a){                                       // (1) 
   var s=0.0;                                       // (2) 
   for (var x in a) s=(s+x);                        // (3) 
                                                    // (3) 

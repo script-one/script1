@@ -1,4 +1,4 @@
-fn mean(a) {
+fn:num mean(a) {
     s:=0.0
     for x in a s = s+x
     return s/a.length

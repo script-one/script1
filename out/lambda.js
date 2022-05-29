@@ -1,7 +1,7 @@
 // source file: prog/lambda.s1
 import '../sys/s1.js'
 
-function inc(x) {                                  // (1) 
+function inc(x){                                   // (1) 
   return (x+1);                                    // (1) 
 }                                                  // (1) 
 let a=[1,2,3];                                     // (3) 

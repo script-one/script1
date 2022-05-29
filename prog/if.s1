@@ -1,5 +1,5 @@
-max:=fn (x,y) { x>y ? x : y }
-min:=fn (x,y) { x<y ? x : y }
+max:=fn:num (x,y) { x>y ? x : y }
+min:=fn:num (x,y) { x<y ? x : y }
 
 log('max(3,5)=' max(3,5))
 log('min(3,5)=' min(3,5))
