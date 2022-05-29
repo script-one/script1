@@ -115,11 +115,7 @@ static void gen_key(node_t *node) {
 }
 */
 static void gen_pair(node_t *n1, node_t *n2) {
-    #ifdef __PYTHON__
-    emit("\'%.*s\'", n1->ptk->len, n1->ptk->str);
-    #else
     gen_code(n1);
-    #endif
     emit(":");
     gen_code(n2);
 }
