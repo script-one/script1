@@ -8,3 +8,6 @@ bak
 *.zip
 *.dSYM
 *.db
+out/*.js
+out/*.dart
+out/*.py

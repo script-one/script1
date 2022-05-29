@@ -1,7 +1,7 @@
 fn:num mean(a) {
     s:=0.0
     for x in a s = s+x
-    return s/a.length
+    return s/len(a)
 }
 
-log('mean([1 2 3 4 5])=${mean([1.0,2,3,4,5])}')
+log('mean([1 2 3 4 5])=', mean([1.0,2,3,4,5]))

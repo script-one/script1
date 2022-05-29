@@ -31,7 +31,7 @@ static void gen_class(node_t *nid, node_t *nmap) {
     indent(block_level); emit("}");
 }
 
-// map = [ (expr:expr)* ]
+// map = [ (str:expr)* ]
 static void gen_map(node_t *nmap) {
     emit("{");
     link_t *head = nmap->list->head;
@@ -50,11 +50,14 @@ static void gen_import(node_t *str1, node_t *id2) {
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     if (n->type == Global) {
-        emit("global.");
+        emit("global['");
     } else if (n->type == This) {
         emit("this.");
     }
     gen_code(n->array[0]);
+    if (n->type == Global) {
+        emit("']");
+    }
 }
 
 // (await|new)? pid ( [expr] | . id | args )*

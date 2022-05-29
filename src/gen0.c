@@ -38,7 +38,7 @@ static char ebuf[1024], *ep=ebuf;
 static void gen_str(node_t *node);
 static void gen_num(node_t *node);
 static void gen_id(node_t *node);
-static void gen_key(node_t *node);
+// static void gen_key(node_t *node);
 static void gen_op0(int op);
 static void gen_op1(int op, node_t *node);
 static void gen_op2(node_t *node1, int op, node_t *node2);
@@ -159,8 +159,8 @@ static void gen_code(node_t *me) {
         gen_pair(args[0], args[1]);
     } else if (type == Token) {
         gen_token(me);
-    } else if (type == Key) {
-        gen_key(me);
+//    } else if (type == Key) {
+//        gen_key(me);
     } else if (me->len == 0) {
         gen_op0(type);
     } else if (me->len == 1) {

@@ -1,8 +1,0 @@
-fn:int inc(x) {?x+1}
-
-fn:double add(x,y) {?x+y}
-
-fn main() {
-    log('inc(2)=${inc(2)}')
-    log('add(2.0,3.0)=${add(2.0,3.0)}')
-}

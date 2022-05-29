@@ -9,15 +9,15 @@ set -x
 ./js_run.sh matrix
 ./js_run.sh mt
 ./js_run.sh global
-./js_run.sh obj
+# ./js_run.sh obj
+./js_run.sh cond
+./js_run.sh lambda
+./js_run.sh map
+./js_run.sh try
+./js_run.sh class
+# js only
 ./js_run.sh import
 ./js_run.sh sha256
-# ./js_run.sh python
-./js_run.sh try
 ./js_run.sh sqlite
-./js_run.sh map
-./js_run.sh class
 ./js_run.sh regexp
-./js_run.sh lambda
-./js_run.sh cond
-
+# ./js_run.sh python

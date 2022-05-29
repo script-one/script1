@@ -43,6 +43,10 @@ export function push(list, a) {
     return list
 }
 
+export function len(list) {
+    return list.length
+}
+
 global.log = log
 global.str = str
 global.keys = keys
@@ -51,3 +55,4 @@ global.range = range
 global.re = re
 global.map = map
 global.push = push
+global.len = len

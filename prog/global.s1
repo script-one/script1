@@ -1,4 +1,4 @@
-@log('hello 你好!')
+log('hello 你好!')
 
 x:=3
 

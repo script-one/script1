@@ -47,12 +47,15 @@ static void gen_while(node_t *exp, node_t *stmt) {
 }
 #endif
 
+#ifndef __PYTHON__
 // should emit semicolon
 static bool semicolon() {
     char *p = ep-1;
     while (p > ebuf && strchr("\t ", *p)) p--;
-    return !(p==ebuf || strchr("};", *p));
+    // return !(p==ebuf || strchr("};", *p));
+    return !(p==ebuf || strchr(";", *p));
 }
+#endif
 
 // stmt
 static void gen_stmt(node_t *stmt) {
@@ -62,7 +65,9 @@ static void gen_stmt(node_t *stmt) {
         emit(" ");
     }
     gen_code(stmt->node);
+#ifndef __PYTHON__
     if (semicolon()) emit(";");
+#endif
     line(stmt->ptk->line);
 }
 
@@ -103,12 +108,12 @@ static void gen_array(link_t *head) {
     gen_list(head, ",");
     emit("]");
 }
-
+/*
 static void gen_key(node_t *node) {
     node_t *nkey = node->array[0];
     emit("%.*s", nkey->ptk->len, nkey->ptk->str);
 }
-
+*/
 static void gen_pair(node_t *n1, node_t *n2) {
     #ifdef __PYTHON__
     emit("\'%.*s\'", n1->ptk->len, n1->ptk->str);

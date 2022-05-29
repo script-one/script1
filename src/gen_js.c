@@ -1,7 +1,8 @@
 #include <gen_j.c>
 
 static void gen_str(node_t *node) {
-    emit("`%.*s`", node->ptk->len-2, node->ptk->str+1);
+//    emit("`%.*s`", node->ptk->len-2, node->ptk->str+1);
+    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
 }
 
 // class = 'class' id classBody

@@ -1,6 +1,6 @@
-fn inc(x) {?x+1}
+fn:num inc(x) { return x+1; }
 
-fn add(x,y) {?x+y}
+add:= fn(x,y) { x+y }
 
 log('inc(2)=', inc(2))
 log('add(2,3)=', add(2,3))

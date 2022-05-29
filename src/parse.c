@@ -119,13 +119,14 @@ node_t *factor() {
     }
 }
 
-// map = { (id|str):expr)* }
+// map = { str:expr)* }
 node_t *map() {
     node_t *r = node(Map);
     r->list = list();
     skip('{');
     while (tk != '}') {
-        node_t *key = (tk == Id) ? id() : str(); // expr();
+        // node_t *key = (tk == Id) ? id() : str(); // expr();
+        node_t *key = str();
         skip(':');
         node_t *e2 = expr();
         list_add(r->list, pair(key, e2));

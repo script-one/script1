@@ -1,3 +1,0 @@
-fn:num max(x,y) { if x>y return x else return y }
-
-log('max(3 5)=${max(3,5)}')

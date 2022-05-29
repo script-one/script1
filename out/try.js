@@ -2,7 +2,7 @@
 import '../sys/s1.js'
 
 try {                                              // (1) 
-  throw Error(`Error`);                            // (2) 
+  throw Error('Error');                            // (2) 
 }                                                  // (1) 
  catch (error){                                    // (3) 
   log(error);                                      // (4) 
