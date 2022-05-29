@@ -1,4 +1,5 @@
 set -x
+set -e
 ./js_run.sh hello
 ./js_run.sh while
 ./js_run.sh sum

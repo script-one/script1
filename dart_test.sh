@@ -1,3 +1,4 @@
+set -e
 set -x
 ./dart_run.sh hello
 ./dart_run.sh while

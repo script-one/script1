@@ -1,4 +1,5 @@
 set -x
+set -e
 ./py_run.sh hello
 ./py_run.sh while
 ./py_run.sh sum

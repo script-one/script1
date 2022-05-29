@@ -7,8 +7,8 @@ fn:str hash(text) {
 }
 
 record := {
-  nonce: 0,
-  data: 'john => mary $2.7',
+  'nonce': 0,
+  'data': 'john => mary $2.7',
 }
 
 json := JSON.stringify(record, null, 2)
