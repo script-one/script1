@@ -19,3 +19,5 @@ set -x
 ./js_run.sh class
 ./js_run.sh regexp
 ./js_run.sh lambda
+./js_run.sh cond
+
