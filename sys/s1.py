@@ -8,6 +8,11 @@ def push(l, a):
     l.append(a)
     return l
 
+def map(l, f):
+    # cannot use python keyword map() here
+    # l = map(f, l)
+    return [f(x) for x in l] 
+
 """
 export function str(o) {
     if (o.__str) return o.__str()
