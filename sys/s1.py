@@ -1,8 +1,12 @@
 # window.global = window
 
-def log(arg):
-    print(arg)
+def log(*args):
+    [print(arg, end='') for arg in args]
+    print(' ')
 
+def push(l, a):
+    l.append(a)
+    return l
 
 """
 export function str(o) {

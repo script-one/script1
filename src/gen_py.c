@@ -1,5 +1,26 @@
 #define __PYTHON__
-#include <gen_j.c>
+#include <gen1.c>
+
+// if expr stmt (else stmt)?
+static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
+    emit("if "); gen_code(exp);
+    emit(":");
+    gen_code(stmt1);
+    if (stmt2) {
+        emit(" else");
+        emit(":");
+        gen_code(stmt2);
+    }
+}
+
+
+static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
+    gen_code(e2);
+    emit(" if ");
+    gen_code(e1);
+    emit(" else ");
+    gen_code(e3);
+}
 
 static void gen_str(node_t *node) {
     emit("\'%.*s\'", node->ptk->len-2, node->ptk->str+1);
@@ -33,7 +54,7 @@ static void gen_class(node_t *nid, node_t *nmap) {
     indent(block_level); emit("}");
 }
 
-// map = [ (expr:expr)* ]
+// map = [ (str:expr)* ]
 static void gen_map(node_t *nmap) {
     emit("{");
     link_t *head = nmap->list->head;
@@ -84,7 +105,6 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    // if (type) emit("let ");
     gen_code(pid);
     if (exp) {
         emit("=");
@@ -108,6 +128,14 @@ static void gen_return(int op, node_t *exp) {
     gen_code(exp);
 }
 
+// while expr stmt
+static void gen_while(node_t *exp, node_t *stmt) {
+    emit("while "); 
+    gen_code(exp);
+    emit(":");
+    gen_code(stmt);
+}
+
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit("for ");
@@ -118,12 +146,27 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
-    emit("def ");
-    // if (ret) { emit(":"); gen_code(ret); }
-    if (id) gen_code(id);
-    gen_code(params);
-    emit(":");
-    gen_code(block);
+    if (id){
+        emit("def ");
+        gen_code(id);
+        gen_code(params);
+        emit(":");
+        gen_code(block);
+    } else {
+        emit("lambda ");
+        gen_list(params->list->head, ",");
+        emit(":");
+        gen_code(block);
+    }
+}
+
+static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
+    emit("try: ");
+    gen_code(nbody);
+    emit("except ");
+    gen_code(nexp);
+    emit(": ");
+    gen_code(ncatch);
 }
 
 void gen_py(node_t *root) {
