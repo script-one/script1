@@ -1,4 +1,4 @@
-# Cajson -- EBNF
+# Script1 -- EBNF
 
 ```EBNF
 prog = stmts
