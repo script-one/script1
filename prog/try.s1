@@ -1,5 +1,5 @@
 try {
-    throw Error('Error')
+    throw error('Error')
 } catch (error) {
     log(error)
 }

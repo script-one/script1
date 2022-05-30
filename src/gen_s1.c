@@ -1,8 +1,9 @@
 #include <gen_j.c>
-
+/*
 static void gen_str(node_t *node) {
     gen_token(node);
 }
+*/
 
 static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");
@@ -15,13 +16,14 @@ static void gen_class(node_t *nid, node_t *nbody) {
     emit("}");
 }
 
-// map = [ (expr:expr)* ]
+/*
 static void gen_map(node_t *nmap) {
     link_t *head = nmap->list->head;
     emit("{");
     gen_list(head, ",");
     emit("}");
 }
+*/
 
 static void gen_import(node_t *str1, node_t *id2) {
     emit("import ");
@@ -41,7 +43,7 @@ static void gen_pid(node_t *pid) {
     gen_code(n->array[0]);
 }
 
-// term = (await|new)? pid ( [expr] | . id | args )*
+/*
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
     if (key) {
         gen_code(key);
@@ -62,6 +64,7 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
         }
     }
 }
+*/
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {

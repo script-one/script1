@@ -1,5 +1,37 @@
 #include <gen1.c>
 
+static void gen_str(node_t *node) {
+    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
+}
+
+static void gen_term(node_t *key, node_t *pid, link_t *head) {
+    if (key) {
+        gen_code(key);
+        emit(" ");
+    }
+    gen_code(pid);
+    for (link_t *p=head; p != NULL; p = p->next) {
+        node_t *n = p->node; int op = n->type;
+        if (op == '[') {
+            emit("[");
+            gen_code(n->array[0]);
+            emit("]");
+        } else if (op == '.') {
+            emit(".");
+            gen_code(n->array[0]);
+        } else if (op == Args) {
+            gen_code(n);
+        }
+    }
+}
+
+static void gen_map(node_t *nmap) {
+    emit("{");
+    link_t *head = nmap->list->head;
+    gen_list(head, ",");
+    emit("}");
+}
+
 static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
     gen_code(e1);
     emit("?");

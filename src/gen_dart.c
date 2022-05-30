@@ -1,44 +1,46 @@
 #include <gen_j.c>
-
+/*
 static void gen_str(node_t *node) {
     emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
 }
-
-// class = 'class' id map
-static void gen_class(node_t *nid, node_t *nmap) {
+*/
+// class = 'class' id classBody
+static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");
     gen_code(nid);
     emit(" {"); /*line(0);*/ block_level++;
-    for (link_t *p = nmap->list->head; p != NULL; p = p->next) {
-        ok(p->node->type == Pair);
-        node_t *nkey = p->node->array[0];
-        node_t *nval = p->node->array[1];
-        if (nval->type == Function) {
-            char *name = nkey->ptk->str; int len=nkey->ptk->len;
-            line(nkey->ptk->line); indent(block_level); 
-            if (head_eq(name, len, "__init")) {
-                emit("constructor");
-            } else {
-                gen_code(nkey);
-            }
-            node_t *params = nval->array[1], *block=nval->array[2];
-            gen_code(params);
-            gen_code(block);
+    for (link_t *p = nbody->list->head; p != NULL; p = p->next) {
+        ok(p->node->type == Function); // Function = op4(type, nid, nret, p1, b1);
+        node_t *nid  = p->node->array[0];
+        node_t *nret = p->node->array[1];
+        node_t *nparams = p->node->array[2];
+        node_t *nbody= p->node->array[3];
+
+        char *name = nid->ptk->str; int len=nid->ptk->len;
+        line(nid->ptk->line); indent(block_level); 
+        if (head_eq(name, len, "__init")) {
+            emit("constructor");
+        } else {
+            gen_code(nid);
         }
+        // node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
+        // if (ntype) gen_code(ntype);
+        if (nret) gen_code(nret);
+        gen_code(nparams);
+        gen_code(nbody);
         line(0);
     }
     block_level --;
     indent(block_level); emit("}");
 }
-
-// map = [ (str:expr)* ]
+/*
 static void gen_map(node_t *nmap) {
     emit("{");
     link_t *head = nmap->list->head;
     gen_list(head, ",");
     emit("}");
 }
-
+*/
 static void gen_import(node_t *str1, node_t *id2) {
     emit("import * as ");
     gen_code(id2);
@@ -60,7 +62,7 @@ static void gen_pid(node_t *pid) {
     }
 }
 
-// (await|new)? pid ( [expr] | . id | args )*
+/*
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
     if (key) {
         gen_code(key);
@@ -81,7 +83,7 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
         }
     }
 }
-
+*/
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
     if (type) emit("var ");

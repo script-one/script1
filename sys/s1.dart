@@ -38,3 +38,7 @@ List push(List list, dynamic a) {
 int len(List list) {
     return list.length;
 }
+
+Exception error(String msg) {
+    return Exception(msg);
+}

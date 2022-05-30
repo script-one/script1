@@ -47,6 +47,10 @@ export function len(list) {
     return list.length
 }
 
+export function error(msg) {
+    return Error(msg)
+}
+
 global.log = log
 global.str = str
 global.keys = keys
@@ -56,3 +60,4 @@ global.re = re
 global.map = map
 global.push = push
 global.len = len
+global.error = error
