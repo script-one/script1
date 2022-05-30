@@ -1,9 +1,5 @@
 #include <gen_j.c>
-/*
-static void gen_str(node_t *node) {
-    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
-}
-*/
+
 // class = 'class' id classBody
 static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");
@@ -33,14 +29,7 @@ static void gen_class(node_t *nid, node_t *nbody) {
     block_level --;
     indent(block_level); emit("}");
 }
-/*
-static void gen_map(node_t *nmap) {
-    emit("{");
-    link_t *head = nmap->list->head;
-    gen_list(head, ",");
-    emit("}");
-}
-*/
+
 static void gen_import(node_t *str1, node_t *id2) {
     emit("import * as ");
     gen_code(id2);
@@ -62,28 +51,6 @@ static void gen_pid(node_t *pid) {
     }
 }
 
-/*
-static void gen_term(node_t *key, node_t *pid, link_t *head) {
-    if (key) {
-        gen_code(key);
-        emit(" ");
-    }
-    gen_code(pid);
-    for (link_t *p=head; p != NULL; p = p->next) {
-        node_t *n = p->node; int op = n->type;
-        if (op == '[') {
-            emit("[");
-            gen_code(n->array[0]);
-            emit("]");
-        } else if (op == '.') {
-            emit(".");
-            gen_code(n->array[0]);
-        } else if (op == Args) {
-            gen_code(n);
-        }
-    }
-}
-*/
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
     if (type) emit("var ");

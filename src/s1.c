@@ -8,8 +8,8 @@
 int main(int argc, char **argv) {
   char *narg;
   int o_lex = 0;
-  // 主程式
-  --argc; ++argv; // 略過執行檔名稱
+
+  --argc; ++argv; // skip exe file name
   if (argc > 0 && **argv == '-' && (*argv)[1] == 'l') { o_lex = 1; --argc; ++argv; }
   if (argc > 0 && **argv == '-' && (*argv)[1] == 's') { src = 1; --argc; ++argv; }
   if (argc > 0 && **argv == '-' && (*argv)[1] == 'd') { dbg = 1; --argc; ++argv; }

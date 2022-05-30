@@ -49,3 +49,12 @@ static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
         gen_code(stmt2);
     }
 }
+
+static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
+    emit("try ");
+    gen_code(nbody);
+    emit(" catch (");
+    gen_code(nexp);
+    emit(")");
+    gen_code(ncatch);
+}

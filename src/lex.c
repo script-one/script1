@@ -26,8 +26,6 @@ void scan() { // 詞彙解析 lexer
       if (src) {
         printf("// %d: %.*s", line, (int) (p-lp), lp); // 印出該行
         lp = p;     // lp = p  = 新一行的原始碼開頭
-        // printf("%s", le); // 印出上一行的所有目的碼
-        // le = e;
       }
       ++line;
     }
@@ -80,23 +78,6 @@ void scan() { // 詞彙解析 lexer
   *ptoken = token;
 }
 
-/*
-bool tk_match(token_t *t, char *str) {
-    int len = strlen(str);
-    return len == t->len && memcmp(str, t->str, len)==0;
-}
-
-bool match(char *str) {
-    return tk_match(token, str);
-}
-
-bool member(char *a[], int len) {
-    for (int i=0; i<len; i++) {
-      if (match(a[i])) return true;
-    }
-    return false;
-}
-*/
 token_t next() {
   token_t r=token; 
   scan();
@@ -108,7 +89,6 @@ token_t next() {
   if (tk==t) next(); else syntax_error(); \
   r; \
 })
-// #define skip_str(str) ({token_t r=token; if (match(str)) next(); else syntax_error(); r; })
 
 void lex(char *source) {
     p = source;

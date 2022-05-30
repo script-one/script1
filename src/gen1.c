@@ -91,17 +91,6 @@ static void gen_block(node_t *block) {
 }
 
 // ------------- moved from gen_j.c to here -------------------
-#ifndef __PYTHON__
-static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
-    emit("try ");
-    gen_code(nbody);
-    emit(" catch (");
-    gen_code(nexp);
-    emit(")");
-    gen_code(ncatch);
-}
-#endif
-
 // array = [ expr* ]
 static void gen_array(link_t *head) {
     emit("[");
@@ -119,5 +108,3 @@ static void gen_pair(node_t *n1, node_t *n2) {
     emit(":");
     gen_code(n2);
 }
-
-

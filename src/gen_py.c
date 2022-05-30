@@ -13,7 +13,6 @@ static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     }
 }
 
-
 static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
     gen_code(e2);
     emit(" if ");
@@ -175,8 +174,6 @@ void gen_py(node_t *root) {
     emit("from s1 import *\n");
     line(0);
     gen_code(root);
-    // emit("if __name__ == '__main__':\n");
-    // emit("\tmain()");
     emit("\n");
 }
 

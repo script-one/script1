@@ -9,14 +9,14 @@ set -e
 ./py_run.sh array
 ./py_run.sh matrix
 ./py_run.sh mt
-./py_run.sh global
-./py_run.sh obj
-./py_run.sh import
-./py_run.sh sha256
+# ./py_run.sh global
+# ./py_run.sh obj
+# ./py_run.sh import
+# ./py_run.sh sha256
 # ./py_run.sh python
-./py_run.sh try
-./py_run.sh sqlite
-./py_run.sh map
-./py_run.sh class
-./py_run.sh regexp
-./py_run.sh lambda
+# ./py_run.sh try
+# ./py_run.sh sqlite
+# ./py_run.sh map
+# ./py_run.sh class
+# ./py_run.sh regexp
+# ./py_run.sh lambda

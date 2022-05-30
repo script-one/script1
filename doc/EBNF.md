@@ -1,40 +1,51 @@
 # Cajson -- EBNF
 
 ```EBNF
+prog = stmts
+
 stmts = stmt*
 
 block = { stmts }
 
 stmt = block                     |
-       fn id(params) block       |
+       import str as id          |
+       function                  |
+       class id { function* }    |
        while expr stmt           | 
        if expr stmt (else stmt)? |
-       for id in expr stmt  |
-       (return|?) expr               |
+       for id in expr stmt       |
+       try stmt catch expr stmt  |
+       throw expr                |
+       (return|?) expr           |
        continue                  |
        break                     |
        assign
 
-assign = pid(:type)?= expr
+assign = term(:type)?= expr
 
-expr = item (op2 expr)*
+params = (assign*)
 
-item = Str | array | map | ( expr ) | factor
-
-factor = (!-~) (factor) | Num | (expr) | term
-
-term = pid ( [expr] | . id | args )*
-// term = (await|new) pid ( [expr] | . id | args )*
-
-pid = (@|$)? id
+type = [^=),]*
 
 function = fn(:id)? id(params) block
 
+lambda = fn (params) { expr }
+
+expr = bexpr (? expr : expr)
+
+bexpr = item (op2 expr)?
+
+item = str | array | lambda | map | factor
+
+factor = (!-~) factor | num | ( expr ) | term
+
+term = (await|new)? pid ( [expr] | . id | args )*
+
+pid = (@|$)? id
+
 array = [ expr* ]
 
-map = { ((id|Str|Num):expr)* }
-
-params = (assign ','?)*
+map = { (str:expr)* }
 
 args  = ( expr* ','? )
 

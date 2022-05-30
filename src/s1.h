@@ -64,7 +64,6 @@ struct link_t {
 };
 
 struct list_t {
-  // int len;
   link_t *head;
 };
 
@@ -85,5 +84,3 @@ void gen_s1(node_t *root);
 void gen_js(node_t *root);
 void gen_dart(node_t *root);
 void gen_py(node_t *root);
-
-// void gen_c(node_t *root);

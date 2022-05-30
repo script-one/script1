@@ -36,7 +36,6 @@ node_t *tk_list(int type, char *end) {
     r->list = list();
     while (tk != End && !contain(end, tk)) {
         list_add(r->list, tok());
-        // next();
     }
     list_reverse(r->list);
     return r;
@@ -101,7 +100,7 @@ node_t *term() {
     return r;
 }
 
-// factor = (!-~) (factor) | Num | (expr) | term
+// factor = (!-~) factor | Num | ( expr ) | term
 node_t *factor() {
     if (contain("!-~", tk)) {
         int op = (tk=='-')?Neg:tk;
@@ -125,7 +124,6 @@ node_t *map() {
     r->list = list();
     skip('{');
     while (tk != '}') {
-        // node_t *key = (tk == Id) ? id() : str(); // expr();
         node_t *key = str();
         skip(':');
         node_t *e2 = expr();
@@ -137,7 +135,7 @@ node_t *map() {
     return r;
 }
 
-// item = Str | array | function | map | factor
+// item = Str | array | lambda | map | factor
 node_t *item() {
     if (tk == Str) {
         return str();
@@ -177,7 +175,7 @@ node_t *expr() {
     return e1;
 }
 
-// type = id**
+// type = [^=),]*
 node_t *type() {
     return tk_list(Type, "=),");
 }
@@ -228,6 +226,7 @@ node_t *function(int type) { // type=Function | Lambda
     return op4(type, nid, nret, nparam, nbody);
 }
 
+// class id { function* }
 node_t *class() {
     skip(Class);
     node_t *nid = id();
@@ -242,20 +241,26 @@ node_t *class() {
     return op2(Class, nid, nbody);
 }
 
-// stmt = block                     |
-//        while expr stmt           | 
-//        if expr stmt (else stmt)? |
-//        for id (in|of) expr stmt  |
-//        for id=expr to expr step expr stmt |
-//        return expr               |
-//        continue                  |
-//        break                     |
-//        term(:type?)?= expr
+/*
+stmt = block                     |
+       import str as id          |
+       function                  |
+       class id { function* }    |
+       while expr stmt           | 
+       if expr stmt (else stmt)? |
+       for id in expr stmt       |
+       try stmt catch expr stmt  |
+       throw expr                |
+       (return|?) expr           |
+       continue                  |
+       break                     |
+       assign
+*/
 node_t *stmt() {
     node_t *e, *s, *r=node(Stmt);
     if (tk == '{') { // block
         r->node = block();
-    } else if (tk == Import) { // import name as id
+    } else if (tk == Import) { // import str as id
         next();
         node_t *str1, *id2=NULL;
         str1 = str();
