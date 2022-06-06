@@ -1,0 +1,20 @@
+class Person {
+    name
+    age
+    
+    fn __init(name, age) {
+        $name = name
+        $age = age
+    }
+    fn toString() {
+        return $name+' '+str($age)
+    }
+}
+
+fn main() {
+    log(Person)
+
+    p:=new Person('ccc', 52)
+    log(str(p))
+    log(p)
+}

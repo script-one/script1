@@ -16,6 +16,7 @@ set -e
 ./js_run.sh map
 ./js_run.sh try
 ./js_run.sh class
+./js_run.sh class2
 # js only
 ./js_run.sh import
 ./js_run.sh sha256

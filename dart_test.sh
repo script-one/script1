@@ -15,4 +15,4 @@ set -x
 ./dart_run.sh lambda
 ./dart_run.sh map
 ./dart_run.sh try
-# ./dart_run.sh class
+./dart_run.sh class2

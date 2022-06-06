@@ -226,6 +226,10 @@ node_t *function(int type) { // type=Function | Lambda
     return op4(type, nid, nret, nparam, nbody);
 }
 
+node_t *field() {
+    return id();
+}
+
 // class id { function* }
 node_t *class() {
     skip(Class);
@@ -233,7 +237,11 @@ node_t *class() {
     skip('{');
     node_t *nbody = node(ClassBody);
     nbody->list = list();
-    while (tk != End && tk != '}') {
+    while (tk == Id) {
+        list_add(nbody->list, field());
+    }
+    // while (tk != End && tk != '}') {
+    while (tk == Fn) {
         list_add(nbody->list, function(Function));
     }
     list_reverse(nbody->list);

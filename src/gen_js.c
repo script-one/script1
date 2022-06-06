@@ -6,7 +6,7 @@ static void gen_class(node_t *nid, node_t *nbody) {
     gen_code(nid);
     emit(" {"); /*line(0);*/ block_level++;
     for (link_t *p = nbody->list->head; p != NULL; p = p->next) {
-        ok(p->node->type == Function); // Function = op4(type, nid, nret, p1, b1);
+        if (p->node->type != Function) continue;
         node_t *nid  = p->node->array[0];
         node_t *nret = p->node->array[1];
         node_t *nparams = p->node->array[2];
