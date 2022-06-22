@@ -26,31 +26,43 @@ static void gen_str(node_t *node) {
 }
 
 // class = 'class' id map
-static void gen_class(node_t *nid, node_t *nmap) {
+static void gen_class(node_t *cid, node_t *cbody) {
     emit("class ");
-    gen_code(nid);
-    emit(" {"); /*line(0);*/ block_level++;
-    for (link_t *p = nmap->list->head; p != NULL; p = p->next) {
-        ok(p->node->type == Pair);
-        node_t *nkey = p->node->array[0];
-        node_t *nval = p->node->array[1];
-        if (nval->type == Function) {
-            char *name = nkey->ptk->str; int len=nkey->ptk->len;
-            line(nkey->ptk->line); indent(block_level); 
+    gen_code(cid);
+    emit(": "); line(0); block_level++;
+    for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
+        if (p->node->type == Id) {
+            indent(block_level);
+            line(0);
+        } else if (p->node->type == Function) {
+            node_t *nid  = p->node->array[0];
+            node_t *nret = p->node->array[1];
+            node_t *nparams = p->node->array[2];
+            node_t *nbody= p->node->array[3];
+
+            char *name = nid->ptk->str; int len=nid->ptk->len;
+            line(nid->ptk->line); indent(block_level); 
             if (head_eq(name, len, "__init")) {
-                emit("constructor");
+                // gen_id(cid);
+                emit("def __init__")
             } else {
-                gen_code(nkey);
+                emit("def ");gen_code(nid);emit("__");
             }
-            node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
-            if (ntype) gen_code(ntype);
-            gen_code(params);
-            gen_code(block);
+            if (nret) gen_code(nret);
+            node_t Self;
+            Self.type = This;
+            emit("(");
+            emit("self, ");
+            // gen_params(nparams);
+            gen_list(nparams->list->head, ",");
+            emit(")");
+            emit(":")
+            gen_code(nbody);
+            line(0);
         }
-        line(0);
     }
     block_level --;
-    indent(block_level); emit("}");
+    indent(block_level);
 }
 
 // map = [ (str:expr)* ]
@@ -75,7 +87,7 @@ static void gen_pid(node_t *pid) {
     if (n->type == Global) {
         emit("global.");
     } else if (n->type == This) {
-        emit("this.");
+        emit("self.");
     }
     gen_code(n->array[0]);
 }
@@ -83,7 +95,7 @@ static void gen_pid(node_t *pid) {
 // (await|new)? pid ( [expr] | . id | args )*
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
     if (key) {
-        gen_code(key);
+        // gen_code(key);
         emit(" ");
     }
     gen_code(pid);
