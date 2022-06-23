@@ -1,63 +1,16 @@
-window.global = window
-
-export function log(...args) {
-    console.log(...args)
-}
-
-export function str(o) {
-    if (o.__str) return o.__str()
-    return o.toString()
-}
-
-export function keys(o) {
-    if (o instanceof Map || o instanceof Set) return Array.from(o.keys())
-    return Object.keys(o)
-}
-
-export function values(o) {
-    if (o instanceof Map || o instanceof Set) return Array.from(o.keys())
-    return Object.keys(o)
-}
-
-export function range(from, to, step=1) {
-    let list=[], i=from;
-    while (i<to) {
-        list.push(i);
-        i+=step;
-    }
-    return list;
-}
-
-export function re(exp, attr) {
-    let r = new RegExp(exp, attr)
-    r.lastIndex = 0
-    return r
-}
-
-export function map(a, f) {
-    return a.map(f)
-}
-
-export function push(list, a) {
-    list.push(a)
-    return list
-}
-
-export function len(list) {
-    return list.length
-}
-
-export function error(msg) {
-    return Error(msg)
-}
-
-global.log = log
-global.str = str
-global.keys = keys
-global.values = values
-global.range = range
+export * from './js/base.js'
+export * from './js/date.js'
+export * from './js/console.js'
+export * from './js/json.js'
+export * from './js/copy.js'
+export * from './js/func.js'
+import * as io from './js/io.js'
+import * as re from './js/regexp.js'
+import { hash } from './js/hash.js'
+import { Sqlite } from './js/sqlite.js'
+import { Server } from './js/server.js'
+global.io = io
 global.re = re
-global.map = map
-global.push = push
-global.len = len
-global.error = error
+global.hash = hash
+global.Sqlite = Sqlite
+global.Server = Server

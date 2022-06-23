@@ -1,18 +1,12 @@
-import 'https://deno.land/x/sqlite/mod.ts' as sqlite
-
-// Open a database
-db := new sqlite.DB('test.db')
+db := new Sqlite('test.db')
 db.query('CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)')
 
 names := ['Peter Parker', 'Clark Kent', 'Bruce Wayne']
 
-// Run a simple query
 for name in names
   db.query('INSERT INTO people (name) VALUES (?)', [name])
 
-// log out data in table
 for r in db.query('SELECT id, name FROM people')
   log(r[0], r[1])
 
-// Close connection
 db.close()

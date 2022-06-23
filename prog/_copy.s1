@@ -1,0 +1,11 @@
+a := ['a', 1]
+b := ['b', a]
+c := copy(b)
+d := deepCopy(b)
+b[0] = 'b1'
+a[1] = 2
+
+log('a=', a)
+log('b=', b)
+log('c=', c)
+log('d=', d)

@@ -1,0 +1,5 @@
+text := 'name:ccc age:52 height:166 weight:60'
+
+log(re.grep('\\d+', text))
+log(re.grep('(\\w+:\\d+)', text, 1))
+ 
