@@ -12,3 +12,6 @@ out/*.js
 out/*.dart
 out/*.py
 __pycache__
+.DS_Store
+s1
+settings.json
