@@ -1,0 +1,3 @@
+d1 := today()
+log(d1)
+log(d1.toDateString())

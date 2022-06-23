@@ -1,0 +1,4 @@
+user := input('user:')
+
+log('user=', user)
+error('error: test error !')

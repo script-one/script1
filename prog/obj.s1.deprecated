@@ -1,9 +1,0 @@
-ccc := {
-    'name': 'ccc',
-    'age':52,
-    'str': fn() {
-        'name='+$name+' age='+$age
-    }
-}
-
-log(ccc['str']())

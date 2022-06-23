@@ -19,7 +19,7 @@ set -e
 ./js_run.sh class2
 # js only
 ./js_run.sh import
-./js_run.sh sha256
-./js_run.sh sqlite
-./js_run.sh regexp
+# ./js_run.sh sha256
+# ./js_run.sh sqlite
+# ./js_run.sh regexp
 # ./js_run.sh python
