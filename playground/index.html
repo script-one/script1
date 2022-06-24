@@ -1,0 +1,52 @@
+<html>
+    <header style="height: 15%;">
+        <div></div>
+    </header>
+    <body>
+    <div class="screen index">
+        <h1>
+            The Transpiler in ScriptOne.
+        </h1>
+            <p>
+              <strong>S1</strong> gives you the best developer experience for building any applications<br />
+              over a variety of languages/platforms.
+            </p>
+            <div class="external-links">
+              <a href="https://github.com/script-one/script1/blob/master/README.md" target="_blank">
+                Get Started
+              </a>
+              <a href="https://script-one.github.io/script1/" target="_blank">
+                Docs
+              </a>
+              <a href="https://github.com/script-one/script1" target="_blank">
+                Github
+              </a>
+            </div>
+        <h5>Script One to Javascript Playground</h5>
+        <!-- <p>Write in ScriptOne here..</p> -->
+        <div class="source-editor" ></div>
+        <button onClick={translateClick()}> Translate </button>
+        <!-- <p>Translated to Javascript here..</p> -->
+        <div class="target-editor" ></div>
+    </div>
+    </body>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://esm.sh/v78/monaco-editor@0.33.0/esnext/monaco-editor.css">
+    <script type="module" src="main.js"></script>
+    <script>
+    var translateClick = async()=>{
+
+        let sourceCode = window.editor.getValue()
+        console.log(sourceCode)
+        if (sourceCode) {
+          const jsonResponse = await fetch(`http://localhost:8000/trans/${sourceCode}`, {
+              method: 'GET', // or 'PUT'
+             })
+          const jsonData = await jsonResponse.text();
+          console.log("jsonData", jsonData);
+          await globalThis.target.getModel().setValue(jsonData)
+          console.log(globalThis.target.getValue())
+        }
+    }
+    </script>
+</html>
