@@ -27,6 +27,7 @@ params = (assign*)
 
 type = [^=),]*
 
+// function = async? fn(:id)? id(params) block
 function = fn(:id)? id(params) block
 
 lambda = fn (params) { expr }

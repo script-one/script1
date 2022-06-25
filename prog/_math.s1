@@ -1,0 +1,4 @@
+log('sin(PI/4)=', sin(PI/4))
+log('random()=', random())
+log('ln(E)=', ln(E))
+log('log2(8)=', log2(8))

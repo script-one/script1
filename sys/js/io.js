@@ -13,3 +13,6 @@ export async function read(fpath, options={}) {
 export async function write(fpath, text, options={}) {
   return await Deno.writeTextFile(fpath, text)
 }
+
+global.read = read
+global.write = write

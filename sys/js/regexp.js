@@ -14,3 +14,4 @@ export function grep(exp, text, groupId=0) {
     return list
 }
 
+global.grep = grep
