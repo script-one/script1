@@ -49,8 +49,8 @@ static void gen_class(node_t *cid, node_t *cbody) {
                 emit("def ");gen_code(nid);emit("__");
             }
             if (nret) gen_code(nret);
-            node_t Self;
-            Self.type = This;
+            // node_t Self;
+            // Self.type = This;
             emit("(");
             emit("self, ");
             // gen_params(nparams);

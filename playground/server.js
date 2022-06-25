@@ -38,7 +38,7 @@ async function translate(code)  {
     await Deno.writeTextFile("./hello.s1", code);
     console.log("File written to ./hello.s1");
     // define command used to create the subprocess
-    const cmd = ["./s1", "./hello.s1", "-o", "./hello.js"];
+    const cmd = ["../s1", "./hello.s1", "-o", "./hello.js"];
     // create subprocess
     const p = await Deno.run({ cmd });
     // await its completion
