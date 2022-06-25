@@ -1,0 +1,14 @@
+// 微分
+fn diff(f, x, h = step) {
+    dy:= f(x+h)-f(x)
+    return dy/h
+}
+
+// 積分 integral calculus
+fn integral(f, a, b, h = step) {
+    area := 0.0
+    for x in range(a, b, h) {
+        area = area + f(x) * h
+    }
+    return area
+}

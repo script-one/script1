@@ -1,0 +1,11 @@
+fn rUnif(min=0, max=1) {
+    return min+random(max-min)
+}
+
+fn rInt(min: number, max: number) {
+    return floor(runif(min, max))
+}
+
+fn rChoose(a: any[]) {
+    return a[rint(0, a.length)]
+}
