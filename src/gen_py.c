@@ -7,7 +7,7 @@ static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     emit(":");
     gen_code(stmt1);
     if (stmt2) {
-        emit(" else");
+        emit("  else");
         emit(":");
         gen_code(stmt2);
     }
