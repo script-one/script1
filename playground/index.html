@@ -39,7 +39,7 @@
         let sourceCode = window.editor.getValue()
         console.log(sourceCode)
         if (sourceCode) {
-          const jsonResponse = await fetch(`http://localhost:8000/trans/${sourceCode}`, {
+          const jsonResponse = await fetch(`http://localhost:8000/trans/${encodeURIComponent(sourceCode)}`, {
               method: 'GET', // or 'PUT'
              })
           const jsonData = await jsonResponse.text();
