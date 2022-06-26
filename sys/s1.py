@@ -1,4 +1,4 @@
-# window.global = window
+null =  None
 
 def log(*args):
     [print(arg, end='') for arg in args]
