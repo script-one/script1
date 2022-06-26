@@ -112,9 +112,9 @@ void gen_dart(node_t *root) {
     emit("// source file: %s\n", ifile);
     emit("import '../sys/s1.dart';\n");
     bool has_main = strstr(source, " main(")!=NULL;
-    if (!has_main) emit("void main() {");
+    if (!has_main && o_main) emit("void main() {");
     line(0);
     gen_code(root);
-    if (!has_main) emit("}");
+    if (!has_main && o_main) emit("}");
     emit("\n");
 }

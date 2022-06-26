@@ -60,7 +60,13 @@ static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
 static void gen_params(link_t *head) {
     emit("(");
     for (link_t *p = head; p != NULL; p = p->next) {
-        gen_code(p->node->array[0]); // id 
+        node_t *nid = p->node->array[0];
+        node_t *nexp = p->node->array[2];
+        gen_code(nid);
+        if (nexp) {
+            emit("=");
+            gen_code(p->node->array[2]);
+        }
         if (p->next != NULL) emit(",");
     }
     emit(")");
@@ -82,6 +88,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 
+/*
 // function = fn id?(params) body
 static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
     emit("function ");
@@ -95,12 +102,26 @@ static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node
         gen_code(body);
     }
 }
+*/
+// function = fn id?(params) body
+static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
+    if (type == Lambda) {
+        gen_code(params);
+        emit("=>");
+        gen_code(body);
+    } else {
+        emit("function ");
+        gen_code(id);
+        gen_code(params);
+        gen_code(body);
+    }
+}
 
 void gen_js(node_t *root) {
     emit("// source file: %s\n", ifile);
     emit("import '../sys/s1.js'\n");
     line(0);
     gen_code(root);
-    emit("if (typeof main == 'function') main()");
+    if (o_main) emit("if (typeof main == 'function') main()");
     emit("\n");
 }

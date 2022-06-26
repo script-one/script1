@@ -1,4 +1,4 @@
-import 'dart/func.dart';
+import 'dart:io';
 
 Map global = new Map();
 

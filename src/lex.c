@@ -12,8 +12,12 @@ void scan_save() { tk0 = tk; token0 = token; p0=p; lp0=lp; ptoken0 = ptoken; tk_
 void scan_restore() { tk = tk0; token = token0; p=p0; lp=lp0; ptoken = ptoken0; tk_top = tk_top0; line=line0; }
 
 #define syntax_error() { \
-  printf("Error at line=%d, pos=%d. C halt at file=%s line=%d, tk=%d(%c) %.*s\n", line, (int)(p-lp), __FILE__, __LINE__, tk, (char)tk, token.len, token.str); \
+  int pos = (int) (p-lp); \
+  printf("\nfile=%s line=%d, pos=%d. syntax error!\n", ifile, line, pos); \
+  for (char *tp=lp; *tp != '\n' && *tp != '\0'; tp++) { putc(*tp, stdout); } \
+  printf("\n%*s^\n", pos, ""); \
   exit(1); \
+  /* printf("\n  C halt at file=%s line=%d, tk=%d(%c) %.*s\n", __FILE__, __LINE__, tk, (char)tk, token.len, token.str);*/ \
 }
 
 void scan() { // 詞彙解析 lexer
@@ -23,10 +27,8 @@ void scan() { // 詞彙解析 lexer
     token.line = line;
     char ch = *p++;
     if (ch == '\n') { // 換行
-      if (src) {
-        printf("// %d: %.*s", line, (int) (p-lp), lp); // 印出該行
-        lp = p;     // lp = p  = 新一行的原始碼開頭
-      }
+      if (src) printf("// %d: %.*s", line, (int) (p-lp), lp); // 印出該行
+      lp = p;     // lp = p  = 新一行的原始碼開頭
       ++line;
     }
     else if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_') { // 取得變數名稱

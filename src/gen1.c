@@ -82,12 +82,10 @@ static void gen_stmts(node_t *node) {
 
 // block = { stmts }
 static void gen_block(node_t *block) {
-    indent(block_level-1);
-    emit(BlockBegin);
-    line(block->ptk->line);
+    line(block->ptk->line); // emit("\n");
+    indent(block_level-1); emit(BlockBegin); line(block->ptk->line);
     gen_stmts(block->node); // stmts
-    emit(BlockEnd);
-    indent(block_level-1);
+    indent(block_level-1); emit(BlockEnd);
 }
 
 // ------------- moved from gen_j.c to here -------------------

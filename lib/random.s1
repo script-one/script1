@@ -7,53 +7,16 @@ fn rInt(min, max) {
 }
 
 fn rChoose(a) {
-    return a[rint(0, a.length)]
+    return a[rInt(0, len(a))]
 }
 
-fn pChoose(x, prob) {
-  let xlen = len(x)
-  let p = random()
-  let psum = 0
+fn sample(x, prob) {
+  xlen := len(x)
+  p := random()
+  psum := 0
   for pi in range(xlen) {
-    psum += prob[pi]
+    psum = psum + prob[pi]
     if (psum >= p) break
   }
   return pi
 }
-
-/*
-
-fn samples(x, size, replace, prob) {
-  xlen := len(x)
-  if (replace && size>xlen) error('samples(): replace=false, size>len(x)')
-  slots := copy(x)
-  p := (prob==null) ? vector(xlen, 1.0/xlen) : copy(prob)
-  rlist := array(size)
-  for i in range(0, size) {
-    xi = pChoose(slots, p)
-    rlist[i] = x[xi]
-    if (replace) {
-      p[xi] = 0
-      normalize(p)  
-    }
-  }
-  return rlist
-}
-
-const EPSILON = 0.00000001
-
-export function histogram(a: number[], from: number = Math.floor(V.min(a)), to: number = Math.ceil(V.max(a)), step: number = 1) {
-  var n = Math.ceil((to - from + EPSILON) / step)
-  var xc = L.range(from + step / 2.0, to, step)
-  // var n = xc.length
-  var bins = V.vector(n, 0)
-  let len = a.length
-  for (let i = 0; i < len; i++) {
-    var slot = Math.floor((a[i] - from) / step)
-    if (slot >= 0 && slot < n) {
-      bins[slot]++
-    }
-  }
-  return { type: 'histogram', xc: xc, bins: bins, from: from, to: to, step: step }
-}
-*/
