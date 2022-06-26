@@ -37,6 +37,10 @@ export function error(msg) {
     return Error(msg)
 }
 
+export function array(n) {
+    return new Array(n)
+}
+
 global.str = str
 global.keys = keys
 global.values = values
@@ -44,3 +48,4 @@ global.range = range
 global.push = push
 global.len = len
 global.error = error
+global.array = array

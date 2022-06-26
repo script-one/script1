@@ -1,0 +1,3 @@
+fn logBase(a,b) {
+    return ln(a)/ln(b)
+}

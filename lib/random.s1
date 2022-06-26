@@ -1,0 +1,22 @@
+fn rUnif(min=0, max=1) {
+    return min+random(max-min)
+}
+
+fn rInt(min, max) {
+    return floor(runif(min, max))
+}
+
+fn rChoose(a) {
+    return a[rInt(0, len(a))]
+}
+
+fn sample(x, prob) {
+  xlen := len(x)
+  p := random()
+  psum := 0
+  for pi in range(xlen) {
+    psum = psum + prob[pi]
+    if (psum >= p) break
+  }
+  return pi
+}

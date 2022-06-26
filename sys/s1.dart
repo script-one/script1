@@ -1,3 +1,5 @@
+import 'dart:io';
+
 Map global = new Map();
 
 void log(a, [b='', c='', d='', e='', f='', g='', h='']) {
@@ -26,10 +28,6 @@ List<int> range(int from, int to, [int step=1]) {
     return list;
 }
 
-List map(List a, dynamic Function(dynamic) f) {
-    return a.map(f).toList();
-}
-
 List push(List list, dynamic a) {
     list.add(a);
     return list;
@@ -41,4 +39,19 @@ int len(List list) {
 
 Exception error(String msg) {
     return Exception(msg);
+}
+
+List map(List a, dynamic Function(dynamic) f) {
+    return a.map(f).toList();
+}
+
+Future<String> read(file) async {
+    var f = File(file);
+    var text = await (f.readAsString());
+    return text;
+}
+
+Future<File> write(file, text) async {
+    var f = File(file);
+    return await (f.writeAsString(text));
 }

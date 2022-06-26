@@ -1,0 +1,24 @@
+fn map2(a,b) {
+  alen := len(a)
+  c := array(alen)
+  for i in range(0, alen) {
+    c[i] = a[i]+b[i]
+  }
+  return c
+}
+
+fn dot(a,b) {
+  alen := len(a)
+  r := 0
+  for i in range(0, alen) 
+    r = r + a[i]*b[i]
+  return r
+}
+
+fn neg(a) {
+    return map(a, fn(a) { -a })
+}
+
+fn add(a,b) {
+    return map2(a, b, fn(a,b) { a+b })
+}

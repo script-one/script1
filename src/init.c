@@ -1,11 +1,11 @@
 char *ifile=NULL, *ofile=NULL;
-int src, dbg, o_run, o_dump;
+int src=0, dbg=0, o_run=0, o_dump=0, o_lex = 0, o_main=0;
 char *source;
 
 char *key_names[] = {
   "keybegin", 
   "import", "as", "if", "while", "for", 
-  "else", "in", "of", "to", "step",  
+  "else", "in", // "of", "to", "step",  
   "await", "new", "continue", "break", "return", 
   "fn", "class", "__map__", "try", "catch", "throw",
   "keyend", 

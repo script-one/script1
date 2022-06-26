@@ -1,5 +1,6 @@
 export * from './js/base.js'
 export * from './js/date.js'
+export * from './js/math.js'
 export * from './js/console.js'
 export * from './js/json.js'
 export * from './js/copy.js'
@@ -9,8 +10,6 @@ import * as re from './js/regexp.js'
 import { hash } from './js/hash.js'
 import { Sqlite } from './js/sqlite.js'
 import { Server } from './js/server.js'
-global.io = io
-global.re = re
 global.hash = hash
 global.Sqlite = Sqlite
 global.Server = Server

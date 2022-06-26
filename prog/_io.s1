@@ -1,7 +1,7 @@
-text := await io.read('./data/test.json')
+text := await read('./data/test.json')
 log(text)
 obj := fromJson(text)
 log(obj)
 text2 := toJson(obj)
 
-await io.write('./data/test2.json', text2)
+await write('./data/test2.json', text2)

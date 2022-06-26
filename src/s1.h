@@ -25,7 +25,7 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   CExpr, 
   KeyBegin=199, 
   Import, As, If, While, For, 
-  Else, In, Of, To, Step, 
+  Else, In, // Of, To, Step,
   Await, New, Continue, Break, Return, 
   Fn, Class, Map, Try, Catch, Throw,
   KeyEnd,
@@ -69,7 +69,7 @@ struct list_t {
 
 char *ifile, *ofile;
 FILE *ofp;
-int src, dbg, o_run, o_dump;
+int src, dbg, o_run, o_dump, o_lex, o_main;
 char *source;
 
 // API
