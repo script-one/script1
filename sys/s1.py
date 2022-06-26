@@ -13,6 +13,19 @@ def map(l, f):
     # l = map(f, l)
     return [f(x) for x in l] 
 
+def set(m, k, v):
+    m[k] = v
+    return m
+    
+def get(m, k):
+    v = None
+    if k in m:
+        v = m[k]
+    return v
+
+def N():
+    return None
+
 """
 export function str(o) {
     if (o.__str) return o.__str()
