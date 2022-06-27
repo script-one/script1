@@ -1,1 +1,1 @@
-./s1 lib/$1.s1 -o out/$1.js
+./s1 lib/$1.s1 -o out/lib/$1.js

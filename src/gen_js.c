@@ -7,13 +7,15 @@ static void gen_class(node_t *nid, node_t *nbody) {
     emit(" {"); /*line(0);*/ block_level++;
     for (link_t *p = nbody->list->head; p != NULL; p = p->next) {
         if (p->node->type != Function) continue;
-        node_t *nid  = p->node->array[0];
-        node_t *nret = p->node->array[1];
-        node_t *nparams = p->node->array[2];
-        node_t *nbody= p->node->array[3];
+        node_t *nasync  = p->node->array[0];
+        node_t *nid  = p->node->array[1];
+        node_t *nret = p->node->array[2];
+        node_t *nparams = p->node->array[3];
+        node_t *nbody= p->node->array[4];
 
         char *name = nid->ptk->str; int len=nid->ptk->len;
-        line(nid->ptk->line); indent(block_level); 
+        line(nid->ptk->line); indent(block_level);
+        if (nasync) emit("async "); 
         if (head_eq(name, len, "__init")) {
             emit("constructor");
         } else {
@@ -88,23 +90,9 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 
-/*
 // function = fn id?(params) body
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
-    emit("function ");
-    if (id) gen_code(id);
-    gen_code(params);
-    if (type == Lambda) {
-        emit(" { return ");
-        gen_code(body);
-        emit(" } ");
-    } else {
-        gen_code(body);
-    }
-}
-*/
-// function = fn id?(params) body
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
+static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *body) {
+    if (async) emit("async ");
     if (type == Lambda) {
         gen_code(params);
         emit("=>");

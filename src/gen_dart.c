@@ -13,10 +13,11 @@ static void gen_class(node_t *cid, node_t *cbody) {
             emit(";");
             line(0);
         } else if (p->node->type == Function) {
-            node_t *nid  = p->node->array[0];
-            node_t *nret = p->node->array[1];
-            node_t *nparams = p->node->array[2];
-            node_t *nbody= p->node->array[3];
+            node_t *nasync  = p->node->array[0];
+            node_t *nid  = p->node->array[1];
+            node_t *nret = p->node->array[2];
+            node_t *nparams = p->node->array[3];
+            node_t *nbody= p->node->array[4];
 
             char *name = nid->ptk->str; int len=nid->ptk->len;
             line(nid->ptk->line); indent(block_level); 
@@ -27,8 +28,13 @@ static void gen_class(node_t *cid, node_t *cbody) {
             }
             // node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
             // if (ntype) gen_code(ntype);
-            if (nret) gen_code(nret);
+            if (nret) {
+                if (nasync) emit("Future<");
+                gen_code(nret);
+                if (nasync) emit(">");
+            }
             gen_code(nparams);
+            if (nasync) emit(" async ");
             gen_code(nbody);
             line(0);
         }
@@ -95,7 +101,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 }
 
 // function = fn(:id)? id?(params) block
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *body) {
+static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *body) {
     if (type == Lambda) {
         gen_code(params);
         emit("=>");

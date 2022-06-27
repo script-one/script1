@@ -35,13 +35,15 @@ static void gen_class(node_t *cid, node_t *cbody) {
             indent(block_level);
             line(0);
         } else if (p->node->type == Function) {
-            node_t *nid  = p->node->array[0];
-            node_t *nret = p->node->array[1];
-            node_t *nparams = p->node->array[2];
-            node_t *nbody= p->node->array[3];
+            node_t *nasync  = p->node->array[0];
+            node_t *nid  = p->node->array[1];
+            node_t *nret = p->node->array[2];
+            node_t *nparams = p->node->array[3];
+            node_t *nbody= p->node->array[4];
 
             char *name = nid->ptk->str; int len=nid->ptk->len;
-            line(nid->ptk->line); indent(block_level); 
+            line(nid->ptk->line); indent(block_level);
+            if (nasync) emit("async ");  
             if (head_eq(name, len, "__init")) {
                 // gen_id(cid);
                 emit("def __init__")
@@ -156,7 +158,8 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit(":");
     gen_code(stmt);
 }
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block) {
+static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *block) {
+    if (async) emit("async ");
     if (id){
         emit("def ");
         gen_code(id);

@@ -5,9 +5,9 @@ char *source;
 char *key_names[] = {
   "keybegin", 
   "import", "as", "if", "while", "for", 
-  "else", "in", // "of", "to", "step",  
-  "await", "new", "continue", "break", "return", 
+  "else", "in", "continue", "break", "return", 
   "fn", "class", "__map__", "try", "catch", "throw",
+  "async", "await", "new",
   "keyend", 
   "op1begin", "-", "++", "--", "global.", "this.", "op1end",
   "op2begin", "||", "&&", "==", "!=", "<=", ">=", "<<", ">>", "op2end"

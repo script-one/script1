@@ -58,7 +58,7 @@ static void gen_import(node_t *id1, node_t *id2);
 static void gen_while(node_t *exp, node_t *stmt);
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2);
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt);
-static void gen_function(int type, node_t *id, node_t *ret, node_t *params, node_t *block);
+static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *block);
 static void gen_block(node_t *block);
 static void gen_stmts(node_t *node);
 static void gen_stmt(node_t *stmt);
@@ -122,7 +122,7 @@ static void gen_code(node_t *me) {
         pop(ForIn);
     } else if (type == Function || type == Lambda) {
         push(Function); fn_level++;
-        gen_function(type, args[0], args[1], args[2], args[3]);
+        gen_function(type, args[0], args[1], args[2], args[3], args[4]);
         pop(Function);  fn_level--;
     } else if (type == Return || type == '?') {
         gen_return(type, args[0]); // gen_return(type, me->node);

@@ -11,13 +11,14 @@ int tk0, tk_top0, line0;
 void scan_save() { tk0 = tk; token0 = token; p0=p; lp0=lp; ptoken0 = ptoken; tk_top0 = tk_top; line0=line; }
 void scan_restore() { tk = tk0; token = token0; p=p0; lp=lp0; ptoken = ptoken0; tk_top = tk_top0; line=line0; }
 
-#define syntax_error() { \
+#define syntax_error(t) { \
   int pos = (int) (p-lp); \
-  printf("\nfile=%s line=%d, pos=%d. syntax error!\n", ifile, line, pos); \
+  printf("\nfile=%s line=%d, pos=%d. syntax error !\n", ifile, line, pos); \
   for (char *tp=lp; *tp != '\n' && *tp != '\0'; tp++) { putc(*tp, stdout); } \
-  printf("\n%*s^\n", pos, ""); \
+  printf("\n%*s^", pos-1, ""); \
+  if (dbg) printf("\n  C halt at file=%s line=%d, expect=%d(%c) tk=%d(%c) %.*s\n", __FILE__, __LINE__, t, (char) t, tk, (char)tk, token.len, token.str); \
+  printf("\n"); \
   exit(1); \
-  /* printf("\n  C halt at file=%s line=%d, tk=%d(%c) %.*s\n", __FILE__, __LINE__, tk, (char)tk, token.len, token.str);*/ \
 }
 
 void scan() { // 詞彙解析 lexer
@@ -88,7 +89,7 @@ token_t next() {
 
 #define skip(t) ({ \
   token_t r=token; \
-  if (tk==t) next(); else syntax_error(); \
+  if (tk==t) next(); else syntax_error(t); \
   r; \
 })
 

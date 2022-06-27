@@ -206,9 +206,10 @@ node_t *params() {
     return r;
 }
 
-// function = fn(:id)? id(params) block
+// function = async? fn(:id)? id(params) block
 node_t *function(int type) { // type=Function | Lambda
     node_t *nret = NULL;
+    node_t *nasync = (tk == Async) ? key(tk) : NULL;
     skip(Fn);
     if (tk == ':') { next(); nret = id(); }
     node_t *nid = (type==Function)?id():NULL;
@@ -223,7 +224,7 @@ node_t *function(int type) { // type=Function | Lambda
     } else {
         nbody = block();
     }
-    return op4(type, nid, nret, nparam, nbody);
+    return op5(type, nasync, nid, nret, nparam, nbody);
 }
 
 node_t *field() {
@@ -241,7 +242,7 @@ node_t *class() {
         list_add(nbody->list, field());
     }
     // while (tk != End && tk != '}') {
-    while (tk == Fn) {
+    while (tk == Fn || tk == Async) {
         list_add(nbody->list, function(Function));
     }
     list_reverse(nbody->list);
@@ -277,7 +278,7 @@ node_t *stmt() {
             id2 = id();
         }
         r->node = op2(Import, str1, id2);
-    } else if (tk == Fn) {
+    } else if (tk==Async || tk == Fn) {
         r->node = function(Function);
     } else if (tk == Class) {
         r->node = class();
