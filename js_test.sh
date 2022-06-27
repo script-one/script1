@@ -23,3 +23,5 @@ set -e
 # ./js_run.sh sqlite
 # ./js_run.sh regexp
 # ./js_run.sh python
+./js_run.sh two_sum
+
