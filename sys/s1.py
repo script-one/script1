@@ -1,4 +1,4 @@
-# window.global = window
+null =  None
 
 def log(*args):
     [print(arg, end='') for arg in args]
@@ -22,9 +22,6 @@ def get(m, k):
     if k in m:
         v = m[k]
     return v
-
-def N():
-    return None
 
 """
 export function str(o) {
