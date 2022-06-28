@@ -13,7 +13,6 @@ set -e
 ./py_run.sh class2
 ./py_run.sh map
 ./py_run.sh lambda
-./py_run.sh two_sum
 
 # ./py_run.sh global
 # ./py_run.sh import

@@ -2,7 +2,7 @@ fn twoSum(nums, target){
     hashmap := {}
     for i in range(0, len(nums)){
         complement := target - nums[i]
-        if (get(hashmap, complement)!=null) {
+        if (hashmap[complement]!=null) {
             return [hashmap[complement], i]
         }
         hashmap[nums[i]] = i

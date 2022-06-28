@@ -41,20 +41,6 @@ export function array(n) {
     return new Array(n)
 }
 
-export function set(m, k, v){
-    m[k] = v
-    return m
-}
-
-    
-export function get(m, k){
-    let v = null
-    if (m[k]!=undefined&&m[k]!=null){
-        v = m[k]
-    }
-    return v
-}
-
 global.str = str
 global.keys = keys
 global.values = values
@@ -63,5 +49,3 @@ global.push = push
 global.len = len
 global.error = error
 global.array = array
-global.set = set
-global.get = get
