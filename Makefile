@@ -23,7 +23,14 @@ test-py: $(OBJS)
 	chmod +x ./py_test.sh
 	chmod +x ./py_run.sh
 	./py_test.sh
+test-dart: $(OBJS)
+	chmod +x ./dart_test.sh
+	chmod +x ./dart_run.sh
+	./dart_test.sh
 
+test-flutter: $(OBJS)
+	(./s1 ./prog/flutter/home_page.s1 -o ./out/flutter/lib/home_page.dart)
+	(cd ./out/flutter && flutter run -d chrome)
 
 clean:
 	rm -f $(OBJS)

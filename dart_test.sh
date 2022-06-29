@@ -16,3 +16,4 @@ set -x
 ./dart_run.sh map
 ./dart_run.sh try
 ./dart_run.sh class2
+./dart_run.sh class3

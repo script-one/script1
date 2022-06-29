@@ -231,11 +231,17 @@ node_t *field() {
     return id();
 }
 
-// class id { function* }
+// class id extends parent { function* }
 node_t *class() {
     skip(Class);
     node_t *nid = id();
-    skip('{');
+    node_t *eid;
+    token_t e = next();
+    if (e.tk == Extends) {
+        eid = id();
+        skip('{');
+    }
+    // skip('{');
     node_t *nbody = node(ClassBody);
     nbody->list = list();
     while (tk == Id) {
@@ -247,7 +253,8 @@ node_t *class() {
     }
     list_reverse(nbody->list);
     skip('}');
-    return op2(Class, nid, nbody);
+
+    return op3(Class, nid, eid, nbody);
 }
 
 /*

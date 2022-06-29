@@ -25,10 +25,17 @@ static void gen_str(node_t *node) {
     emit("\'%.*s\'", node->ptk->len-2, node->ptk->str+1);
 }
 
-// class = 'class' id map
-static void gen_class(node_t *cid, node_t *cbody) {
+// class = 'class' id 'extends' eid map
+static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
     emit("class ");
     gen_code(cid);
+
+    if (eid) {
+        emit("(");
+        gen_code(eid);
+        emit(")");
+    }
+
     emit(": "); line(0); block_level++;
     for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
         if (p->node->type == Id) {
@@ -48,7 +55,7 @@ static void gen_class(node_t *cid, node_t *cbody) {
                 // gen_id(cid);
                 emit("def __init__")
             } else {
-                emit("def ");gen_code(nid);emit("__");
+                emit("def ");gen_code(nid);// emit("__");
             }
             if (nret) gen_code(nret);
             // node_t Self;
@@ -189,6 +196,12 @@ void gen_py(node_t *root) {
     emit("from s1 import *\n");
     line(0);
     gen_code(root);
+
+    bool has_main = strstr(source, " main(")!=NULL;
+    if (has_main && o_main){
+        emit("if __name__ == '__main__':");
+        emit("main()");
+    }
     emit("\n");
 }
 

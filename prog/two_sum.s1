@@ -1,0 +1,15 @@
+fn twoSum(nums, target){
+    hashmap := {}
+    for i in range(0, len(nums)){
+        complement := target - nums[i]
+        if (hashmap[complement]!=null) {
+            return [hashmap[complement], i]
+        }
+        hashmap[nums[i]] = i
+    }
+}
+
+log(twoSum([2,7,11,15], 9))
+log(twoSum([3,2,4], 6))
+log(twoSum([3,3], 6))
+    

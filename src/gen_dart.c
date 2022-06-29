@@ -1,9 +1,15 @@
 #include <gen_j.c>
 
-// class = 'class' id classBody
-static void gen_class(node_t *cid, node_t *cbody) {
+// class = 'class' id 'extends' eid classBody
+static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
     emit("class ");
     gen_code(cid);
+
+    if (eid) {
+        emit(" extends ")
+        gen_code(eid);
+    }
+
     emit(" {"); line(0); block_level++;
     for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
         if (p->node->type == Id) {
@@ -44,9 +50,9 @@ static void gen_class(node_t *cid, node_t *cbody) {
 }
 
 static void gen_import(node_t *str1, node_t *id2) {
-    emit("import * as ");
-    gen_code(id2);
-    emit(" from ");
+    emit("import ");
+    // gen_code(id2);
+    // emit(" from ");
     gen_code(str1);
 }
 

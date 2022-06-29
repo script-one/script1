@@ -26,7 +26,7 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   KeyBegin=199, 
   Import, As, If, While, For, 
   Else, In, Continue, Break, Return, 
-  Fn, Class, Map, Try, Catch, Throw,
+  Fn, Class, Extends, Map, Try, Catch, Throw,
   Async, Await, New, 
   KeyEnd,
   Op1Begin, Neg, Inc, Dec, Global, This, Op1End, 

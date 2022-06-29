@@ -49,7 +49,7 @@ static void gen_params(link_t *head);
 static void gen_array(link_t *head);
 static void gen_pair(node_t *n1, node_t *n2);
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch);
-static void gen_class(node_t *nid, node_t *nmap);
+static void gen_class(node_t *nid, node_t *eid, node_t *nmap);
 static void gen_map(node_t *nmap);
 static void gen_args(link_t *head);
 static void gen_assign(node_t *pid, node_t *type, node_t *exp);
@@ -135,7 +135,7 @@ static void gen_code(node_t *me) {
     } else if (type == Try) {
         gen_try(args[0], args[1], args[2]);
     } else if (type == Class) {
-        gen_class(args[0], args[1]);
+        gen_class(args[0], args[1], args[2]);
     } else if (type == Map) {
         gen_map(me);
     } else if (type == Args) { // args  = ( expr* )
