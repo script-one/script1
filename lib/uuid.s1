@@ -1,0 +1,35 @@
+import 'random.s1' as R
+
+fn randomChar(chars) {
+    i:=R.rInt(0, chars.length)
+    return chars[i]
+}
+
+fn randomStr(chars, len) {
+    list := []
+    clen :=  len(chars)
+    for i in range(0, len) {
+        ci := R.rInt(0, clen)
+        push(list, chars[ci])
+    }
+    return join(list, '')
+}
+
+BASE := '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+fn baseChars(base) {
+  return substr(BASE, 0, base)
+}
+
+fn randomBase(base, len) {
+    return randomStr(baseChars(base), len)
+}
+
+fn s4() {
+    return randomBase(16, 4)
+}
+
+// https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+fn guid() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}

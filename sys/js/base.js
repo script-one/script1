@@ -37,8 +37,30 @@ export function error(msg) {
     return Error(msg)
 }
 
-export function array(n) {
-    return new Array(n)
+export function array(n, value) {
+    let a = new Array(n)
+    a.fill(value)
+    return a
+}
+
+export function isDefined(x) {
+    return x == null
+}
+
+export function float(str) {
+    return parseFloat(str)
+}
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function join(list, spliter) {
+    return list.join(spliter)
+}
+
+export function substr(str, i, len) {
+    return str.substr(i, len)
 }
 
 global.str = str
@@ -49,3 +71,8 @@ global.push = push
 global.len = len
 global.error = error
 global.array = array
+global.isDefined = isDefined
+global.float = float
+global.sleep = sleep
+global.join = join
+global.substr = substr
