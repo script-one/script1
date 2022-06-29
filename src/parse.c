@@ -235,19 +235,17 @@ node_t *field() {
 node_t *class() {
     skip(Class);
     node_t *nid = id();
-    node_t *eid;
-    token_t e = next();
-    if (e.tk == Extends) {
+    node_t *eid = NULL;
+    if (tk == Extends) {
+        next();
         eid = id();
-        skip('{');
     }
-    // skip('{');
+    skip('{');
     node_t *nbody = node(ClassBody);
     nbody->list = list();
     while (tk == Id) {
         list_add(nbody->list, field());
     }
-    // while (tk != End && tk != '}') {
     while (tk == Fn || tk == Async) {
         list_add(nbody->list, function(Function));
     }
