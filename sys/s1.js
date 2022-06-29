@@ -1,4 +1,6 @@
 export * from './js/base.js'
+export * from './js/type.js'
+export * from './js/str.js'
 export * from './js/date.js'
 export * from './js/math.js'
 export * from './js/console.js'
