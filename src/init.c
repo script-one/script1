@@ -6,7 +6,7 @@ char *key_names[] = {
   "keybegin", 
   "import", "as", "if", "while", "for", 
   "else", "in", "continue", "break", "return", 
-  "fn", "class", "__map__", "try", "catch", "throw",
+  "fn", "class", "extends", "__map__", "try", "catch", "throw",
   "async", "await", "new",
   "keyend", 
   "op1begin", "-", "++", "--", "global.", "this.", "op1end",

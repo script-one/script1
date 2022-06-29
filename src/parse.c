@@ -235,7 +235,13 @@ node_t *field() {
 node_t *class() {
     skip(Class);
     node_t *nid = id();
-    skip('{');
+    node_t *eid;
+    token_t e = next();
+    if (e.tk == Extends) {
+        eid = id();
+        skip('{');
+    }
+    // skip('{');
     node_t *nbody = node(ClassBody);
     nbody->list = list();
     while (tk == Id) {
@@ -247,6 +253,9 @@ node_t *class() {
     }
     list_reverse(nbody->list);
     skip('}');
+    if (e.tk == Extends){
+        return op3(Extends, nid, eid, nbody);
+    }
     return op2(Class, nid, nbody);
 }
 

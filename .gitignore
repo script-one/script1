@@ -18,3 +18,7 @@ __pycache__
 .DS_Store
 s1
 settings.json
+out/flutter/.dart_tool
+out/flutter/.packages
+out/flutter/pubspec.lock
+out/flutter/build

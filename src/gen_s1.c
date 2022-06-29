@@ -1,5 +1,20 @@
 #include <gen_j.c>
 
+//TODO: redundant code
+static void gen_extends(node_t *nid, node_t *eid, node_t *nbody) {
+    emit("class ");
+    gen_code(nid);
+
+    emit(" extends ")
+    gen_code(eid);
+
+    emit(" {");
+    line(0);
+    gen_list(nbody->list->head, "\n");
+    line(0);
+    emit("}");
+}
+
 static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");
     gen_code(nid);

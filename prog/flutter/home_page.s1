@@ -1,0 +1,29 @@
+import 'package:flutter/widgets.dart';
+
+class HomePage extends StatelessWidget {
+    fn build(context:BuildContext) {
+        // Material is a conceptual piece
+        // of paper on which the UI appears.
+        return Text(
+            'Hello, world!',{textDirection: TextDirection.ltr,}
+        );
+    }
+}
+
+/*
+class HomePage extends StatelessWidget {
+  const HomePage({key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece
+    // of paper on which the UI appears.
+    return Center(
+      child: Text(
+        'Hello, world!',
+        textDirection: TextDirection.ltr,
+      ),
+    );
+  }
+}
+*/

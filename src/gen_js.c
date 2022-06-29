@@ -1,5 +1,39 @@
 #include <gen_j.c>
 
+//TODO: redundant code
+static void gen_extends(node_t *nid, node_t *eid, node_t *nbody) {
+    emit("class ");
+    gen_code(nid);
+
+    emit(" extends ")
+    gen_code(eid);
+
+    emit(" {"); /*line(0);*/ block_level++;
+    for (link_t *p = nbody->list->head; p != NULL; p = p->next) {
+        if (p->node->type != Function) continue;
+        node_t *nasync  = p->node->array[0];
+        node_t *nid  = p->node->array[1];
+        node_t *nret = p->node->array[2];
+        node_t *nparams = p->node->array[3];
+        node_t *nbody= p->node->array[4];
+
+        char *name = nid->ptk->str; int len=nid->ptk->len;
+        line(nid->ptk->line); indent(block_level);
+        if (nasync) emit("async "); 
+        if (head_eq(name, len, "__init")) {
+            emit("constructor");
+        } else {
+            gen_code(nid);
+        }
+        if (nret) gen_code(nret);
+        gen_code(nparams);
+        gen_code(nbody);
+        line(0);
+    }
+    block_level --;
+    indent(block_level); emit("}");
+}
+
 // class = 'class' id classBody
 static void gen_class(node_t *nid, node_t *nbody) {
     emit("class ");

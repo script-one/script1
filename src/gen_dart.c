@@ -1,5 +1,53 @@
 #include <gen_j.c>
 
+//TODO: redundant code
+static void gen_extends(node_t *cid, node_t *eid, node_t *cbody) {
+    emit("class ");
+    gen_code(cid);
+
+    emit(" extends ")
+    gen_code(eid);
+
+
+    emit(" {"); line(0); block_level++;
+    for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
+        if (p->node->type == Id) {
+            indent(block_level);
+            emit("var ");
+            gen_id(p->node);
+            emit(";");
+            line(0);
+        } else if (p->node->type == Function) {
+            node_t *nasync  = p->node->array[0];
+            node_t *nid  = p->node->array[1];
+            node_t *nret = p->node->array[2];
+            node_t *nparams = p->node->array[3];
+            node_t *nbody= p->node->array[4];
+
+            char *name = nid->ptk->str; int len=nid->ptk->len;
+            line(nid->ptk->line); indent(block_level); 
+            if (head_eq(name, len, "__init")) {
+                gen_id(cid);
+            } else {
+                gen_code(nid);
+            }
+            // node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
+            // if (ntype) gen_code(ntype);
+            if (nret) {
+                if (nasync) emit("Future<");
+                gen_code(nret);
+                if (nasync) emit(">");
+            }
+            gen_code(nparams);
+            if (nasync) emit(" async ");
+            gen_code(nbody);
+            line(0);
+        }
+    }
+    block_level --;
+    indent(block_level); emit("}");
+}
+
 // class = 'class' id classBody
 static void gen_class(node_t *cid, node_t *cbody) {
     emit("class ");
@@ -44,9 +92,9 @@ static void gen_class(node_t *cid, node_t *cbody) {
 }
 
 static void gen_import(node_t *str1, node_t *id2) {
-    emit("import * as ");
-    gen_code(id2);
-    emit(" from ");
+    emit("import ");
+    // gen_code(id2);
+    // emit(" from ");
     gen_code(str1);
 }
 
