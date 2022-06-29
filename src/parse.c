@@ -231,7 +231,7 @@ node_t *field() {
     return id();
 }
 
-// class id { function* }
+// class id extends parent { function* }
 node_t *class() {
     skip(Class);
     node_t *nid = id();
@@ -253,10 +253,8 @@ node_t *class() {
     }
     list_reverse(nbody->list);
     skip('}');
-    if (e.tk == Extends){
-        return op3(Extends, nid, eid, nbody);
-    }
-    return op2(Class, nid, nbody);
+
+    return op3(Class, nid, eid, nbody);
 }
 
 /*

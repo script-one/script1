@@ -1,0 +1,28 @@
+class Vehicle {
+  brand
+  
+  fn honk(){
+      ? ''
+  }
+}
+
+class Car extends Vehicle {
+
+  fn honk() {
+    log('BAAAAA')
+  }
+}
+
+class SportsCar extends Car {
+    brand
+
+    fn __init(brand) {
+        $brand = brand
+    }
+}
+  
+fn main() {
+  benzzz := new SportsCar('Benzzz')
+  log(benzzz.brand)
+  benzzz.honk()
+}

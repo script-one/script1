@@ -5,7 +5,7 @@ class HomePage extends StatelessWidget {
         // Material is a conceptual piece
         // of paper on which the UI appears.
         return Text(
-            'Hello, world!',{textDirection: TextDirection.ltr,}
+            'Hello, world!',
         );
     }
 }

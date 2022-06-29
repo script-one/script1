@@ -11,6 +11,7 @@ set -e
 ./py_run.sh mt
 ./py_run.sh class
 ./py_run.sh class2
+./py_run.sh class3
 ./py_run.sh map
 ./py_run.sh lambda
 
@@ -22,4 +23,3 @@ set -e
 # ./py_run.sh sqlite
 # ./py_run.sh obj
 # ./py_run.sh regexp
-
