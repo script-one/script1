@@ -1,10 +1,5 @@
 window.global = window
 
-export function str(o) {
-    if (o.__str) return o.__str()
-    return o.toString()
-}
-
 export function keys(o) {
     if (o instanceof Map || o instanceof Set) return Array.from(o.keys())
     return Object.keys(o)
@@ -37,15 +32,20 @@ export function error(msg) {
     return Error(msg)
 }
 
-export function array(n) {
-    return new Array(n)
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-global.str = str
+export function join(list, spliter) {
+    return list.join(spliter)
+}
+
 global.keys = keys
 global.values = values
 global.range = range
 global.push = push
 global.len = len
 global.error = error
-global.array = array
+global.sleep = sleep
+global.join = join
+

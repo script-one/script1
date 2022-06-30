@@ -1,3 +1,3 @@
-d1 := today()
+d1 := now()
 log(d1)
-log(d1.toDateString())
+log(str(d1))
