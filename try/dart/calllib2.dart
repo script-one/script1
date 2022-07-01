@@ -1,4 +1,4 @@
-import './lib/math.dart' as m;
+import './lib/my.dart' as m;
 // part of my_lib;
 
 void main() {

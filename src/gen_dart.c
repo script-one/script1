@@ -51,9 +51,18 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
 
 static void gen_import(node_t *str1, node_t *id2) {
     emit("import ");
-    // gen_code(id2);
-    // emit(" from ");
-    gen_code(str1);
+    char *fpath = str1->ptk->str + 1;
+    int  flen = str1->ptk->len - 2;
+    char *ext = fpath + flen - 3;
+    if (memcmp(ext, ".s1", 3)==0) {
+        emit("'%.*s.dart'", flen-3, fpath);
+    } else {
+        emit("'%.*s'", flen, fpath);
+    }
+    if (id2) {
+        emit(" as ");
+        gen_code(id2);
+    }
 }
 
 // pid = (@|$)? id
@@ -113,7 +122,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
         emit("=>");
         gen_code(body);
     } else {
-        if (ret) { gen_code(ret); emit(" "); } else emit("void ");
+        if (ret) { gen_code(ret); emit(" "); } else emit("dynamic ");
         gen_code(id); // if (id) gen_code(id);
         gen_code(params);
         gen_code(body);
@@ -122,7 +131,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 
 void gen_dart(node_t *root) {
     emit("// source file: %s\n", ifile);
-    emit("import '../sys/s1.dart';\n");
+    if (o_main) { emit("import '../sys/s1.dart';\n"); } else emit("import '../../sys/s1.dart';\n")
     bool has_main = strstr(source, " main(")!=NULL;
     if (!has_main && o_main) emit("void main() {");
     line(0);

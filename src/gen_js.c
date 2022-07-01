@@ -49,10 +49,13 @@ static void gen_import(node_t *str1, node_t *id2) {
     emit("import * as ");
     gen_code(id2);
     emit(" from ");
-    if (tail_eq(ifile, ".s1")) {
-        emit("'%.*s.js'", str1->ptk->len-5, str1->ptk->str+1);
+    char *fpath = str1->ptk->str + 1;
+    int  flen = str1->ptk->len - 2;
+    char *ext = fpath + flen - 3;
+    if (memcmp(ext, ".s1", 3)==0) {
+        emit("'%.*s.js'", flen-3, fpath);
     } else {
-        emit("'%.*s'", str1->ptk->len-2, str1->ptk->str+1);
+        emit("'%.*s'", flen, fpath);
     }
 }
 

@@ -1,8 +1,8 @@
-fn rUnif(min=0, max=1) {
-    return min+random(max-min)*(max-min)
+fn:double rUnif(min=0, max=1) {
+    return min+random()*(max-min)
 }
 
-fn rInt(min, max) {
+fn:int rInt(min, max) {
     return floor(rUnif(min, max))
 }
 
@@ -10,13 +10,15 @@ fn rChoose(a) {
     return a[rInt(0, len(a))]
 }
 
-fn sample(x, prob) {
+/*
+fn:dynamic sample(x, prob) {
   xlen := len(x)
   p := random()
   psum := 0
-  for pi in range(xlen) {
+  for pi in range(0, xlen) {
     psum = psum + prob[pi]
-    if (psum >= p) break
+    if (psum >= p) return pi
   }
-  return pi
+  return null
 }
+*/

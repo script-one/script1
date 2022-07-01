@@ -1,10 +1,4 @@
-export 'dart/base.dart';
-export 'dart/math.dart';
-export 'dart/str.dart';
-
-/*
 import 'dart:io';
-import 'dart:math';
 
 Map global = new Map();
 
@@ -39,8 +33,8 @@ List push(List list, dynamic a) {
     return list;
 }
 
-int len(List list) {
-    return list.length;
+int len(dynamic x) {
+    return x.length;
 }
 
 Exception error(String msg) {
@@ -50,6 +44,11 @@ Exception error(String msg) {
 List map(List a, dynamic Function(dynamic) f) {
     return a.map(f).toList();
 }
+
+String join(List list, String spliter) {
+    return list.join(spliter);
+}
+
 
 Future<String> read(file) async {
     var f = File(file);
@@ -61,10 +60,3 @@ Future<File> write(file, text) async {
     var f = File(file);
     return await (f.writeAsString(text));
 }
-
-var _R = Random();
-
-double random() {
-    return _R.nextDouble();
-}
-*/

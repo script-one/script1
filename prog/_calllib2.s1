@@ -1,0 +1,9 @@
+import './lib/random.s1' as R
+import './lib/guid.s1' as G
+
+fn main() {
+    log('rUnif(5,10)=', R.rUnif(5,10))
+    log('rInt()=', R.rInt(10, 20))
+    log('rChoose([a,b,c])=', R.rChoose(['a','b','c']))
+    log('guid()=', G.guid())
+}
