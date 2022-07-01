@@ -1,4 +1,9 @@
+import sys, os
+
 null =  None
+
+def addPath(path):
+    sys.path.append(path)
 
 def log(*args):
     [print(arg, end='') for arg in args]

@@ -49,7 +49,11 @@ static void gen_import(node_t *str1, node_t *id2) {
     emit("import * as ");
     gen_code(id2);
     emit(" from ");
-    emit("'%.*s'", str1->ptk->len-2, str1->ptk->str+1);
+    if (tail_eq(ifile, ".s1")) {
+        emit("'%.*s.js'", str1->ptk->len-5, str1->ptk->str+1);
+    } else {
+        emit("'%.*s'", str1->ptk->len-2, str1->ptk->str+1);
+    }
 }
 
 // pid = (@|$)? id
@@ -107,12 +111,13 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 
 // function = fn id?(params) body
 static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *body) {
-    if (async) emit("async ");
     if (type == Lambda) {
         gen_code(params);
         emit("=>");
         gen_code(body);
     } else {
+        emit("export ");
+        if (async) emit("async ");
         emit("function ");
         gen_code(id);
         gen_code(params);
@@ -122,7 +127,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 
 void gen_js(node_t *root) {
     emit("// source file: %s\n", ifile);
-    emit("import '../sys/s1.js'\n");
+    if (o_main) emit("import '../sys/s1.js'\n");
     line(0);
     gen_code(root);
     if (o_main) emit("if (typeof main == 'function') main()");

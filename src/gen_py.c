@@ -192,8 +192,7 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
 
 void gen_py(node_t *root) {
     emit("# source file: %s\n", ifile);
-    emit("import sys, os\nsys.path.append(os.path.join(os.path.dirname(__file__), '..', 'sys'))\n");
-    emit("from s1 import *\n");
+    emit("import sys\nsys.path.append('sys')\nfrom s1 import *\n");
     line(0);
     gen_code(root);
 

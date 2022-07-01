@@ -10,8 +10,9 @@ fn map2(a,b) {
 fn dot(a,b) {
   alen := len(a)
   r := 0
-  for i in range(0, alen) 
+  for i in range(0, alen) {
     r = r + a[i]*b[i]
+  }
   return r
 }
 

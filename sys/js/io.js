@@ -1,3 +1,7 @@
+export function cwd() {
+  return Deno.cwd()
+}
+
 export async function dirList(fpath) {
     let list = []
     for await (const entry of Deno.readDir(fpath)) {
@@ -14,5 +18,6 @@ export async function write(fpath, text, options={}) {
   return await Deno.writeTextFile(fpath, text)
 }
 
+global.cwd = cwd
 global.read = read
 global.write = write

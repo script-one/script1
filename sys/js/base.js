@@ -11,10 +11,9 @@ export function values(o) {
 }
 
 export function range(from, to, step=1) {
-    let list=[], i=from;
-    while (i<to) {
+    let list=[]
+    for (let i=from; i<to; i+=step) {
         list.push(i);
-        i+=step;
     }
     return list;
 }

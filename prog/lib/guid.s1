@@ -1,14 +1,14 @@
-import 'random.s1' as R
+import './random.s1' as R
 
 fn randomChar(chars) {
-    i:=R.rInt(0, chars.length)
+    i:=R.rInt(0, len(chars))
     return chars[i]
 }
 
-fn randomStr(chars, len) {
+fn randomStr(chars, n) {
     list := []
     clen :=  len(chars)
-    for i in range(0, len) {
+    for i in range(0, n) {
         ci := R.rInt(0, clen)
         push(list, chars[ci])
     }

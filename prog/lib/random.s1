@@ -1,9 +1,9 @@
 fn rUnif(min=0, max=1) {
-    return min+random(max-min)
+    return min+random(max-min)*(max-min)
 }
 
 fn rInt(min, max) {
-    return floor(runif(min, max))
+    return floor(rUnif(min, max))
 }
 
 fn rChoose(a) {

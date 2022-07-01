@@ -1,0 +1,3 @@
+Hello !
+
+Script 1 can be translated to JavaScript/Python/Dart.

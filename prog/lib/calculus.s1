@@ -1,5 +1,6 @@
+step := 0.001
 // 微分
-fn diff(f, x, h = step) {
+fn df(f, x, h = step) {
     dy:= f(x+h)-f(x)
     return dy/h
 }
