@@ -1,6 +1,14 @@
 export 'dart/base.dart';
-export 'dart/math.dart';
+export 'dart/type.dart';
 export 'dart/str.dart';
+export 'dart/array.dart';
+export 'dart/datetime.dart';
+export 'dart/math.dart';
+export 'dart/console.dart';
+export 'dart/json.dart';
+export 'dart/fs.dart';
+export 'dart/regexp.dart';
+export 'dart:math';
 
 /*
 import 'dart:io';

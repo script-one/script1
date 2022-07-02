@@ -1,0 +1,3 @@
+fn copy(o) {
+    return fromJson(toJson(o))
+}

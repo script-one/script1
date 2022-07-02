@@ -1,5 +1,6 @@
 set -x
 set -e
+./dart_lib.sh obj
 ./dart_lib.sh calculus
 ./dart_lib.sh random
 ./dart_lib.sh vector

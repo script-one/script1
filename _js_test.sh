@@ -1,6 +1,6 @@
 set -x
 set -e
-./js_run.sh _io
+./js_run.sh _fs
 ./js_run.sh _regexp
 ./js_run.sh _sqlite
 ./js_run.sh _sha256

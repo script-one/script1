@@ -31,20 +31,11 @@ export function error(msg) {
     return Error(msg)
 }
 
-export function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-export function join(list, spliter) {
-    return list.join(spliter)
-}
-
 global.keys = keys
 global.values = values
 global.range = range
 global.push = push
 global.len = len
 global.error = error
-global.sleep = sleep
-global.join = join
+
 

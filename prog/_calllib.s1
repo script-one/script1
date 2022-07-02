@@ -1,14 +1,18 @@
 import './lib/random.s1' as R
-import './lib/fs.s1' as F
+import './lib/file.s1' as F
 import './lib/guid.s1' as G
 import './lib/calculus.s1' as C
 import './lib/vector.s1' as V
+import './lib/obj.s1' as O
 
-fn main() {
+async fn main() {
     log('rUnif(5,10)=', R.rUnif(5,10))
-    await F.copy('data/test.txt', 'data/test2.txt')
+    await F.copyText('data/test.txt', 'data/test2.txt')
     log('rInt()=', R.rInt(10, 20))
     log('guid()=', G.guid())
     log('diff(sin, PI/4)=', C.df(sin, PI/4))
     log('dot([1,2,3], [1,1,1])=', V.dot([1,2,3],[1,1,1]))
+    obj := {'name':'snoopy', 'age':3}
+    obj2 := O.copy(obj)
+    log('obj2=', obj2)
 }

@@ -1,8 +1,3 @@
-export function array(n, value) {
-    let a = new Array(n)
-    a.fill(value)
-    return a
-}
 
 export function float(str) {
     return parseFloat(str)
@@ -21,10 +16,9 @@ export function isInstanceOf(obj, cls) {
 }
 
 export function isTypeEqual(obj1, obj2) {
-    return typeof(obj1) == typeof (obj2)
+    return typeof(obj1) == typeof(obj2)
 }
 
-global.array = array
 global.float = float
 global.equal = equal
 global.isDefined = isDefined

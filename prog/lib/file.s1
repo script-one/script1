@@ -1,0 +1,4 @@
+async fn copyText(file1, file2) {
+    text1 := await readText(file1)
+    await writeText(file2, text1)
+}
