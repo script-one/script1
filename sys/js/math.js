@@ -1,3 +1,7 @@
+global.math = {
+    E:Math.E,
+    PI:Math.PI
+}
 global.sin = Math.sin
 global.cos = Math.cos
 global.tan = Math.tan
@@ -14,7 +18,5 @@ global.abs = Math.abs
 global.round = Math.round
 global.floor = Math.floor
 global.ceil = Math.ceil
-global.E = Math.E
-global.PI = Math.PI
 global.ln = Math.log
 global.random = Math.random

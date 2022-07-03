@@ -1,19 +1,21 @@
-import "dart:math" as math;
+import "dart:math" as m;
+class math {
+  static const PI = m.pi;
+  static const E = m.e;
+}
 
-var PI = math.pi;
-var E  = math.e;
-var sin = math.sin;
-var cos = math.cos;
-var tan = math.tan;
-var asin= math.asin;
-var acos= math.acos;
-var atan= math.atan;
-var exp = math.exp;
-var sqrt= math.sqrt;
-var pow = math.pow;
-var ln = math.log;
+var sin = m.sin;
+var cos = m.cos;
+var tan = m.tan;
+var asin= m.asin;
+var acos= m.acos;
+var atan= m.atan;
+var exp = m.exp;
+var sqrt= m.sqrt;
+var pow = m.pow;
+var ln = m.log;
 
-var _R = math.Random();
+var _R = m.Random();
 
 double random() {
     return _R.nextDouble();
