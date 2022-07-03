@@ -1,12 +1,12 @@
-step := 0.001
+// step := 0.001
 // 微分
-fn df(f, x, h = step) {
+fn df(f, x, h := 0.001) {
     dy:= f(x+h)-f(x)
     return dy/h
 }
 
 // 積分 integral calculus
-fn integral(f, a, b, h = step) {
+fn integral(f, a, b, h = 0.001) {
     area := 0.0
     for x in range(a, b, h) {
         area = area + f(x) * h

@@ -1,8 +1,8 @@
-fn map2(a,b) {
+fn map2(a,b, f) {
   alen := len(a)
   c := array(alen)
   for i in range(0, alen) {
-    c[i] = a[i]+b[i]
+    c[i] = f(a[i], b[i])
   }
   return c
 }

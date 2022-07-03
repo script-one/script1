@@ -1,4 +1,4 @@
-List array(n, value) {
+List array(n, [value=null]) {
     // var a = new List(n)
     return List.filled(n, value);
 }

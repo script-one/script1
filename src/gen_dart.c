@@ -81,7 +81,8 @@ static void gen_pid(node_t *pid) {
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    if (type) emit("var ");
+    // if (type) emit("var ");
+    if (type) emit("dynamic ");
     gen_code(pid);
     if (exp) {
         emit("=");
@@ -92,10 +93,18 @@ static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
 // params = assign*
 static void gen_params(link_t *head) {
     emit("(");
+    if (head != NULL) emit("[");
     for (link_t *p = head; p != NULL; p = p->next) {
-        gen_code(p->node->array[0]); // id 
+        node_t *nid = p->node->array[0];
+        node_t *nexp = p->node->array[2];
+        gen_code(nid);
+        if (nexp) {
+            emit("=");
+            gen_code(p->node->array[2]);
+        }
         if (p->next != NULL) emit(",");
     }
+    if (head != NULL) emit("]");
     emit(")");
 }
 
@@ -125,6 +134,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
         if (ret) { gen_code(ret); emit(" "); } else emit("dynamic ");
         gen_code(id); // if (id) gen_code(id);
         gen_code(params);
+        if (async) emit(" async ");
         gen_code(body);
     }
 }
