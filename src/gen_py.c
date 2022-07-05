@@ -93,12 +93,16 @@ static void gen_import(node_t *str1, node_t *id2) {
     int  flen = str1->ptk->len - 2;
     char *ext = fpath + flen - 3;
     char *p;
-    for (p = ext; p>=fpath; p--) {
+    for (p = fpath+flen; p>=fpath; p--) {
         if (*p == '/') break;
     }
     char *fname = p+1;
-    emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
-    emit("import %.*s as ", (int) (ext-fname), fname);
+    if (memcmp(ext, ".s1", 3)==0) {
+        emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
+        emit("import %.*s as ", (int) (ext-fname), fname);
+    } else {
+        emit("import %.*s as ", flen, fname);
+    }
     gen_code(id2);
     line(0);
 }
