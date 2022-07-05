@@ -98,7 +98,6 @@ static void gen_import(node_t *str1, node_t *id2) {
     }
     char *fname = p+1;
     if (memcmp(ext, ".s1", 3)==0) {
-        emit("import sys\nimport os\n");
         emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
         emit("import %.*s as ", (int) (ext-fname), fname);
     } else {
@@ -213,7 +212,7 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
 void gen_py(node_t *root) {
     emit("# source file: %s\n", ifile);
     // if (o_main) 
-    emit("import sys\nsys.path.append('sys')\nfrom s1 import *\n");
+    emit("import sys\nimport os\nsys.path.append('sys')\nfrom s1 import *\n");
     line(0);
     gen_code(root);
 
