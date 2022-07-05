@@ -1,4 +1,6 @@
 import sys, os
+import random as R
+import math
 
 null =  None
 
@@ -19,7 +21,14 @@ def push(l, a):
 def map(l, f):
     # cannot use python keyword map() here
     # l = map(f, l)
-    return [f(x) for x in l] 
+    return [f(x) for x in l]
+
+def random():
+    return R.random()
+
+def floor(x):
+    return math.floor(x)
+
 
 """
 export function str(o) {

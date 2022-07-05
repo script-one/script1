@@ -1,5 +1,4 @@
-import './random.s1' as R
-import 'math' as M
+import './rnd.s1' as R
 
 fn randomChar(chars) {
     i:=R.rInt(0, len(chars))

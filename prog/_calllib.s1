@@ -1,4 +1,4 @@
-import './lib/random.s1' as R
+import './lib/rnd.s1' as R
 import './lib/file.s1' as F
 import './lib/guid.s1' as G
 import './lib/calculus.s1' as C
