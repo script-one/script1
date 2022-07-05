@@ -1,5 +1,20 @@
 #include <gen1.c>
 
+// block = { stmts }
+static void gen_block(node_t *block) {
+    line(block->ptk->line); // emit("\n");
+    indent(block_level-1); emit(BlockBegin); line(block->ptk->line);
+    gen_stmts(block->node); // stmts
+    indent(block_level-1); emit(BlockEnd);
+}
+
+// while expr stmt
+static void gen_while(node_t *exp, node_t *stmt) {
+    emit("while "); 
+    gen_code(exp);
+    gen_code(stmt);
+}
+
 static void gen_str(node_t *node) {
     emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
 }

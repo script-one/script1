@@ -5,6 +5,9 @@ null =  None
 def addPath(path):
     sys.path.append(path)
 
+def includePath(path):
+    sys.path.append(os.path.join(os.path.dirname(__file__), path))
+
 def log(*args):
     [print(arg, end='') for arg in args]
     print(' ')

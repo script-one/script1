@@ -65,7 +65,11 @@ static void gen_stmt(node_t *stmt);
 static void gen_code(node_t *me);
 
 static void indent(int level) {
+#ifdef __PYTHON__
+    emit("%*s", level*4, "");
+#else
     emit("%*s", level*2, "");
+#endif
 }
 
 static void push(int type) {

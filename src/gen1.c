@@ -39,15 +39,6 @@ static void gen_args(link_t *head) {
 }
 
 #ifndef __PYTHON__
-// while expr stmt
-static void gen_while(node_t *exp, node_t *stmt) {
-    emit("while "); 
-    gen_code(exp);
-    gen_code(stmt);
-}
-#endif
-
-#ifndef __PYTHON__
 // should emit semicolon
 static bool semicolon() {
     char *p = ep-1;
@@ -80,14 +71,19 @@ static void gen_stmts(node_t *node) {
     }
 }
 
+/*
 // block = { stmts }
 static void gen_block(node_t *block) {
     line(block->ptk->line); // emit("\n");
-    indent(block_level-1); emit(BlockBegin); line(block->ptk->line);
+    #ifndef __PYTHON__
+        indent(block_level-1); emit(BlockBegin); line(block->ptk->line);
+    #endif
     gen_stmts(block->node); // stmts
-    indent(block_level-1); emit(BlockEnd);
+    #ifndef __PYTHON__
+        indent(block_level-1); emit(BlockEnd);
+    #endif
 }
-
+*/
 // ------------- moved from gen_j.c to here -------------------
 // array = [ expr* ]
 static void gen_array(link_t *head) {

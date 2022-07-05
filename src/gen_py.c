@@ -1,13 +1,19 @@
 #define __PYTHON__
 #include <gen1.c>
 
+// block = { stmts }
+static void gen_block(node_t *block) {
+    line(block->ptk->line); // emit("\n");
+    gen_stmts(block->node); // stmts
+}
+
 // if expr stmt (else stmt)?
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     emit("if "); gen_code(exp);
     emit(":");
     gen_code(stmt1);
     if (stmt2) {
-        emit("  else");
+        emit(" else");
         emit(":");
         gen_code(stmt2);
     }
@@ -83,11 +89,18 @@ static void gen_map(node_t *nmap) {
 }
 
 static void gen_import(node_t *str1, node_t *id2) {
-    emit("import * as ");
+    char *fpath = str1->ptk->str + 1;
+    int  flen = str1->ptk->len - 2;
+    char *ext = fpath + flen - 3;
+    char *p;
+    for (p = ext; p>=fpath; p--) {
+        if (*p == '/') break;
+    }
+    char *fname = p+1;
+    emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
+    emit("import %.*s as ", (int) (ext-fname), fname);
     gen_code(id2);
-    emit(" from ");
-    // gen_code(str1);
-    emit("'%.*s'", str1->ptk->len-2, str1->ptk->str+1);
+    line(0);
 }
 
 // pid = (@|$)? id
@@ -104,8 +117,10 @@ static void gen_pid(node_t *pid) {
 // (await|new)? pid ( [expr] | . id | args )*
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
     if (key) {
-        // gen_code(key);
-        emit(" ");
+        if (key->array[0]->type != New) {
+            gen_code(key);
+            emit(" ");
+        }
     }
     gen_code(pid);
     for (link_t *p=head; p != NULL; p = p->next) {
@@ -192,7 +207,7 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
 
 void gen_py(node_t *root) {
     emit("# source file: %s\n", ifile);
-    emit("import sys\nsys.path.append('sys')\nfrom s1 import *\n");
+    if (o_main) emit("import sys\nsys.path.append('sys')\nfrom s1 import *\n");
     line(0);
     gen_code(root);
 
