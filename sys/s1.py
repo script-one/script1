@@ -7,21 +7,20 @@ null =  None
 def addPath(path):
     sys.path.append(path)
 
-def includePath(path):
-    sys.path.append(os.path.join(os.path.dirname(__file__), path))
+def includePath(file, path):
+    sys.path.append(os.path.join(os.path.dirname(file), path))
 
-def log(*args):
-    [print(arg, end='') for arg in args]
-    print(' ')
+# base
+
 
 def push(l, a):
     l.append(a)
     return l
 
-def map(l, f):
-    # cannot use python keyword map() here
-    # l = map(f, l)
-    return [f(x) for x in l]
+# len : default
+
+def error(msg):
+    return NameError(msg)
 
 def random():
     return R.random()
@@ -29,42 +28,100 @@ def random():
 def floor(x):
     return math.floor(x)
 
+# array
 
-"""
-export function str(o) {
-    if (o.__str) return o.__str()
-    return o.toString()
-}
+def array(n, value):
+    return [value] * 5
 
-export function keys(o) {
-    if (o instanceof Map || o instanceof Set) return Array.from(o.keys())
-    return Object.keys(o)
-}
+def join(a, spliter):
+    return spliter.join(a)
 
-export function values(o) {
-    if (o instanceof Map || o instanceof Set) return Array.from(o.keys())
-    return Object.keys(o)
-}
+'''
+def map(l, f):
+    # cannot use python keyword map() here
+    # l = map(f, l)
+    return [f(x) for x in l]
+'''
 
-export function range(from, to, step=1) {
-    let list=[], i=from;
-    while (i<to) {
-        list.push(i);
-        i+=step;
-    }
-    return list;
-}
+pymap = map
+pyfilter = filter
+from functools import reduce
+pyreduce = reduce
 
-export function re(exp, attr) {
-    let r = new RegExp(exp, attr)
-    r.lastIndex = 0
-    return r
-}
+def map(a, f):
+    return pymap(f, a)
 
-global.log = log
-global.str = str
-global.keys = keys
-global.values = values
-global.range = range
-global.re = re
-"""
+def filter(a, f):
+    return pyfilter(f, a)
+
+def reduce(a, f, init):
+    return pyreduce(f, a, init)
+
+# console
+
+import logging
+
+def log(*args):
+    [print(arg, end='') for arg in args]
+    print(' ')
+
+def warning(*args):
+    logging.warning('/'.join(args))
+
+# input:default
+
+import datetime
+
+def date(year, month, day):
+    return datetime.datetime(year, month, day)
+
+'''
+def time(year, month, day):
+'''
+
+def now():
+    return datetime.datetime.now()
+
+# sleep:default
+
+# fs -- https://www.twilio.com/blog/working-with-files-asynchronously-in-python-using-aiofiles-and-asyncio
+
+# hash -- https://docs.python.org/3/library/hashlib.html
+
+# json -- https://www.w3schools.com/python/python_json.asp
+import json
+
+def toJson(o):
+    return json.dumps(o)
+
+def fromJson(text):
+    return json.loads(text)
+
+
+import math as M
+
+# math -- https://docs.python.org/3/library/math.html
+
+class math:
+    PI = M.pi
+
+sin = M.sin
+cos = M.cos
+tan = M.tan
+asin = M.asin
+acos = M.acos
+atan = M.atan
+exp = M.exp
+sqrt = M.sqrt
+floor = M.floor
+ceil = M.ceil
+ln = M.log
+
+# regexp -- https://docs.python.org/3/library/re.html
+
+# sqlite -- https://docs.python.org/3/library/sqlite3.html
+
+# str -- https://www.freecodecamp.org/news/how-to-substring-a-string-in-python/
+
+def substr(str1, i, len):
+    return str1[i:i+len]

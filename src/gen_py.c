@@ -98,7 +98,8 @@ static void gen_import(node_t *str1, node_t *id2) {
     }
     char *fname = p+1;
     if (memcmp(ext, ".s1", 3)==0) {
-        emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
+        // emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
+        emit("includePath(__file__, '%.*s')\n", (int) (fname-fpath), fpath);
         emit("import %.*s as ", (int) (ext-fname), fname);
     } else {
         emit("import %.*s as ", flen, fname);
@@ -150,12 +151,28 @@ static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
         gen_code(exp);
     }
 }
-
+/*
 // params = assign*
 static void gen_params(link_t *head) {
     emit("(");
     for (link_t *p = head; p != NULL; p = p->next) {
         gen_code(p->node->array[0]); // id 
+        if (p->next != NULL) emit(",");
+    }
+    emit(")");
+}
+*/
+// params = assign*
+static void gen_params(link_t *head) {
+    emit("(");
+    for (link_t *p = head; p != NULL; p = p->next) {
+        node_t *nid = p->node->array[0];
+        node_t *nexp = p->node->array[2];
+        gen_code(nid);
+        if (nexp) {
+            emit("=");
+            gen_code(p->node->array[2]);
+        }
         if (p->next != NULL) emit(",");
     }
     emit(")");
