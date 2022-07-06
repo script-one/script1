@@ -49,13 +49,13 @@ from functools import reduce
 pyreduce = reduce
 
 def map(a, f):
-    return pymap(f, a)
+    return list(pymap(f, a))
 
 def filter(a, f):
-    return pyfilter(f, a)
+    return list(pyfilter(f, a))
 
 def reduce(a, f, init):
-    return pyreduce(f, a, init)
+    return list(pyreduce(f, a, init))
 
 # console
 
@@ -84,7 +84,21 @@ def now():
 
 # sleep:default
 
+import asyncio
+import aiofiles
+
 # fs -- https://www.twilio.com/blog/working-with-files-asynchronously-in-python-using-aiofiles-and-asyncio
+async def readText(fpath):
+    async with aiofiles.open(fpath, mode='r') as f:
+        text = await f.read()
+        return text
+
+async def writeText(fpath, text):
+    async with aiofiles.open(fpath, mode='w') as f:
+        await f.write(text)
+
+# async def run(f):
+#    return asyncio.run(f)
 
 # hash -- https://docs.python.org/3/library/hashlib.html
 
