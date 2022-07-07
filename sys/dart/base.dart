@@ -20,6 +20,10 @@ List<int> range(int from, int to, [int step=1]) {
     return list;
 }
 
+List list(List a) {
+    return a;
+}
+
 List push(List list, dynamic a) {
     list.add(a);
     return list;

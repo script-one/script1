@@ -31,6 +31,11 @@ export function error(msg) {
     return Error(msg)
 }
 
+// like python list(...)
+export function list(a) {
+    return Array.from(a)
+}
+
 global.keys = keys
 global.values = values
 global.range = range

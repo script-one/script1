@@ -9,5 +9,5 @@ log('hello', 'ccc', '!', 32, [])
 map1 = {'a':1, 'b':2, 'c':[3,4]}
 log(keys(map1))
 log(values(map1))
-log(range(1,10))
-log(range(1,10,2))
+log(list(range(1,10)))
+log(list(range(1,10,2)))

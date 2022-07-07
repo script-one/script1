@@ -29,6 +29,7 @@ def keys(dict):
 def values(dict):
     return dict.values()
 
+'''
 pyrange = range
 
 def range(start, to, step=1):
@@ -36,6 +37,7 @@ def range(start, to, step=1):
     for i in pyrange(start, to, step):
         a.append(i)
     return a
+'''
 
 # len : default
 
