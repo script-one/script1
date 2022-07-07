@@ -6,5 +6,4 @@ set -e
 ./py_lib.sh vector
 ./py_lib.sh file
 ./py_lib.sh guid
-./py_run.sh _calllib4
-# ./py_run.sh _calllib
+./py_run.sh _calllib

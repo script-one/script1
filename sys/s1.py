@@ -1,6 +1,7 @@
 import sys, os
 import random as R
 import math
+import inspect
 
 null =  None
 
@@ -10,12 +11,31 @@ def addPath(path):
 def includePath(file, path):
     sys.path.append(os.path.join(os.path.dirname(file), path))
 
-# base
+def run(f):
+    if inspect.iscoroutinefunction(f):
+        asyncio.run(f())
+    else:
+        f()
 
+# base
 
 def push(l, a):
     l.append(a)
     return l
+
+def keys(dict):
+    return dict.keys()
+
+def values(dict):
+    return dict.values()
+
+pyrange = range
+
+def range(start, to, step=1):
+    a=[]
+    for i in pyrange(start, to, step):
+        a.append(i)
+    return a
 
 # len : default
 
@@ -33,8 +53,9 @@ def floor(x):
 def array(n, value):
     return [value] * 5
 
-def join(a, spliter):
-    return spliter.join(a)
+def join(a, spliter=' '):
+    return spliter.join([str(x) for x in a])
+    # return spliter.join(a)
 
 '''
 def map(l, f):
@@ -62,11 +83,12 @@ def reduce(a, f, init):
 import logging
 
 def log(*args):
-    [print(arg, end='') for arg in args]
-    print(' ')
+    print(join(args))
+    # [print(arg, end=' ') for arg in args]
+    # print(' ')
 
 def warning(*args):
-    logging.warning('/'.join(args))
+    logging.warning(join(args))
 
 # input:default
 

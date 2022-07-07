@@ -228,18 +228,13 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
 
 void gen_py(node_t *root) {
     emit("# source file: %s\n", ifile);
-    emit("import sys\nimport os\nimport asyncio\n");
+    emit("import sys\nimport os\n");
     emit("sys.path.append('sys')\nfrom s1 import *\n");
     line(0);
     gen_code(root);
     bool has_main = strstr(source, " main(")!=NULL;
     if (has_main && o_main){
-        emit("if __name__ == '__main__':");
-        if (strstr(source, "async fn main(")) {
-            emit("asyncio.run(main())");
-        } else {
-            emit("main()");
-        }
+        emit("if 'main' in globals():run(main)");
     }
     emit("\n");
 }
