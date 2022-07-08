@@ -26,12 +26,17 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   KeyBegin=199, 
   Import, As, If, While, For, 
   Else, In, Continue, Break, Return, 
-  Fn, Class, Extends, Map, Try, Catch, Throw,
-  Async, Await, New, 
-  KeyEnd,
-  Op1Begin, Neg, Inc, Dec, Global, This, Op1End, 
-  Op2Begin, Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, Op2End,
-  End,
+  Fn, Class, Extends, Map, Try, 
+  Catch, Throw, Async, Await, New, 
+  KeyEnd, Op1Begin, Neg, Inc, Dec, 
+  Global, This, Op1End, Op2Begin, Lor, 
+  Land, Eq, Neq, Le, Ge, 
+  Shl, Shr, Op2End, VmOpBegin, Lea,
+  Imm, Jmp ,Jsr ,Bz  ,Bnz ,
+  Ent, Adj ,Lev ,Li  ,Lc,
+  Si, Sc, Push , Open, Read,
+  Close, Prtf, Malc, Free, Mset,
+  Mcmp, Exit, VmOpEnd, End,
 };
 
 typedef struct token_t {
@@ -77,6 +82,7 @@ char* key_name(int key, char *name);
 int read_source(char *file);
 bool head_eq(char *str1, int len1, char *str2);
 bool tail_eq( char *str, char *end);
+void copy_str(char *str, int len, char *to_str);
 char back_skip(char *end, char *set);
 void lex(char *source);
 node_t *parse(char *source);
@@ -84,3 +90,4 @@ void gen_s1(node_t *root);
 void gen_js(node_t *root);
 void gen_dart(node_t *root);
 void gen_py(node_t *root);
+void gen_ir(node_t *root);

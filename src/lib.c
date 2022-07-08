@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 // =================== memory management: pool ================
 #define NPTR 100000
@@ -50,4 +51,9 @@ bool tail_eq(char *str, char *tail) {
 bool head_eq(char *str, int len, char *head) {
     int hlen = strlen(head);
     return hlen == len && memcmp(str, head, len)==0;
+}
+
+void copy_str(char *str, int len, char *to_str) {
+    memcpy(to_str, str, len);
+    to_str[len] = '\0';
 }

@@ -1,0 +1,18 @@
+// source file: prog/exp.s1
+
+// var x
+x=3;                                      // (1) 
+imm 3
+// var y
+y=5;                                // (2) 
+imm 5
+// var z
+z=((var x
+x+3)*var y
+y);            // (3) 
+imm 3
+// var log
+log('z=',var z
+z);                // (4) 
+
+

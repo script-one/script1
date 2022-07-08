@@ -9,11 +9,11 @@ static void gen_class(node_t *nid, node_t *eid, node_t *nbody) {
         gen_code(eid);
     }
 
-    emit(" {");
+    emit(" {"); block_level++;
     line(0);
     gen_list(nbody->list->head, "\n");
     line(0);
-    emit("}");
+    block_level --; indent(block_level); emit("}");
 }
 
 static void gen_import(node_t *str1, node_t *id2) {
@@ -74,6 +74,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 
 // function = fn(:id)? id(params) block
 static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *block) {
+    indent(block_level); 
     if (async) emit("async ");
     emit("fn");
     if (ret) { emit(":"); gen_code(ret); }

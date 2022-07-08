@@ -4,14 +4,19 @@ char *source;
 
 char *key_names[] = {
   "keybegin", 
-  "import", "as", "if", "while", "for", 
-  "else", "in", "continue", "break", "return", 
-  "fn", "class", "extends", "__map__", "try", "catch", "throw",
-  "async", "await", "new",
-  "keyend", 
-  "op1begin", "-", "++", "--", "global.", "this.", "op1end",
-  "op2begin", "||", "&&", "==", "!=", "<=", ">=", "<<", ">>", "op2end"
-  "end",
+/*200*/ "import", "as", "if", "while", "for", 
+/*205*/ "else", "in", "continue", "break", "return", 
+/*210*/ "fn", "class", "extends", "__map__", "try", 
+/*215*/ "catch", "throw", "async", "await", "new", 
+/*220*/ "keyend", "op1begin", "-", "++", "--", 
+/*225*/ "global.", "this.", "op1end","op2begin", 
+/*230*/ "||", "&&", "==", "!=", "<=", ">=", 
+/*235*/ "<<", ">>", "op2end", "vmOpBegin", "lea", 
+/*240*/ "imm", "jmp", "jsr", "bz", "bnz", 
+/*245*/ "ent", "adj", "lev", "li", "lc", 
+/*250*/ "si", "sc", "push","open", "read", 
+/*255*/ "close", "prtf", "malc", "free", "mset", 
+/*260*/ "mcmp", "exit", "VmOpEnd", "end",
 };
 
 int key_code(char *key, int len) {

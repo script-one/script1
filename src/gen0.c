@@ -10,9 +10,10 @@ static char ebuf[1024], *ep=ebuf;
 
 #define max(a,b) (((a)>(b))?(a):(b))
 #define emit(...) { \
+  char *lep = ep; \
   sprintf(ep, __VA_ARGS__); ep+=strlen(ep); \
-  debug(__VA_ARGS__); \
-  if (ofp) fprintf(ofp, __VA_ARGS__); \
+  debug("%.*s", (int) (ep-lep), lep); \
+  if (ofp) fprintf(ofp, "%.*s", (int) (ep-lep), lep); \
 }
 
 #ifdef __PYTHON__
