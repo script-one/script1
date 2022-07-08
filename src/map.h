@@ -11,22 +11,22 @@ typedef char* string;
 typedef struct _Pair {
   char *key;
   void *value;
-} Pair;
+} pair_t;
 
 typedef struct _Map {
-  Pair *table;
+  pair_t *table;
   int size;
   int top;
-} Map;
+} map_t;
 
 #define ARRAY_SIZE(list) (sizeof(list)/sizeof(list[0]))
-extern unsigned int hash(char *key);
-extern Map* map_new(Map *map, int size);
-extern Pair* map_find(Map *map, char *key);
-extern Pair* map_add(Map *map, char *key, void *value);
-extern void map_add_all(Map *map, Pair *list, int top);
-extern void* map_lookup(Map *map, char *key);
-extern void map_dump(Map *map);
-extern void map_free(Map *map);
+extern unsigned int map_hash(char *key);
+extern map_t* map_new(map_t *map, int size);
+extern pair_t* map_find(map_t *map, char *key);
+extern pair_t* map_add(map_t *map, char *key, void *value);
+extern void map_add_all(map_t *map, pair_t *list, int top);
+extern void* map_lookup(map_t *map, char *key);
+extern void map_dump(map_t *map);
+extern void map_free(map_t *map);
 
 #endif
