@@ -39,6 +39,7 @@ pair_t* map_add(map_t *map, char *key, void *value) {
 
 void* map_lookup(map_t *map, char *key) {
   pair_t *p = map_find(map, key);
+  if (p->key == NULL) return NULL;
   return p->value;
 }
 

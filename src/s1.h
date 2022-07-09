@@ -32,9 +32,9 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   Global, This, Op1End, Op2Begin, Lor, 
   Land, Eq, Neq, Le, Ge, 
   Shl, Shr, Op2End, VmOpBegin, Lea,
-  Imm, Jmp ,Jsr ,Bz  ,Bnz ,
-  Ent, Adj ,Lev ,Li  ,Lc,
-  Si, Sc, Push , Open, Read,
+  Imm, Var, Jmp ,Jsr ,Bz  ,Bnz ,
+  Ent, Adj ,Lev ,Ldi  ,Ldc,
+  Sti, Stc, Push , Open, Read,
   Close, Prtf, Malc, Free, Mset,
   Mcmp, Exit, VmOpEnd, End,
 };

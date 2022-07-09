@@ -1,15 +1,57 @@
 #include <gen0.c>
 #include <stdint.h>
+#include <map.h>
 
 #define ir_t int
 
+#define TMAX 10000
+
 ir_t code[NMAX], *cp = code, *lcp = code;
 ir_t data[NMAX], *dp = data;
+char stab[NMAX], *stabp = stab;
+
 typedef struct {
-    Map
-} env_t;
+    char *name;
+    char type;
+    int i;
+} var_t;
+
+map_t env;
+var_t vars[TMAX];
+int var_top = 0;
 
 #define eir(c) { *cp++=c; }
+
+static void ir_init() {
+  map_new(&env, TMAX);
+}
+
+static void ir_close() {
+  map_free(&env);
+}
+
+static var_t* sym_add(char *name) {
+  var_t *var = map_lookup(&env, name);
+  if (var) return var;
+  
+  char *vname = stabp;
+  strcpy(stabp, name);
+  stabp += strlen(name);
+  *stabp++ = '\0';
+  
+  var = &vars[var_top];
+  *var = (var_t) { .name=vname, .type='G', .i=var_top++ };
+  map_add(&env, vname, var);
+  printf("map_add(%s)\n", vname);
+  return var;
+}
+
+void sym_dump() {
+  for (int i=0; i<var_top; i++) {
+    var_t *var = &vars[i];
+    printf("%s %c %d\n", var->name, var->type, var->i);
+  }
+}
 
 static void dump_ir() {
     while (lcp < cp) {
@@ -20,21 +62,23 @@ static void dump_ir() {
         emit("%s", ir_name);
         if (ir >= Lea && ir <= Adj)
             emit(" %d", *lcp++);
+        emit("\n");
     }
     emit("\n");
 }
 
 static void gen_num(node_t *node) {
-    eir(Imm);
     int value;
     sscanf(node->ptk->str, "%d", &value);
-    eir(value);
+    eir(Imm); eir(value); // imm value
     gen_token(node);
 }
 
 static void gen_id(node_t *node) {
     char id[100];
     copy_str(node->ptk->str, node->ptk->len, id);
+    var_t *var = sym_add(id);
+    eir(Var); eir(var->i); // var id
     gen_token(node);
 }
 
@@ -55,10 +99,12 @@ static void gen_op1(int op, node_t *node) {
 static void gen_op2(node_t *node1, int op, node_t *node2) {
     emit("(");
     gen_code(node1);
+    eir(Push);
     char name[20];
     key_name(op, name);
     emit("%s", name);
     gen_code(node2);
+    eir(op);
     emit(")");
 }
 
@@ -230,6 +276,7 @@ static void gen_pid(node_t *pid) {
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
     gen_code(pid);
+    eir(Push);
     if (type) {
         emit(":");
         if (type->list != NULL)
@@ -238,6 +285,7 @@ static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
     if (exp) {
         emit("=");
         gen_code(exp);
+        eir(Sti);
     }
 }
 
@@ -278,8 +326,11 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 }
 
 void gen_ir(node_t *root) {
+    ir_init();
     emit("// source file: %s\n", ifile);
     line(0);
     gen_code(root);
     emit("\n");
+    sym_dump();
+    ir_close();
 }

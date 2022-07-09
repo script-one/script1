@@ -8,12 +8,12 @@
 
 typedef char* string;
 
-typedef struct _Pair {
+typedef struct {
   char *key;
   void *value;
 } pair_t;
 
-typedef struct _Map {
+typedef struct {
   pair_t *table;
   int size;
   int top;
