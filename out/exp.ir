@@ -1,35 +1,35 @@
 // source file: prog/exp.s1
 
 // x=3;                                            // (1) 
-var 0
+var 0 // x
 push
 imm 3
 st.i
 
-// y=5;                     // (2) 
-var 1
+// y=5;                // (2) 
+var 1 // y
 push
 imm 5
 st.i
 
-// z=((x+3)*y);             // (3) 
-var 2
+// z=((x+3)*y);        // (3) 
+var 2 // z
 push
-var 0
+var 0 // x
 push
 imm 3
 +
 push
-var 1
+var 1 // y
 *
 st.i
 
 // log('z=',z); // (4) 
-var 3
+var 3 // log
 push
-cstr 10
+cstr 10 // 'z='
 push
-var 2
+var 2 // z
 push
 narg 2
 jsr

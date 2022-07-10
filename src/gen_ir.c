@@ -32,8 +32,8 @@ static void ir_close() {
 
 static char *st_add(char *str, int len) {
   char *start = stp;
-  strcpy(stp, str);
-  stp += len; // strlen(str);
+  memcpy(stp, str, len);
+  stp += len;
   *stp++ = '\0';
   return start;
 }
@@ -70,8 +70,14 @@ static void dump_ir() {
         if (ir >= End) emit("error\n");
         key_name(ir, ir_name);
         emit("%s", ir_name);
-        if (ir >= Lea && ir <= Adj)
-            emit(" %d", *lcp++);
+        if (ir >= Lea && ir <= Adj) {
+            ir_t arg = *lcp++;
+            emit(" %d", arg);
+            if (ir == Var)
+                emit(" // %s", vars[arg].name);
+            if (ir == Cstr)
+                emit(" // '%s'", &stab[arg]);
+        }
         emit("\n");
     }
     emit("\n");
