@@ -8,7 +8,7 @@
 
 ir_t code[NMAX], *cp = code, *lcp = code;
 ir_t data[NMAX], *dp = data;
-char stab[NMAX], *stabp = stab;
+char stab[NMAX], *stp = stab;
 
 typedef struct {
     char *name;
@@ -30,15 +30,25 @@ static void ir_close() {
   map_free(&env);
 }
 
+static char *st_add(char *str, int len) {
+  char *start = stp;
+  strcpy(stp, str);
+  stp += len; // strlen(str);
+  *stp++ = '\0';
+  return start;
+}
+
 static var_t* sym_add(char *name) {
   var_t *var = map_lookup(&env, name);
   if (var) return var;
   
+  char *vname = st_add(name, strlen(name));
+  /*
   char *vname = stabp;
   strcpy(stabp, name);
   stabp += strlen(name);
   *stabp++ = '\0';
-  
+  */
   var = &vars[var_top];
   *var = (var_t) { .name=vname, .type='G', .i=var_top++ };
   map_add(&env, vname, var);
@@ -75,10 +85,12 @@ static void gen_num(node_t *node) {
 }
 
 static void gen_id(node_t *node) {
+    /* move to gen_pid
     char id[100];
     copy_str(node->ptk->str, node->ptk->len, id);
     var_t *var = sym_add(id);
     eir(Var); eir(var->i); // var id
+    */
     gen_token(node);
 }
 
@@ -111,7 +123,15 @@ static void gen_op2(node_t *node1, int op, node_t *node2) {
 // args = ( expr* )
 static void gen_args(link_t *head) {
     emit("(");
-    gen_list(head, ",");
+    // gen_list(head, ",");
+    int narg = 0;
+    for (link_t *p = head; p != NULL; p = p->next) {
+        gen_code(p->node);
+        eir(Push);
+        if (p->next != NULL) emit(",");
+        narg++;
+    }
+    eir(Narg); eir(narg);
     emit(")");
 }
 
@@ -180,7 +200,10 @@ static void gen_while(node_t *exp, node_t *stmt) {
 }
 
 static void gen_str(node_t *node) {
-    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
+    char *str = node->ptk->str+1; int len = node->ptk->len-2;
+    emit("'%.*s'", len, str);
+    char *s = st_add(str, len);
+    eir(Cstr); eir(s-stab);
 }
 
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
@@ -198,8 +221,10 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
         } else if (op == '.') {
             emit(".");
             gen_code(n->array[0]);
-        } else if (op == Args) {
+        } else if (op == Args) { // function call
+            eir(Push);
             gen_code(n);
+            eir(Jsr);
         }
     }
 }
@@ -265,24 +290,30 @@ static void gen_import(node_t *str1, node_t *id2) {
 // pid = (@|$)? id
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
+    char id[100];
     if (n->type == Global) {
         emit("@");
     } else if (n->type == This) {
         emit("$");
     }
-    gen_code(n->array[0]);
+    node_t *nid = n->array[0];
+    gen_code(nid);
+
+    copy_str(nid->ptk->str, nid->ptk->len, id);
+    var_t *var = sym_add(id);
+    eir(Var); eir(var->i); // var id
 }
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
     gen_code(pid);
-    eir(Push);
     if (type) {
         emit(":");
         if (type->list != NULL)
             gen_list(type->list->head, "");
     }
     if (exp) {
+        eir(Push);
         emit("=");
         gen_code(exp);
         eir(Sti);

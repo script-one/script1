@@ -12,9 +12,9 @@ char *key_names[] = {
 /*225*/ "global.", "this.", "op1end","op2begin", 
 /*230*/ "||", "&&", "==", "!=", "<=", ">=", 
 /*235*/ "<<", ">>", "op2end", "vmOpBegin", "lea", 
-/*240*/ "imm", "var", "jmp", "jsr", "bz", "bnz", 
-/*24..6*/ "ent", "adj", "lev", "ld.i", "ld.c", 
-/*250*/ "st.i", "st.c", "push","open", "read", 
+/*240*/ "imm", "var", "cstr", "narg", "ent", "jmp", "bz", "bnz", "adj",
+/*24..6*/ "jsr", "lev", "ld.i", "ld.c", 
+/*250*/ "st.i", "st.b", "push","open", "read", 
 /*255*/ "close", "prtf", "malc", "free", "mset", 
 /*260*/ "mcmp", "exit", "VmOpEnd", "end",
 };

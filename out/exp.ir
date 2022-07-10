@@ -26,7 +26,12 @@ st.i
 
 // log('z=',z); // (4) 
 var 3
+push
+cstr 10
+push
 var 2
 push
+narg 2
+jsr
 
 
