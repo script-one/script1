@@ -1,6 +1,20 @@
 // source file: prog/hello.s1
-import '../sys/s1.js'
 
-name='script1';                                    // (1) 
-log(('hello '+name));                              // (2) 
-call main
+// name:='script1';                                // (1) 
+var name
+push
+imm 'script1'
+Store
+
+// log(('hello '+name)); // (2) 
+var log
+push
+imm 'hello '
+push
+var name
++
+push
+narg 1
+jsr
+
+

@@ -1,0 +1,37 @@
+// source file: prog/exp.s1
+
+// x=3;                                            // (1) 
+var x
+push
+imm 3
+Store
+
+// y=5;                    // (2) 
+var y
+push
+imm 5
+Store
+
+// z=((x+3)*y);            // (3) 
+var z
+push
+var x
+push
+imm 3
++
+push
+var y
+*
+Store
+
+// log('z=',z); // (4) 
+var log
+push
+imm 'z='
+push
+var z
+push
+narg 2
+jsr
+
+

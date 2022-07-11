@@ -1,7 +1,7 @@
 set -x
 set -e
 ./ir_run.sh exp
-#./ir_run.sh hello
+./ir_run.sh hello
 #./js_run.sh while
 #./js_run.sh sum
 #./js_run.sh fn

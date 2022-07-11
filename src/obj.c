@@ -47,7 +47,7 @@ struct obj_link_t {
 
 #define OMAX 10000
 obj_t obj[OMAX];
-int o_top = 0;
+int o_top = 0; 
 
 obj_t *obj_new(int type) {
     obj_t *r = &obj[o_top++];
