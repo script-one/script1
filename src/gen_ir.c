@@ -1,33 +1,32 @@
 #include <gen0.c>
 #include <stdint.h>
 #include <map.h>
-
-#define ir_t int
+#include <unistd.h>
 
 #define TMAX 10000
-
-ir_t code[NMAX], *cp = code, *lcp = code;
-ir_t data[NMAX], *dp = data;
-char stab[NMAX], *stp = stab;
 
 typedef struct {
     char *name;
     char type;
-    int i;
+    int idx;
 } var_t;
 
-map_t env;
+map_t sym_table;
 var_t vars[TMAX];
 int var_top = 0;
+
+word_t code[NMAX], *cp = code, *lcp = code;
+word_t data[NMAX], *dp = data;
+char stab[NMAX], *stp = stab;
 
 #define eir(c) { *cp++=c; }
 
 static void ir_init() {
-  map_new(&env, TMAX);
+  map_new(&sym_table, TMAX);
 }
 
 static void ir_close() {
-  map_free(&env);
+  map_free(&sym_table);
 }
 
 static char *st_add(char *str, int len) {
@@ -39,40 +38,35 @@ static char *st_add(char *str, int len) {
 }
 
 static var_t* sym_add(char *name) {
-  var_t *var = map_lookup(&env, name);
+  var_t *var = map_lookup(&sym_table, name);
   if (var) return var;
   
   char *vname = st_add(name, strlen(name));
-  /*
-  char *vname = stabp;
-  strcpy(stabp, name);
-  stabp += strlen(name);
-  *stabp++ = '\0';
-  */
+
   var = &vars[var_top];
-  *var = (var_t) { .name=vname, .type='G', .i=var_top++ };
-  map_add(&env, vname, var);
-  printf("map_add(%s)\n", vname);
+  *var = (var_t) { .name=vname, .type='G', .idx=var_top++ };
+  map_add(&sym_table, vname, var);
+  // printf("map_add(%s)\n", vname);
   return var;
 }
 
 void sym_dump() {
   for (int i=0; i<var_top; i++) {
     var_t *var = &vars[i];
-    printf("%s %c %d\n", var->name, var->type, var->i);
+    printf("%s %c %d\n", var->name, var->type, var->idx);
   }
 }
 
 static void dump_ir() {
     while (lcp < cp) {
-        ir_t ir = *lcp++;
+        word_t ir = *lcp++;
         char ir_name[20];
         if (ir >= End) emit("error\n");
         key_name(ir, ir_name);
         emit("%s", ir_name);
         if (ir >= Lea && ir <= Adj) {
-            ir_t arg = *lcp++;
-            emit(" %d", arg);
+            word_t arg = *lcp++;
+            emit(" %d", (int) arg);
             if (ir == Var)
                 emit(" // %s", vars[arg].name);
             if (ir == Cstr)
@@ -91,12 +85,6 @@ static void gen_num(node_t *node) {
 }
 
 static void gen_id(node_t *node) {
-    /* move to gen_pid
-    char id[100];
-    copy_str(node->ptk->str, node->ptk->len, id);
-    var_t *var = sym_add(id);
-    eir(Var); eir(var->i); // var id
-    */
     gen_token(node);
 }
 
@@ -307,7 +295,7 @@ static void gen_pid(node_t *pid) {
 
     copy_str(nid->ptk->str, nid->ptk->len, id);
     var_t *var = sym_add(id);
-    eir(Var); eir(var->i); // var id
+    eir(Var); eir(var->idx); // var id
 }
 
 // assign = pid(:type?)?= expr
@@ -362,6 +350,8 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
     gen_code(block);
 }
 
+#include <vm.c>
+
 void gen_ir(node_t *root) {
     ir_init();
     emit("// source file: %s\n", ifile);
@@ -370,4 +360,5 @@ void gen_ir(node_t *root) {
     emit("\n");
     sym_dump();
     ir_close();
+    vm_run(code, 0, NULL);
 }

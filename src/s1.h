@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define word_t int64_t
+
 #define debug(...) { if (dbg) printf(__VA_ARGS__); }
 #define NMAX 100000
 #define error(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
@@ -32,10 +34,10 @@ enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
   Global, This, Op1End, Op2Begin, Lor, 
   Land, Eq, Neq, Le, Ge, 
   Shl, Shr, Op2End, VmOpBegin, Lea,
-  Imm, Var, Cstr, Narg, Ent, Jmp, Bz ,Bnz , Adj ,
+  Imm, Int, Double, Var, Cstr, Narg, Ent, Jmp, Bz ,Bnz , Adj ,
   Jsr ,Lev ,Ldi  ,Ldc,
   Sti, Stb, Push , Open, Read,
-  Close, Prtf, Malc, Free, Mset,
+  Close, Print, Malc, Free, Mset,
   Mcmp, Exit, VmOpEnd, End,
 };
 
