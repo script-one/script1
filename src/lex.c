@@ -62,8 +62,8 @@ void scan() { // 詞彙解析 lexer
     } else { // 以下為運算元 =+-!<>|&^%*[?~, ++, --, !=, <=, >=, ||, &&, ~  ;{}()],:
       tk = ch;
       if (ch == '=') { if (*p == '=') { ++p; tk = Eq; } break; }
-      else if (ch == '+') { if (*p == '+') { ++p; tk = Inc; } break; }
-      else if (ch == '-') { if (*p == '-') { ++p; tk = Dec; } break; }
+      // else if (ch == '+') { if (*p == '+') { ++p; tk = Inc; } break; }
+      // else if (ch == '-') { if (*p == '-') { ++p; tk = Dec; } break; }
       else if (ch == '!') { if (*p == '=') { ++p; tk = Neq; } break; }
       else if (ch == '<') { if (*p == '=') { ++p; tk = Le; } else if (*p == '<') { ++p; tk = Shl; } break; }
       else if (ch == '>') { if (*p == '=') { ++p; tk = Ge; } else if (*p == '>') { ++p; tk = Shr; } break; }
@@ -73,10 +73,19 @@ void scan() { // 詞彙解析 lexer
     }
   }
   token.len = p-token.str;
-  int kc = key_code(token.str, token.len);
-  if (kc >= 0) tk = kc;
+  // int kc = key_code(token.str, token.len);
+  // if (kc >= 0) tk = kc;
+  if (tk == Id) { // keywords: such as 'while', 'if', ....
+    int kc = k2i(keys, 0, size(keys), token.str, token.len);
+    if (kc > KeyBegin && kc < KeyEnd) tk = kc;
+  }
   token.tk = tk;
   debug("%.*s ", token.len, token.str);
+  // if (tk == Id && !isalpha(token.str[0])) {
+  //   printf("Id should started with alpha char...\n");
+  //   exit(1);
+  // }
+  // debug("tk=%d ", tk);
   ptoken = &tokens[tk_top++];
   *ptoken = token;
 }

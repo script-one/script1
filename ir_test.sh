@@ -2,26 +2,26 @@ set -x
 set -e
 ./ir_run.sh exp
 ./ir_run.sh hello
-#./js_run.sh while
-#./js_run.sh sum
-#./js_run.sh fn
-#./js_run.sh for
-#./js_run.sh if
-#./js_run.sh array
-#./js_run.sh matrix
-#./js_run.sh mt
-#./js_run.sh global
-# ./js_run.sh obj
-#./js_run.sh cond
-#./js_run.sh lambda
-#./js_run.sh map
-#./js_run.sh try
-#./js_run.sh class
-#./js_run.sh class2
-#./js_run.sh class3
+./ir_run.sh while
+#./ir_run.sh sum
+#./ir_run.sh fn
+#./ir_run.sh for
+./ir_run.sh if
+#./ir_run.sh array
+#./ir_run.sh matrix
+#./ir_run.sh mt
+#./ir_run.sh global
+# ./ir_run.sh obj
+./ir_run.sh cond
+#./ir_run.sh lambda
+#./ir_run.sh map
+#./ir_run.sh try
+#./ir_run.sh class
+#./ir_run.sh class2
+#./ir_run.sh class3
 # js only
-#./js_run.sh import
-# ./js_run.sh sha256
-# ./js_run.sh sqlite
-# ./js_run.sh regexp
-# ./js_run.sh python
+#./ir_run.sh import
+# ./ir_run.sh sha256
+# ./ir_run.sh sqlite
+# ./ir_run.sh regexp
+# ./ir_run.sh python

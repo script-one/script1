@@ -57,3 +57,21 @@ void copy_str(char *str, int len, char *to_str) {
     memcpy(to_str, str, len);
     to_str[len] = '\0';
 }
+
+// =================== k2i table ================
+int k2i(k2i_t *table, int from, int to, char *k, int klen) {
+  for (int j=from; j<to; j++) {
+    char *kt = table[j].k;
+    if (strlen(kt)==klen && memcmp(k, kt, klen)==0)
+      return table[j].i;
+  }
+  return -1;
+}
+
+char *i2k(k2i_t *table, int from, int to, int i) {
+  for (int j=from; j<to; j++) {
+    if (i == table[j].i)
+      return table[j].k;
+  }
+  return NULL;
+}

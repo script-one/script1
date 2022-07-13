@@ -4,42 +4,54 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
-#define word_t int64_t
+#include <ctype.h>
 
 #define debug(...) { if (dbg) printf(__VA_ARGS__); }
 #define NMAX 100000
 #define error(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
-#define size(x) (sizeof(x)/sizeof(typeof (x)))
+#define size(x) (sizeof(x)/sizeof(typeof(x[0])))
 #define contain(set, ch) strchr(set, ch)
 #define ok(exp) { if (!(exp)) error("ok() fail at file=%s, line=%d\n", __FILE__, __LINE__); }
 #define fail() { error("Fail: not implemented yet!"); ok(0); }
-// lex
-enum { // token : 0-127 直接用該字母表達， 128 以後用代號。
-  None=0,
-  Or='|',And='&', Xor='^',Add='+',Sub='-',Mul='*',Div='/', Mod='%',
-  AsciiEnd=128, 
-  Id=130, Num, Str, Array, Function, 
-  Pair, Block, Args, Params, Param, 
-  ForIn, ForOf, ForTo, Stmts, Stmt, 
-  Expr, Item, Term, Assign, Type, 
-  Token, Pid, Key, Lambda, ClassBody,
-  CExpr, 
-  KeyBegin=199, 
-  Import, As, If, While, For, 
-  Else, In, Continue, Break, Return, 
-  Fn, Class, Extends, Map, Try, 
-  Catch, Throw, Async, Await, New, 
-  KeyEnd, Op1Begin, Neg, Inc, Dec, 
-  Global, This, Op1End, Op2Begin, Lor, 
-  Land, Eq, Neq, Le, Ge, 
-  Shl, Shr, Op2End, VmOpBegin, Lea,
-  Imm, Var, Narg, Ent, Jmp, Bz ,Bnz , Adj ,
-  Jsr ,Lev , Load, Store, Ldi  ,Ldc,
-  Sti, Stb, Push , Open, Read,
-  Close, Print, Malc, Free, Mset,
-  Mcmp, Exit, VmOpEnd, End,
+
+enum {
+  None = 0,
+  AsciiEnd = 128, 
+  TkBegin = 130, // lex:tk
+    Id, Num, Str, 
+  TkEnd,
+  NodeTypeBegin = 140, // node:type
+    Array, Function, Pair, Block, Args, 
+    Params, Param, ForIn, ForOf, ForTo, 
+    Stmts, Stmt, Expr, Item, Term, 
+    Assign, Type, Token, Pid, Key, 
+    Lambda, ClassBody, CExpr, 
+  NodeTypeEnd,
+  KeyBegin = 170, // node:type
+    Import, As, If, While, For, 
+    Else, In, Continue, Break, Return, 
+    Fn, Class, Extends, Map, Try, 
+    Catch, Throw, Async, Await, New,
+  KeyEnd,
+  Op1Begin = 200, 
+    Neg, Inc, Dec, Global, This, 
+  Op1End, 
+  Op2Begin = 210, 
+    Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, 
+  Op2End, 
+  VmOpBegin = 220, 
+    Lea, Imm, Var, Src, Def, 
+    Narg, Ent, Jmp, Bz ,Bnz, 
+    Adj, Call ,Lev, Store, Push, 
+    Print, Exit, 
+  VmOpEnd,
+  End,
 };
+
+typedef struct {
+  char *k;
+  int  i;
+} k2i_t;
 
 typedef struct token_t {
     int tk;     // token 型態
@@ -85,6 +97,8 @@ int read_source(char *file);
 bool head_eq(char *str1, int len1, char *str2);
 bool tail_eq( char *str, char *end);
 void copy_str(char *str, int len, char *to_str);
+int k2i(k2i_t *table, int from, int to, char *k, int klen);
+char *i2k(k2i_t *table, int from, int to, int i);
 char back_skip(char *end, char *set);
 void lex(char *source);
 node_t *parse(char *source);

@@ -91,11 +91,14 @@ static void gen_token(node_t *node) {
     emit("%.*s", node->ptk->len, node->ptk->str);
 }
 
-static void gen_list(link_t *head, char *spliter) {
+static int gen_list(link_t *head, char *spliter) {
+    int count=0;
     for (link_t *p = head; p != NULL; p = p->next) {
         gen_code(p->node);
         if (p->next != NULL) emit("%s", spliter);
+        count ++;
     }
+    return count;
 }
 
 static void gen_code(node_t *me) {

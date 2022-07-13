@@ -2,39 +2,46 @@ char *ifile=NULL, *ofile=NULL;
 int src=0, dbg=0, o_run=0, o_dump=0, o_lex = 0, o_main=0;
 char *source;
 
-char *key_names[] = {
-  "keybegin", 
-/*200*/ "import", "as", "if", "while", "for", 
-/*205*/ "else", "in", "continue", "break", "return", 
-/*210*/ "fn", "class", "extends", "__map__", "try", 
-/*215*/ "catch", "throw", "async", "await", "new", 
-/*220*/ "keyend", "op1begin", "-", "++", "--", 
-/*225*/ "global.", "this.", "op1end","op2begin", 
-/*230*/ "||", "&&", "==", "!=", "<=", ">=", 
-/*235*/ "<<", ">>", "op2end", "vmOpBegin", "lea", 
-/*240*/ "imm", "var",  "narg", "ent", "jmp", "bz", "bnz", "adj",
-/*24..6*/ "jsr", "lev", "Load", "Store", "ld.i", "ld.c", 
-/*250*/ "st.i", "st.b", "push","open", "read", 
-/*255*/ "close", "print", "malc", "free", "mset", 
-/*260*/ "mcmp", "exit", "VmOpEnd", "end",
-};
-
-int key_code(char *key, int len) {
-  for (int i=KeyBegin+1; i<KeyEnd; i++) {
-    int ni = i-KeyBegin;
-    if (len == strlen(key_names[ni]) && memcmp(key, key_names[ni], len)==0)
-      return i;
-  }
-  return -1;
-}
+k2i_t keys[] = {
+ {"import", Import},
+ {"as", As},
+ {"if", If},
+ {"while", While},
+ {"for", For},
+ {"else", Else },
+ {"in", In}, 
+ {"continue", Continue},
+ {"break", Break}, 
+ {"return", Return}, 
+ {"fn", Fn},
+ {"class", Class},
+ {"extends", Extends}, 
+ {"try", Try},
+ {"catch", Catch}, 
+ {"throw", Throw},
+ {"async", Async},
+ {"await", Await},
+ {"new", New}, 
+ {"||", Lor},
+ {"&&", Land},
+ {"==", Eq},
+ {"!=", Neq},
+ {"<=", Le},
+ {">=", Ge},
+ {"<<", Shl},
+ {">>", Shr},
+ {"global.", Global},
+ {"this.", This},
+ {"-", Neg},
+}; 
 
 char* key_name(int key, char *name) {
   if (key < AsciiEnd)
     sprintf(name, "%c", (char) key);
-  else if (key > KeyBegin && key < End)
-    sprintf(name, "%s", key_names[key-KeyBegin]);
-  else
-    error("key_name(%d) out of range...", key);
+  else {
+    char *k = i2k(keys, 0, size(keys), key);
+    if (k) sprintf(name, "%s", k); else error("key_name(%d) not found ...", key);
+  }
   return name;
 }
 
