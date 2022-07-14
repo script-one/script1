@@ -201,6 +201,7 @@ node_t *assign() {
         }
     }
     n = term();
+    t = NULL;
     if (tk == '=') {
         next();
         e = expr();
@@ -208,19 +209,26 @@ node_t *assign() {
     return op3(Assign, n, t, e);
 }
 
-// params = (id(:type?)?=exp)*
+// id_assign = id(:type?)?=exp
+node_t *id_assign() {
+    node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
+    if (tk == ':') {
+        next();
+        ntype = type();
+    }
+    if (tk == '=') {
+        next();
+        nexpr = expr();
+    }
+    return op3(Assign, nid, ntype, nexpr);
+}
+
+// params = id_assign*
 node_t *params() {
     node_t *r = node(Params);
     r->list = list();
     while (tk != ')') {
-        node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
-        if (tk == ':') {
-            ntype = type();
-        }
-        if (tk == '=') {
-            nexpr = expr();
-        }
-        list_add(r->list, op3(Assign, nid, ntype, nexpr));
+        list_add(r->list, id_assign());
         if (tk == ',') next();
     }
     list_reverse(r->list);
