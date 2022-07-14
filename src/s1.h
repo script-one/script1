@@ -8,10 +8,10 @@
 
 #define debug(...) { if (dbg) printf(__VA_ARGS__); }
 #define NMAX 100000
-#define error(...) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, " fail at file=%s, line=%d\n", __FILE__, __LINE__);  exit(1); }
+#define error(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
 #define size(x) (sizeof(x)/sizeof(typeof(x[0])))
 #define contain(set, ch) strchr(set, ch)
-#define ok(exp) { if (!(exp)) error("ok() fail : ", __FILE__, __LINE__); }
+#define ok(exp) { if (!(exp)) error("ok() fail at file=%s, line=%d\n", __FILE__, __LINE__); }
 #define fail() { error("Fail: not implemented yet!"); ok(0); }
 
 enum {
@@ -40,8 +40,10 @@ enum {
     Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, 
   Op2End, 
   VmOpBegin = 220, 
-    Lea, /*Imm,*/ Var, Src, Def, Load, Store, Narg, Ent, Jmp, Bz ,Bnz, Adj, 
-    Call ,Lev, Push, Print, Exit, 
+    Lea, Imm, Var, Src, Def, 
+    Narg, Ent, Jmp, Bz ,Bnz, 
+    Adj, Call ,Lev, Store, Push, 
+    Print, Exit, 
   VmOpEnd,
   End,
 };

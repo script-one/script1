@@ -24,7 +24,7 @@ static void dump_ir() {
         emit("%s", name);
         if (op >= Lea && op <= Adj) {
             word_t arg = *lcp++;
-            if (op == Load || op == Store || op == Var || op == Def || op == Src) {
+            if (op == Imm || op == Var || op == Def || op == Src) {
                 emit(" %s", (char*) arg);
             } else {
                 emit(" %d", (int) arg);
@@ -37,7 +37,7 @@ static void dump_ir() {
 
 static void gen_num(node_t *node) {
     char *p = st_token(node->ptk);
-    eir(Load); eir(p); // imm value
+    eir(Imm); eir(p); // imm value
     gen_token(node);
 }
 
@@ -48,7 +48,7 @@ static void gen_id(node_t *node) {
 static void gen_str(node_t *node) {
     emit("%.*s", node->ptk->len, node->ptk->str);
     char *p = st_token(node->ptk);
-    eir(Load); eir(p);
+    eir(Imm); eir(p);
 }
 
 static void gen_op0(int op) {
@@ -254,8 +254,6 @@ static void gen_import(node_t *str1, node_t *id2) {
     gen_code(id2);
 }
 
-static char *pid_name = NULL;
-static bool pid_load = true;
 // pid = (@|$)? id
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
@@ -273,29 +271,23 @@ static void gen_pid(node_t *pid) {
     }
     gen_code(nid);
 
-    if (pid_load) {
-        eir(Load); eir(p); // load var
-    }
-    pid_name = p;
+    // char *p = st_add(name, (int) strlen(name));
+    eir(Var); eir(p); // var id
 }
 
 // assign = pid(:type?)?= expr
 static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    if (exp) pid_load = false; // 不產生 load pid
-    gen_code(pid); // pid 的名稱會記在 pid_name
-    if (exp) pid_load = true;
-    char *vname = pid_name;
+    gen_code(pid);
     if (type) {
         emit(":");
         if (type->list != NULL)
             gen_list(type->list->head, "");
     }
     if (exp) {
-        // eir(Push);
+        eir(Push);
         emit("=");
         gen_code(exp);
         eir(Store);
-        eir(vname);
     }
 }
 
