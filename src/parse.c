@@ -180,14 +180,28 @@ node_t *type() {
     return tk_list(Type, "=),");
 }
 
-// assign = term(:type?)?(= expr)?
+// assign = (term|id(:type?)?) (= expr)?
 node_t *assign() {
-    node_t *n = term(), *t = NULL, *e = NULL;
-    if (tk == ':') { // 如果沒有 : ，會傳回 NULL
-        next();
-        t = type(); // 如果是空的，會傳回 node with empty list
+    node_t *n = NULL, *t = NULL, *e = NULL;
+    if (tk == Id) {
+        scan_save();
+        n = id();
+        if (tk == ':') { // 如果沒有 : ，會傳回 NULL
+            next();
+            t = type(); // 如果是空的，會傳回 node with empty list
+        }
+        if (tk == '=') {
+            next();
+            e = expr();
+        }
+        if (t || e) {
+            return op3(Assign, n, t, e);
+        } else {
+            scan_restore();
+        }
     }
-    if (tk=='=') {
+    n = term();
+    if (tk == '=') {
         next();
         e = expr();
     }
@@ -328,7 +342,7 @@ node_t *stmt() {
     } else if (tk == Continue || tk == Break) {
         token_t t = next();
         r->node = op0(t.tk);
-    } else { // assign = term(:type?)?(= expr)?
+    } else { // term(:type?)?(= expr)?
         r->node = assign();
     }
     return r;

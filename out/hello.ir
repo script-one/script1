@@ -1,19 +1,19 @@
 // source file: prog/hello.s1
 
-// name:='script1';                                // (1) 
+// :='script1';                                    // (1) 
 // log(('hello '+name));                           // (2) 
 
 // 1:name:='script1'
 var name
 push
-imm 'script1'
+load 'script1'
 store
 // 2:log('hello '+name)
-var log
+load log
 push
-imm 'hello '
+load 'hello '
 push
-var name
+load name
 +
 push
 narg 1

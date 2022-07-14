@@ -1,37 +1,37 @@
 // source file: prog/exp.s1
 
-// x:=3;                                           // (1) 
-// y:=5;                                           // (2) 
-// z:=((x+3)*y);                                   // (3) 
+// :=3;                                            // (1) 
+// :=5;                                            // (2) 
+// :=((x+3)*y);                                    // (3) 
 // log('z=',z);                                    // (4) 
 
 // 1:x := 3
 var x
 push
-imm 3
+load 3
 store
 // 2:y := 5
 var y
 push
-imm 5
+load 5
 store
 // 3:z := (x+3)*y
 var z
 push
-var x
+load x
 push
-imm 3
+load 3
 +
 push
-var y
+load y
 *
 store
 // 4:log('z=', z)
-var log
+load log
 push
-imm 'z='
+load 'z='
 push
-var z
+load z
 push
 narg 2
 call

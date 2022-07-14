@@ -40,7 +40,7 @@ enum {
     Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, 
   Op2End, 
   VmOpBegin = 220, 
-    Lea, Imm, Var, Src, Def, 
+    Lea, Load, Var, Src, Def, 
     Narg, Ent, Jmp, Bz ,Bnz, 
     Adj, Call ,Lev, Store, Push, 
     Print, Exit, 

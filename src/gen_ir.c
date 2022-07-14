@@ -24,7 +24,7 @@ static void dump_ir() {
         emit("%s", name);
         if (op >= Lea && op <= Adj) {
             word_t arg = *lcp++;
-            if (op == Imm || op == Var || op == Def || op == Src) {
+            if (op == Load || op == Var || op == Def || op == Src) {
                 emit(" %s", (char*) arg);
             } else {
                 emit(" %d", (int) arg);
@@ -37,7 +37,7 @@ static void dump_ir() {
 
 static void gen_num(node_t *node) {
     char *p = st_token(node->ptk);
-    eir(Imm); eir(p); // imm value
+    eir(Load); eir(p); // imm value
     gen_token(node);
 }
 
@@ -48,7 +48,7 @@ static void gen_id(node_t *node) {
 static void gen_str(node_t *node) {
     emit("%.*s", node->ptk->len, node->ptk->str);
     char *p = st_token(node->ptk);
-    eir(Imm); eir(p);
+    eir(Load); eir(p);
 }
 
 static void gen_op0(int op) {
@@ -259,7 +259,6 @@ static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     node_t *nid = n->array[0];
     char *p;
-    // char name[100] = "";
     if (n->type == Global) {
         emit("@");
         p = st_printf("@%.*s", nid->ptk->len, nid->ptk->str);
@@ -270,18 +269,23 @@ static void gen_pid(node_t *pid) {
         p = st_printf("%.*s", nid->ptk->len, nid->ptk->str);
     }
     gen_code(nid);
-
-    // char *p = st_add(name, (int) strlen(name));
-    eir(Var); eir(p); // var id
+    eir(Load); eir(p); // load id
 }
 
-// assign = term(:type?)?(= expr)?
-static void gen_assign(node_t *term, node_t *type, node_t *exp) {
-    gen_code(term);
-    if (type) {
-        emit(":");
-        if (type->list != NULL)
-            gen_list(type->list->head, "");
+// assign = (term|id(:type?)?) (= expr)?
+static void gen_assign(node_t *head, node_t *type, node_t *exp) {
+    if (head->type == Id) {
+        char *name = st_printf("%.*s", head->ptk->len, head->ptk->str);
+        if (type) {
+            eir(Var); eir(name);
+            emit(":");
+            if (type->list != NULL)
+                gen_list(type->list->head, "");
+        } else {
+            eir(Load); eir(name);
+        }
+    } else {
+        gen_code(head);
     }
     if (exp) {
         emit("=");

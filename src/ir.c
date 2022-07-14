@@ -1,6 +1,7 @@
 static k2i_t ops[] = {
  {"lea", Lea},
- {"imm", Imm},
+ // {"imm", Imm},
+ {"load", Load},
  {"var", Var},
  {"//", Src},
  {"def", Def},
@@ -10,7 +11,6 @@ static k2i_t ops[] = {
  {"bz",  Bz},
  {"bnz", Bnz},
  {"adj", Adj},
- {"var", Var},
  {"call", Call},
  {"lev", Lev}, 
  {"store", Store},
@@ -45,7 +45,8 @@ static char* op_name(int key, char *name) {
   }
   return name;
 }
-
+/*
 static int op_code(char *name) {
   return k2i(ops, 0, size(ops), name, strlen(name));
 }
+*/
