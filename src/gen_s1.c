@@ -34,9 +34,9 @@ static void gen_pid(node_t *pid) {
     gen_code(n->array[0]);
 }
 
-// assign = pid(:type?)?= expr
-static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    gen_code(pid);
+// assign = term(:type?)?(= expr)?
+static void gen_assign(node_t *term, node_t *type, node_t *exp) {
+    gen_code(term);
     if (type) {
         emit(":");
         if (type->list != NULL)

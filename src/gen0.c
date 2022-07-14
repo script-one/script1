@@ -53,7 +53,7 @@ static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch);
 static void gen_class(node_t *nid, node_t *eid, node_t *nmap);
 static void gen_map(node_t *nmap);
 static void gen_args(link_t *head);
-static void gen_assign(node_t *pid, node_t *type, node_t *exp);
+static void gen_assign(node_t *term, node_t *type, node_t *exp);
 static void gen_return(int op, node_t *exp);
 static void gen_import(node_t *id1, node_t *id2);
 static void gen_while(node_t *exp, node_t *stmt);
@@ -66,11 +66,7 @@ static void gen_stmt(node_t *stmt);
 static void gen_code(node_t *me);
 
 static void indent(int level) {
-#ifdef __PYTHON__
     emit("%*s", level*4, "");
-#else
-    emit("%*s", level*2, "");
-#endif
 }
 
 static void push(int type) {
@@ -162,7 +158,7 @@ static void gen_code(node_t *me) {
     } else if (type == Pid) { // pid = (@|$)? id
         gen_pid(me);
     } else if (type==Assign) {
-        gen_assign(args[0], args[1], args[2]);
+        gen_assign(args[0], args[1], args[2]); // assign = term(:type?)?(= expr)?
     } else if (type == Pair) {
         gen_pair(args[0], args[1]);
     } else if (type == Token) {

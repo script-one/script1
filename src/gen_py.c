@@ -143,9 +143,9 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
     }
 }
 
-// assign = pid(:type?)?= expr
-static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    gen_code(pid);
+// assign = term(:type?)?(= expr)?
+static void gen_assign(node_t *term, node_t *type, node_t *exp) {
+    gen_code(term);
     if (exp) {
         emit("=");
         gen_code(exp);

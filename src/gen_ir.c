@@ -275,17 +275,17 @@ static void gen_pid(node_t *pid) {
     eir(Var); eir(p); // var id
 }
 
-// assign = pid(:type?)?= expr
-static void gen_assign(node_t *pid, node_t *type, node_t *exp) {
-    gen_code(pid);
+// assign = term(:type?)?(= expr)?
+static void gen_assign(node_t *term, node_t *type, node_t *exp) {
+    gen_code(term);
     if (type) {
         emit(":");
         if (type->list != NULL)
             gen_list(type->list->head, "");
     }
     if (exp) {
-        eir(Push);
         emit("=");
+        eir(Push);
         gen_code(exp);
         eir(Store);
     }

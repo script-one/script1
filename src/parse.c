@@ -182,7 +182,7 @@ node_t *type() {
 
 // assign = term(:type?)?(= expr)?
 node_t *assign() {
-    node_t *n = item(), *t = NULL, *e = NULL;
+    node_t *n = term(), *t = NULL, *e = NULL;
     if (tk == ':') { // 如果沒有 : ，會傳回 NULL
         next();
         t = type(); // 如果是空的，會傳回 node with empty list
@@ -328,7 +328,7 @@ node_t *stmt() {
     } else if (tk == Continue || tk == Break) {
         token_t t = next();
         r->node = op0(t.tk);
-    } else { // term(:type?)?(= expr)?
+    } else { // assign = term(:type?)?(= expr)?
         r->node = assign();
     }
     return r;
