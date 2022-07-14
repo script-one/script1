@@ -208,12 +208,19 @@ node_t *assign() {
     return op3(Assign, n, t, e);
 }
 
-// params = (assign*)
+// params = (id(:type?)?=exp)*
 node_t *params() {
     node_t *r = node(Params);
     r->list = list();
-    while (tk != ')') { 
-        list_add(r->list, assign());
+    while (tk != ')') {
+        node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
+        if (tk == ':') {
+            ntype = type();
+        }
+        if (tk == '=') {
+            nexpr = expr();
+        }
+        list_add(r->list, op3(Assign, nid, ntype, nexpr));
         if (tk == ',') next();
     }
     list_reverse(r->list);

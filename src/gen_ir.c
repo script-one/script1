@@ -15,6 +15,8 @@ char stab[NMAX], *stp = stab;
 #define st_token(ptk) st_add((ptk)->str, (ptk)->len)
 #define eir(c) { *cp=(word_t) (c); cp++; }
 
+static int in_param = false;
+
 static void dump_ir() {
     while (lcp < cp) {
         word_t op = *lcp++;
@@ -276,10 +278,10 @@ static void gen_pid(node_t *pid) {
 static void gen_assign(node_t *head, node_t *type, node_t *exp) {
     if (head->type == Id) {
         char *name = st_printf("%.*s", head->ptk->len, head->ptk->str);
-        if (type) {
+        if (type || in_param) {
             eir(Var); eir(name);
             emit(":");
-            if (type->list != NULL)
+            if (type && type->list != NULL)
                 gen_list(type->list->head, "");
         } else {
             eir(Load); eir(name);
@@ -305,11 +307,13 @@ static void gen_return(int op, node_t *exp) {
 }
 
 static int param_count = 0;
-// params = assign*
+// params = (id(:type?)?=exp)*
 static void gen_params(link_t *head) {
+    in_param = true;
     emit("(");
     param_count = gen_list(head, ",");
     emit(")");
+    in_param = false;
 }
 
 // for id in expr stmt
