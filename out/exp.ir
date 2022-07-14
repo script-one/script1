@@ -6,32 +6,26 @@
 // log('z=',z);                                    // (4) 
 
 // 1:x = 3
-var x
-push
-imm 3
-store
+load 3
+store x
 // 2:y = 5
-var y
-push
-imm 5
-store
+load 5
+store y
 // 3:z = (x+3)*y
-var z
+load x
 push
-var x
-push
-imm 3
+load 3
 +
 push
-var y
+load y
 *
-store
+store z
 // 4:log('z=', z)
-var log
+load log
 push
-imm 'z='
+load 'z='
 push
-var z
+load z
 push
 narg 2
 call

@@ -4,16 +4,14 @@
 // log(('hello '+name));                           // (2) 
 
 // 1:name:='script1'
-var name
-push
-imm 'script1'
-store
+load 'script1'
+store name
 // 2:log('hello '+name)
-var log
+load log
 push
-imm 'hello '
+load 'hello '
 push
-var name
+load name
 +
 push
 narg 1

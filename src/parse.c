@@ -180,7 +180,7 @@ node_t *type() {
     return tk_list(Type, "=),");
 }
 
-// assign = term(:type?)?(= expr)?
+// assign = item(:type?)?(= expr)?
 node_t *assign() {
     node_t *n = item(), *t = NULL, *e = NULL;
     if (tk == ':') { // 如果沒有 : ，會傳回 NULL
