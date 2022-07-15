@@ -3,6 +3,7 @@
 #include <init.c>
 #include <lex.c>
 #include <ast.c>
+#include <env.c>
 #include <parse.c>
 
 int main(int argc, char **argv) {

@@ -7,7 +7,7 @@ node_t *base(int type) {
     node_t *r = node(type);
     skip(type);
     return r;
-}
+} 
 
 node_t *key(int k) {
     return op1(Key, base(k));
@@ -71,6 +71,11 @@ node_t *pid() {
     if (tk == '@') { pre = Global; next(); }
     else if (tk == '$') { pre = This; next(); }
     node_t *nid = id();
+
+    // char id_name[20];
+    // sprintf(id_name, "%.*s", nid->ptk->len, nid->ptk->str);
+    // env_lookup(id_name);
+
     r->node = op1(pre, nid);
     return r;
 }
@@ -186,8 +191,9 @@ node_t *assign() {
     if (tk == Id) {
         scan_save();
         n = id();
-        if (tk == ':') { // 如果沒有 : ，會傳回 NULL
+        if (tk == ':') { // 如果沒有 : 會傳回 NULL
             next();
+            // env_pushvar(st_token(n->ptk)); // 新增該變數到環境中
             t = type(); // 如果是空的，會傳回 node with empty list
         }
         if (tk == '=') {
@@ -209,9 +215,12 @@ node_t *assign() {
     return op3(Assign, n, t, e);
 }
 
-// id_assign = id(:type?)?=exp
-node_t *id_assign() {
+// param = id(:type?)?=expr
+node_t *param() {
     node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
+
+    // env_pushvar(st_token(nid->ptk));
+
     if (tk == ':') {
         next();
         ntype = type();
@@ -223,12 +232,12 @@ node_t *id_assign() {
     return op3(Assign, nid, ntype, nexpr);
 }
 
-// params = id_assign*
+// params = param*
 node_t *params() {
     node_t *r = node(Params);
     r->list = list();
     while (tk != ')') {
-        list_add(r->list, id_assign());
+        list_add(r->list, param());
         if (tk == ',') next();
     }
     list_reverse(r->list);
@@ -241,11 +250,17 @@ node_t *function(int type) { // type=Function | Lambda
     node_t *nasync = (tk == Async) ? key(tk) : NULL;
     skip(Fn);
     if (tk == ':') { next(); nret = id(); }
-    node_t *nid = (type==Function)?id():NULL;
+    node_t *nid = (type==Function)?id():NULL;    
     skip('(');
+
+    // struct func *f = env_pushf(st_token(nid->ptk)); // 新增函數堆疊，將參數加入其中
     node_t *nparam = params();
+    // f->local_start = var_top; // 紀錄區域變數起始點
+    
     skip(')');
     node_t *nbody = NULL;
+
+    // 繼續 parse
     if (type == Lambda) {
         skip('{');
         nbody = expr(); // expr();
@@ -253,6 +268,8 @@ node_t *function(int type) { // type=Function | Lambda
     } else {
         nbody = block();
     }
+
+    // env_popf();
     return op5(type, nasync, nid, nret, nparam, nbody);
 }
 

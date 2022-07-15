@@ -1,6 +1,4 @@
 #include <gen0.c>
-#include <stdint.h>
-#include <stdlib.h>
 #include <ir.c>
 
 static void dump_ir() {
@@ -11,7 +9,7 @@ static void dump_ir() {
         op_name(op, name);
         emit("%s", name);
         word_t arg;
-        if (op == Str || op == Float || op == Load || op == Var || op == Fn || op == Src) {
+        if (op == Str || op == Float || op == Load || op == Var || op == Param || op == Fn || op == Src) {
             arg = *lcp++;
             emit(" %s", (char*) arg);
         } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj ) {
@@ -75,7 +73,7 @@ static void gen_args(link_t *head) {
     int narg = 0;
     for (link_t *p = head; p != NULL; p = p->next) {
         gen_code(p->node);
-        eir(Push);
+        eir(Arg); // eir(Push);
         if (p->next != NULL) emit(",");
         narg++;
     }
@@ -266,8 +264,9 @@ static void gen_pid(node_t *pid) {
 static void gen_assign(node_t *head, node_t *type, node_t *exp) {
     if (head->type == Id) {
         char *name = st_printf("%.*s", head->ptk->len, head->ptk->str);
+        emit(name);
         if (type || in_param) {
-            eir(Var); eir(name);
+            eir(in_param?Param:Var); eir(name);
             emit(":");
             if (type && type->list != NULL)
                 gen_list(type->list->head, "");

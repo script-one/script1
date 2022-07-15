@@ -16,6 +16,12 @@
 #define fail() { error("Fail: not implemented yet!"); ok(0); }
 #define max(a,b) (((a)>(b))?(a):(b))
 
+extern char stab[], *stp;
+
+#define st_printf(...) ({ char *stp0=stp; sprintf(stp, __VA_ARGS__); stp+=strlen(stp)+1; stp0; })
+#define st_add(str, len) st_printf("%.*s", (int)(len), (str))
+#define st_token(ptk) st_add((ptk)->str, (ptk)->len)
+
 enum {
   None = 0,
   AsciiEnd = 128, 
@@ -43,7 +49,7 @@ enum {
   Op2End, 
   VmOpBegin = 220, 
     Load, Var, Float, Src, 
-    Narg, Ent, Jmp, Bz ,Bnz, 
+    Narg, Arg, Ent, Jmp, Bz ,Bnz, 
     Adj, Call ,Lev, Ssto, Push, 
     Print, Exit, 
   VmOpEnd,

@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 
+// ================= strTable: st_... ==============
+
+char stab[NMAX], *stp = stab;
+/*
+#define st_printf(...) ({ char *stp0=stp; sprintf(stp, __VA_ARGS__); stp+=strlen(stp)+1; stp0; })
+#define st_add(str, len) st_printf("%.*s", (int)(len), (str))
+#define st_token(ptk) st_add((ptk)->str, (ptk)->len)
+*/
+
 // =================== memory management: pool ================
 #define NPTR 100000
 void *pools[NPTR];
@@ -75,3 +84,4 @@ char *i2k(k2i_t *table, int from, int to, int i) {
   }
   return NULL;
 }
+

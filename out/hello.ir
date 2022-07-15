@@ -1,6 +1,6 @@
 // source file: prog/hello.s1
 
-// :='script1';                                    // (1) 
+// name:='script1';                                // (1) 
 // log(('hello '+name));                           // (2) 
 
 // 1:name:='script1'
@@ -15,7 +15,7 @@ str 'hello '
 push
 load name
 +
-push
+arg
 narg 1
 call
 

@@ -5,11 +5,13 @@
 
 word_t code[NMAX], *cp = code, *lcp = code;
 word_t data[NMAX], *dp = data;
+/*
 char stab[NMAX], *stp = stab;
 
 #define st_printf(...) ({ char *stp0=stp; sprintf(stp, __VA_ARGS__); stp+=strlen(stp)+1; stp0; })
 #define st_add(str, len) st_printf("%.*s", (int)(len), (str))
 #define st_token(ptk) st_add((ptk)->str, (ptk)->len)
+*/
 #define eir(c) { *cp=(word_t) (c); cp++; }
 
 static k2i_t ops[] = {
@@ -17,6 +19,7 @@ static k2i_t ops[] = {
  // {"imm", Imm},
  {"load", Load},
  {"var", Var},
+ {"param", Param},
  {"str", Str},
  {"float", Float},
  {"//", Src},
@@ -28,6 +31,7 @@ static k2i_t ops[] = {
  {"bz",  Bz},
  {"bnz", Bnz},
  {"adj", Adj},
+ {"arg", Arg},
  {"call", Call},
  {"lev", Lev}, 
  {"ssto", Ssto},

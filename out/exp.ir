@@ -1,8 +1,8 @@
 // source file: prog/exp.s1
 
-// :=3;                                            // (1) 
-// :=5;                                            // (2) 
-// :=((x+3)*y);                                    // (3) 
+// x:=3;                                           // (1) 
+// y:=5;                                           // (2) 
+// z:=((x+3)*y);                                   // (3) 
 // log('z=',z);                                    // (4) 
 
 // 1:x := 3
@@ -30,9 +30,9 @@ ssto
 load log
 push
 str 'z='
-push
+arg
 load z
-push
+arg
 narg 2
 call
 
