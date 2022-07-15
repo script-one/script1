@@ -4,12 +4,12 @@
 
 static void dump_ir() {
     while (lcp < cp) {
-        word_t op = *lcp++;
+        ir_t op = *lcp++;
         char name[20];
         if (op >= End) emit("error\n");
         op_name(op, name);
         emit("%s", name);
-        word_t arg;
+        ir_t arg;
         if (op == Str || op == Float || op == Get || op == Var || op == Param || op == Fn || op == Src) {
             arg = *lcp++;
             emit(" %s", (char*) arg);
@@ -154,7 +154,7 @@ static void gen_block(node_t *block) {
 
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
-    word_t *begin = cp, *b;
+    ir_t *begin = cp, *b;
     emit("while ");
     gen_code(exp);
     eir(Bz); b = cp; eir(0);
@@ -195,30 +195,30 @@ static void gen_map(node_t *nmap) {
 
 static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
     gen_code(e1);
-    eir(Bz); word_t *b_else = cp; eir(0);
+    eir(Bz); ir_t *b_else = cp; eir(0);
     emit("?");
     gen_code(e2);
-    *b_else = (word_t) (cp-b_else);
-    eir(Jmp); word_t *b_end = cp; eir(0);
+    *b_else = (ir_t) (cp-b_else);
+    eir(Jmp); ir_t *b_end = cp; eir(0);
     emit(":");
     gen_code(e3);
-    *b_end = (word_t) (cp-b_end);
+    *b_end = (ir_t) (cp-b_end);
 }
 
 // if expr stmt (else stmt)?
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     emit("if "); gen_code(exp);
-    eir(Bz); word_t *b_else = cp; eir(0);
+    eir(Bz); ir_t *b_else = cp; eir(0);
     gen_code(stmt1);
-    eir(Jmp); word_t *b_end = cp; eir(0);
+    eir(Jmp); ir_t *b_end = cp; eir(0);
     if (stmt2) {
-        *b_else = (word_t) (cp-b_else);
+        *b_else = (ir_t) (cp-b_else);
         emit(" else");
         gen_code(stmt2);
     } else {
-        *b_else = (word_t) (cp-b_else);
+        *b_else = (ir_t) (cp-b_else);
     }
-    *b_end = (word_t) (cp-b_end);
+    *b_end = (ir_t) (cp-b_end);
 }
 
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {

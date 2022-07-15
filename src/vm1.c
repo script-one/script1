@@ -36,7 +36,7 @@ int asm2ir(char *line) {
   sscanf(line, "%20s %100s", p1, p2);
   if (p1[0]=='\0' || head_eq(p1, 2, "//")) return -1;
   printf("%s", line);
-  word_t op = op_code(p1);
+  ir_t op = op_code(p1);
   if (op < 0) return -1;
   eir(op);
   // printf("%d ", (int) op);
@@ -96,10 +96,10 @@ int asm2ir(char *line) {
 
 int run() {
   printf("==================run================\n");
-  word_t *p = code;
+  ir_t *p = code;
   while (1) {
     if (p >= cp) error("no more code...\n");
-    word_t op = *p++, arg;
+    ir_t op = *p++, arg;
     char name[20];
     op_name(op, name);
     printf("%s ", name);

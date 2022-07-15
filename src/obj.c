@@ -32,7 +32,7 @@ struct obj {
         struct { // 一般函數
             struct struct obj *params; // 函數參數
             // struct struct obj *body;   // 函數 body
-            word_t *entry;
+            ir_t *entry;
             struct struct obj *env;    // 環境變數
         };
         struct { // 環境變數

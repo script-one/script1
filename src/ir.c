@@ -1,10 +1,10 @@
 #include <s1.h>
 
-#define word_t int64_t
+#define ir_t int64_t
 // #define emit(...) {}
 
-word_t code[NMAX], *cp = code, *lcp = code;
-word_t data[NMAX], *dp = data;
+ir_t code[NMAX], *cp = code, *lcp = code;
+ir_t data[NMAX], *dp = data;
 /*
 char stab[NMAX], *stp = stab;
 
@@ -12,7 +12,7 @@ char stab[NMAX], *stp = stab;
 #define st_add(str, len) st_printf("%.*s", (int)(len), (str))
 #define st_token(ptk) st_add((ptk)->str, (ptk)->len)
 */
-#define eir(c) { *cp=(word_t) (c); cp++; }
+#define eir(c) { *cp=(ir_t) (c); cp++; }
 
 static k2i_t ops[] = {
  // {"lea", Lea},
