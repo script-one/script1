@@ -7,13 +7,13 @@
 var name
 push
 str 'script1'
-ssto
+store
 // 2:log('hello '+name)
-load log
+get log
 push
 str 'hello '
 push
-load name
+get name
 +
 arg
 narg 1

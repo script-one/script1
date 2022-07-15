@@ -1,5 +1,6 @@
 #include <gen0.c>
 #include <ir.c>
+#include <env.c>
 
 static void dump_ir() {
     while (lcp < cp) {
@@ -9,16 +10,26 @@ static void dump_ir() {
         op_name(op, name);
         emit("%s", name);
         word_t arg;
-        if (op == Str || op == Float || op == Load || op == Var || op == Param || op == Fn || op == Src) {
+        if (op == Str || op == Float || op == Get || op == Var || op == Param || op == Fn || op == Src) {
             arg = *lcp++;
             emit(" %s", (char*) arg);
-        } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj ) {
+        } else if (op == Local || op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj ) {
             arg = *lcp++;
             emit(" %d", (int) arg);
         }
         emit("\n");
     }
     emit("\n");
+}
+
+// 產生載入變數的指令，可能是 load name 或 local i
+void eir_load(char *name) {
+    int local_idx = env_findlocal(name);
+    if (local_idx == 0) { // not found!
+        eir(Get); eir(name); // get name
+    } else {
+        eir(Local); eir(local_idx); // local i
+    }
 }
 
 static int in_param = false;
@@ -246,18 +257,18 @@ static void gen_import(node_t *str1, node_t *id2) {
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     node_t *nid = n->array[0];
-    char *p;
+    char *name;
     if (n->type == Global) {
         emit("@");
-        p = st_printf("@%.*s", nid->ptk->len, nid->ptk->str);
+        name = st_printf("@%.*s", nid->ptk->len, nid->ptk->str);
     } else if (n->type == This) {
         emit("$");
-        p = st_printf("$%.*s", nid->ptk->len, nid->ptk->str);
+        name = st_printf("$%.*s", nid->ptk->len, nid->ptk->str);
     } else {
-        p = st_printf("%.*s", nid->ptk->len, nid->ptk->str);
+        name = st_printf("%.*s", nid->ptk->len, nid->ptk->str);
     }
     gen_code(nid);
-    eir(Load); eir(p); // load id
+    eir_load(name);
 }
 
 // assign = (term|id(:type?)?) (= expr)?
@@ -267,11 +278,12 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
         emit(name);
         if (type || in_param) {
             eir(in_param?Param:Var); eir(name);
+            env_pushvar(name); // 新增該變數到環境中
             emit(":");
             if (type && type->list != NULL)
                 gen_list(type->list->head, "");
         } else {
-            eir(Load); eir(name);
+            eir_load(name);
         }
     } else {
         gen_code(head);
@@ -280,7 +292,7 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
         emit("=");
         eir(Push);
         gen_code(exp);
-        eir(Ssto);
+        eir(Store);
     }
 }
 
@@ -290,7 +302,7 @@ static void gen_return(int op, node_t *exp) {
     key_name(op, name);
     emit("%s ", name);
     gen_code(exp);
-    eir(Lev);
+    eir(Ret);
 }
 
 static int param_count = 0;
@@ -327,15 +339,21 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
         sid = st_add("_", 1);
     }
     eir(sid);
+
+    env_pushf(sid); // 新增函數堆疊，將參數加入其中
     gen_code(params);
+    env_params_end();
+    // f->local_start = var_top; // 紀錄區域變數起始點
     eir(Ent); eir(param_count);
     gen_code(block);
+    env_popf();
     eir(Lev);
 }
 
 void gen_ir(node_t *root) {
     emit("// source file: %s\n", ifile);
     line(0);
+    env_init();
     gen_code(root);
     emit("\n");
     dump_ir();

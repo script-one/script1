@@ -9,29 +9,29 @@
 var x
 push
 float 3
-ssto
+store
 // 2:y := 5
 var y
 push
 float 5
-ssto
+store
 // 3:z := (x+3)*y
 var z
 push
-load x
+get x
 push
 float 3
 +
 push
-load y
+local 1
 *
-ssto
+store
 // 4:log('z=', z)
-load log
+get log
 push
 str 'z='
 arg
-load z
+local 2
 arg
 narg 2
 call
