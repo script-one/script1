@@ -7,8 +7,8 @@ k2i_t syms[10000];
 int sym_top = 0;
 
 int sym_get(char *name) {
-  int si = k2i(syms, 0, sym_top, name, strlen(name));
-  if (si >= 0) return si;
+  int oi = k2i(syms, 0, sym_top, name, strlen(name));
+  if (oi >= 0) return oi;
   return -1;
 }
 
@@ -16,19 +16,19 @@ int sym_add(char *name) {
   int si = sym_get(name);
   if (si >= 0) return si;
   struct obj *o = o_new(TNONE);
-  k2i_t *s = &syms[sym_top];
+  k2i_t *s = &syms[sym_top++];
   s->k=st_printf(name);
   s->i=o_idx(o);
-  return sym_top++;
+  return s->i;
 }
 
-struct obj *sym_obj(int si) {
-  return &objs[syms[si].i];
+struct obj *obj_get(int oi) {
+  return &objs[oi];
 }
 
 void sym_init() {
-  int si; struct obj *o;
-  si=sym_add("log"); o = sym_obj(si); o->type = TFUNCTION; o->func = o_print;
+  int oi; struct obj *o;
+  oi = sym_add("log"); o = obj_get(oi); o->type = TFUNCTION; o->func = o_print;
 }
 
 int asm2ir(char *line) {
@@ -40,24 +40,24 @@ int asm2ir(char *line) {
   if (op < 0) return -1;
   eir(op);
   // printf("%d ", (int) op);
-  word_t si, arg; 
+  int oi, arg; 
   struct obj *o;
   switch (op) {
     case Fn:
-      si = sym_add(p2);
-      printf("  fn %d\n", (int) si);
-      eir(si);
+      oi = sym_add(p2);
+      printf("  fn %d\n", (int) oi);
+      eir(oi);
       break;
     case Var:
-      si = sym_add(p2);
-      printf("  var %d\n", (int) si);
-      eir(si);
+      oi = sym_add(p2);
+      printf("  var %d\n", (int) oi);
+      eir(oi);
       break;
     case Load:
-      si = sym_get(p2);
+      oi = sym_get(p2);
       printf("p2=|%s| strlen(p2)=%d\n", p2, (int) strlen(p2));
-      printf("  load %d\n", (int) si);
-      eir(si);
+      printf("  load %d\n", (int) oi);
+      eir(oi);
       break;
     case Src:
       break;
