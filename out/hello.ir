@@ -6,12 +6,12 @@
 // 1:name:='script1'
 var name
 push
-load 'script1'
-store
+str 'script1'
+ssto
 // 2:log('hello '+name)
 load log
 push
-load 'hello '
+str 'hello '
 push
 load name
 +

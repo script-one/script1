@@ -3,20 +3,6 @@
 #include <stdlib.h>
 #include <ir.c>
 
-#define word_t int64_t
-// #define emit(...) {}
-
-word_t code[NMAX], *cp = code, *lcp = code;
-word_t data[NMAX], *dp = data;
-char stab[NMAX], *stp = stab;
-
-#define st_printf(...) ({ char *stp0=stp; sprintf(stp, __VA_ARGS__); stp+=strlen(stp)+1; stp0; })
-#define st_add(str, len) st_printf("%.*s", (len), (str))
-#define st_token(ptk) st_add((ptk)->str, (ptk)->len)
-#define eir(c) { *cp=(word_t) (c); cp++; }
-
-static int in_param = false;
-
 static void dump_ir() {
     while (lcp < cp) {
         word_t op = *lcp++;
@@ -24,22 +10,24 @@ static void dump_ir() {
         if (op >= End) emit("error\n");
         op_name(op, name);
         emit("%s", name);
-        if (op >= Lea && op <= Adj) {
-            word_t arg = *lcp++;
-            if (op == Load || op == Var || op == Def || op == Src) {
-                emit(" %s", (char*) arg);
-            } else {
-                emit(" %d", (int) arg);
-            }
+        word_t arg;
+        if (op == Str || op == Float || op == Load || op == Var || op == Fn || op == Src) {
+            arg = *lcp++;
+            emit(" %s", (char*) arg);
+        } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj ) {
+            arg = *lcp++;
+            emit(" %d", (int) arg);
         }
         emit("\n");
     }
     emit("\n");
 }
 
+static int in_param = false;
+
 static void gen_num(node_t *node) {
     char *p = st_token(node->ptk);
-    eir(Load); eir(p); // imm value
+    eir(Float); eir(p); // imm value
     gen_token(node);
 }
 
@@ -50,7 +38,7 @@ static void gen_id(node_t *node) {
 static void gen_str(node_t *node) {
     emit("%.*s", node->ptk->len, node->ptk->str);
     char *p = st_token(node->ptk);
-    eir(Load); eir(p);
+    eir(Str); eir(p);
 }
 
 static void gen_op0(int op) {
@@ -293,7 +281,7 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
         emit("=");
         eir(Push);
         gen_code(exp);
-        eir(Store);
+        eir(Ssto);
     }
 }
 
@@ -329,7 +317,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
 static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *block) {
     indent(block_level); 
     if (async) emit("async ");
-    emit("fn"); eir(Def);
+    emit("fn"); eir(Fn);
     if (ret) { emit(":"); gen_code(ret); }
     emit(" ");
     char *sid;

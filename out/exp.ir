@@ -8,28 +8,28 @@
 // 1:x := 3
 var x
 push
-load 3
-store
+float 3
+ssto
 // 2:y := 5
 var y
 push
-load 5
-store
+float 5
+ssto
 // 3:z := (x+3)*y
 var z
 push
 load x
 push
-load 3
+float 3
 +
 push
 load y
 *
-store
+ssto
 // 4:log('z=', z)
 load log
 push
-load 'z='
+str 'z='
 push
 load z
 push

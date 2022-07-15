@@ -1,8 +1,9 @@
 // The Lisp object type
 enum {
     // Regular objects visible from the user
-    TINT = 1,  // 整數
-    TDOUBLE,   // 雙精度浮點數
+    TNONE = 0, // 未定義
+    TINT,      // 整數
+    TFLOAT,   // 雙精度浮點數
     TSTRING,   // 字串
     TLIST,     // 串列
     TSYMBOL,   // 符號
@@ -11,80 +12,96 @@ enum {
     TENV       // 環境變數 frame
 };
 
-typedef struct obj_t obj_t;
-typedef struct obj_link_t obj_link_t;
+// typedef struct struct obj struct obj;
+// typedef struct obj_link_t obj_link_t;
+// typedef struct obj_func_t obj_func_t;
 
 // The object type
-typedef struct obj_t {
+struct obj {
     int type; // 物件型態
     int size; // 物件大小
     union { // Object values.
-        int    ivalue;  // 整數值
-        double dvalue;  // 浮點數值
+        int    i;  // 整數值
+        double f;  // 浮點數值
         char   *str;    // 字串常數
-        var_t  *var;   // 變數
-        obj_link_t *list; // 物件串列
+        // var_t  *var;   // 變數
+        struct olink *list; // 物件串列
+        struct obj* (*func)(struct obj*); // 函數
+        /*
         // Primitive *fn; // 基本函數
         struct { // 一般函數
-            struct obj_t *params; // 函數參數
-            // struct obj_t *body;   // 函數 body
+            struct struct obj *params; // 函數參數
+            // struct struct obj *body;   // 函數 body
             word_t *entry;
-            struct obj_t *env;    // 環境變數
+            struct struct obj *env;    // 環境變數
         };
         struct { // 環境變數
-            struct obj_t *vars;
-            struct obj_t *up;
+            struct struct obj *vars;
+            struct struct obj *up;
         };
         // Forwarding pointer
         // void *moved; // 移動後物件的新位址
+        */
     };
-} obj_t;
+};
 
-struct obj_link_t {
-  obj_t *obj;
-  obj_link_t *next;
+struct olink {
+  struct obj *obj;
+  struct olink *next;
 };
 
 #define OMAX 10000
-obj_t obj[OMAX];
+struct obj objs[OMAX];
 int o_top = 0; 
 
-obj_t *obj_new(int type) {
-    obj_t *r = &obj[o_top++];
+int o_idx(struct obj *o) {
+    return o-objs;
+}
+
+struct obj *o_new(int type) {
+    struct obj *r = &objs[o_top++];
     r->type = type;
     return r;
 }
 
-obj_t *obj_add(obj_t *a, obj_t *b) {
-    obj_t *r = &obj[o_top++];
-    if (a->type == TDOUBLE && b->type == TDOUBLE ) {
-        r->dvalue = a->dvalue+b->dvalue;
+struct obj *o_add(struct obj *a, struct obj *b) {
+    struct obj *r = &objs[o_top++];
+    if (a->type == TFLOAT && b->type == TFLOAT ) {
+        r->f = a->f+b->f;
     }
     return r;
 }
 
-obj_t *obj_mul(obj_t *a, obj_t *b) {
-    obj_t *r = &obj[o_top++];
-    if (a->type == TDOUBLE && b->type == TDOUBLE ) {
-        r->dvalue = a->dvalue*b->dvalue;
+struct obj *o_mul(struct obj *a, struct obj *b) {
+    struct obj *r = &objs[o_top++];
+    if (a->type == TFLOAT && b->type == TFLOAT ) {
+        r->f = a->f*b->f;
     }
     return r;
 }
 
-void obj_print(obj_t *a) {
+struct obj *o_print(struct obj *a) {
+    printf("obj=");
     switch (a->type) {
-        case TDOUBLE:
-            printf("%lf", a->dvalue);
+        case TFLOAT:
+            printf("%lf", a->f);
             break;
         case TSTRING:
             printf("%s", a->str);
             break;
         case TLIST:
-            for (obj_link_t *p = a->list; p!=NULL; p=p->next) {
-                obj_print(p->obj);
+            for (struct olink *p = a->list; p!=NULL; p=p->next) {
+                o_print(p->obj);
             }
             break;
         default:
             printf("(unknown type)");
     }
+    printf("\n");
+    return NULL;
+}
+
+struct obj *o_call(struct obj *o, struct obj *arg) {
+    ok(o->type = TFUNCTION);
+    return o->func(arg);
 }

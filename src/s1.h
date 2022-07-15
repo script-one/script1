@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdint.h>
 
 #define debug(...) { if (dbg) printf(__VA_ARGS__); }
 #define NMAX 100000
@@ -13,6 +14,7 @@
 #define contain(set, ch) strchr(set, ch)
 #define ok(exp) { if (!(exp)) error("ok() fail at file=%s, line=%d\n", __FILE__, __LINE__); }
 #define fail() { error("Fail: not implemented yet!"); ok(0); }
+#define max(a,b) (((a)>(b))?(a):(b))
 
 enum {
   None = 0,
@@ -40,9 +42,9 @@ enum {
     Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, 
   Op2End, 
   VmOpBegin = 220, 
-    Lea, Load, Var, Src, Def, 
+    Load, Var, Float, Src, 
     Narg, Ent, Jmp, Bz ,Bnz, 
-    Adj, Call ,Lev, Store, Push, 
+    Adj, Call ,Lev, Ssto, Push, 
     Print, Exit, 
   VmOpEnd,
   End,

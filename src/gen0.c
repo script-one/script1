@@ -8,7 +8,6 @@ static bool show_line = true;
 
 static char ebuf[1024], *ep=ebuf;
 
-#define max(a,b) (((a)>(b))?(a):(b))
 #define emit(...) { \
   char *lep = ep; \
   sprintf(ep, __VA_ARGS__); ep+=strlen(ep); \

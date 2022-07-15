@@ -1,10 +1,13 @@
 CC = gcc
-CFLAGS = -Wall -g -I ./src -std=gnu11 
-OBJS = s1
+CFLAGS = -Wall -Wno-unused-function -g -I ./src -std=gnu11 
+OBJS = s1 vm1
 
 all: $(OBJS)
 
 s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c src/gen_py.c src/gen_ir.c
+	$(CC) $(CFLAGS) $^ -o $@
+
+vm1: src/vm1.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 hello: $(OBJS)
