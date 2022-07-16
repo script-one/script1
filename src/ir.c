@@ -1,22 +1,16 @@
 #include <s1.h>
 
-#define ir_t int64_t
-// #define emit(...) {}
+// intptr_t 參考 https://stackoverflow.com/questions/1464174/size-t-vs-uintptr-t
+//   https://stackoverflow.com/questions/35071200/what-is-the-use-of-intptr-t
+// If you're storing a size, use size_t. If you're storing a pointer, use intptr_t. 
+#define ir_t int64_t // 這樣才能相容 double 浮點數，因此不用 intptr_t
 
 ir_t code[NMAX], *cp = code, *lcp = code;
 ir_t data[NMAX], *dp = data;
-/*
-char stab[NMAX], *stp = stab;
 
-#define st_printf(...) ({ char *stp0=stp; sprintf(stp, __VA_ARGS__); stp+=strlen(stp)+1; stp0; })
-#define st_add(str, len) st_printf("%.*s", (int)(len), (str))
-#define st_token(ptk) st_add((ptk)->str, (ptk)->len)
-*/
-#define eir(c) { *cp=(ir_t) (c); cp++; }
+#define eir(c) ({ *cp=(ir_t) (c); cp++; })
 
 static k2i_t ops[] = {
- // {"lea", Lea},
- // {"imm", Imm},
  {"get", Get},
  {"local", Local},
  {"var", Var},
@@ -24,7 +18,6 @@ static k2i_t ops[] = {
  {"str", Str},
  {"float", Float},
  {"//", Src},
- // {"def", Def},
  {"fn", Fn},
  {"narg", Narg},
  {"ent", Ent},

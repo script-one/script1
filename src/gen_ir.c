@@ -24,7 +24,7 @@ static void dump_ir() {
 
 // 產生載入變數的指令，可能是 load name 或 local i
 void eir_load(char *name) {
-    int local_idx = env_findlocal(name);
+    int local_idx = env_find_local(name);
     if (local_idx == 0) { // not found!
         eir(Get); eir(name); // get name
     } else {
@@ -344,9 +344,10 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
     gen_code(params);
     env_params_end();
     // f->local_start = var_top; // 紀錄區域變數起始點
-    eir(Ent); eir(param_count);
+    eir(Ent); ir_t *ecount = eir(0); // eir(param_count);
     gen_code(block);
-    env_popf();
+    struct func *f = env_popf();
+    *ecount = f->frame_size;
     eir(Lev);
 }
 
