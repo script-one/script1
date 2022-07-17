@@ -2,7 +2,6 @@
 #include <lib.c>
 #include <ir.c>
 #include <env.c>
-#include <obj.c>
 
 void parse_ir(char *line, char *op, char *arg) {
   *op='\0'; *arg='\0';
@@ -38,38 +37,43 @@ int asm2ir(char *line) {
   return 0;
 }
 
+struct obj stack[NMAX];
+
 int run() {
   printf("==================run================\n");
   env_init();
-  ir_t *p = code;
-  obj_t *a = NULL;
+  ir_t *pc = code;
+  struct obj *a = NULL, *sp = stack;
   bool is_stop = false;
   while (1) {
-    if (p >= cp) error("no more code...\n");
-    ir_t op = *p++;
+    if (pc >= cp) error("no more code...\n");
+    ir_t op = *pc++;
     char opname[20];
     op_name(op, opname);
     printf("%s ", opname);
-    char *s; int n; double f; obj_t *o;
+    char *s; int n; double f; // struct obj *o;
     if (op == Float) {
-      f = (double) *p++;
+      f = (double) *pc++;
       printf(" %lf", f);
     } else if (op == Str) {
-      s = (char*) *p++;
+      s = (char*) *pc++;
       printf(" '%s'", s);
     } else if (op == Get || op == Var || op == Fn || op == Src) {
-      s = (char*) *p++;
+      s = (char*) *pc++;
       printf(" %s", s);
-    } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
-      n = *p++;
+    } else if (op == Local || op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
+      n = *pc++;
       printf(" %d", n);
     }
     printf("\n");
+
     switch (op) {
       case Fn:
         env_pushf(s); // 新增函數堆疊，將參數加入其中
         break;
-      case Param:
+      case Param: case Var:
+        n = env_pushvar(s);
+        a = vars[n].o;
         break;
       case Ent:
         env_params_end();
@@ -77,100 +81,103 @@ int run() {
       case Lev: case Ret: 
         env_popf();
         break;
-      case Var:
-        a = env_push_var(s);
-        break;
       case Get:
-        a = env_get_var(s);
+        // a = env_get_var(s);
         break;
       case Local:
-        a = env_get_local(n);
+        a = env_get_local(n)->o;
+        break;
+      case Store:
+        o_assign(--sp, a);
+        break;
+      case Push:
+        o_assign(sp++, a);
         break;
       case Str:
-        a = env_get_str(s); 
+        // a = env_get_str(s); 
         break;
       case Float:
-        a = env_get_float(f);
+        // a = env_get_float(f);
         break;
       case Call:
-        p = *--sp;
+        // pc = call(a);
         break;
       case Narg: // do nothing...
         break;
       case Jmp:
-        p = p + n;
+        pc = pc + n;
         break;
       case Bz:
-        if (obj_iszero(a)) p = p + n;
+        if (o_iszero(a)) pc = pc + n;
         break;
       case Bnz:
-        if (!obj_iszero(a)) p = p + n;
-        break;
-      case Store:
-        obj_assign(*--sp, a);
-        break;
-      case Push:
-        *sp++ = a;
+        if (!o_iszero(a)) pc = pc + n;
         break;
       case Print:
-        obj_print(a);
+        o_print(a);
         break;
       case Exit:
         is_stop = true;
         break;
       case Lor:
-        a = obj_lor(*--sp, a);
+        o_lor(--sp, a);
         break;
       case Land:
-        a = obj_land(*--sp, a);
+        o_land(--sp, a);
         break;
       case '!':
-        a = obj_lnot(a);
+        o_lnot(a);
         break;
       case Eq:
-        a = obj_eq(*--sp, a);
+        o_eq(--sp, a);
         break;
       case Neq:
-        a = obj_neq(*--sp, a);
+        o_neq(--sp, a);
         break;
       case Le:
-        a = obj_le(*--sp, a);
+        o_le(--sp, a);
         break;
       case Ge:
-        a = obj_ge(*--sp, a);
+        o_ge(--sp, a);
         break;
       case Shl:
-        a = obj_shl(*--sp, a);
+        o_shl(--sp, a);
         break;
       case Shr:
-        a = obj_shr(*--sp, a);
+        o_shr(--sp, a);
         break;
       case Neg:
-        a = obj_neg(a);
+        o_neg(a);
         break;
       case '+':
-        a = obj_add(*--sp, a);
+        o_add(--sp, a);
         break;
       case '-':
-        a = obj_sub(*--sp, a);
+        o_sub(--sp, a);
         break;
       case '*':
-        a = obj_mul(*--sp, a);
+        o_mul(--sp, a);
         break;
       case '/':
-        a = obj_div(*--sp, a);
+        o_div(--sp, a);
         break;
       case '%':
-        a = obj_mod(*--sp, a);
+        o_mod(--sp, a);
         break;
       case '&':
-        a = obj_band(*--sp, a);
+        o_band(--sp, a);
         break;
       case '|':
-        a = obj_bor(*--sp, a);
+        o_bor(--sp, a);
         break;
       case '^':
-        a = obj_bxor(*--sp, a);
+        o_bxor(--sp, a);
+        break;
+      case '<':
+        o_lt(--sp, a);
+        break;
+      case '>':
+        o_gt(--sp, a);
         break;
       // case Adj:
       //   break;
@@ -181,6 +188,7 @@ int run() {
     }
     if (is_stop) break;
   }
+  return 0;
 }
 
 int main(int argc, char **argv) {

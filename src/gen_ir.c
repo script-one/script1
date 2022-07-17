@@ -22,7 +22,7 @@ static void dump_ir() {
     emit("\n");
 }
 
-// 產生載入變數的指令，可能是 load name 或 local i
+// 產生載入變數的指令，可能是 get name 或 local i
 void eir_load(char *name) {
     int local_idx = env_find_local(name);
     if (local_idx == 0) { // not found!
@@ -347,7 +347,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
     eir(Ent); ir_t *ecount = eir(0); // eir(param_count);
     gen_code(block);
     struct func *f = env_popf();
-    *ecount = f->frame_size;
+    *ecount = f->frame_end-f->frame_base;
     eir(Lev);
 }
 
