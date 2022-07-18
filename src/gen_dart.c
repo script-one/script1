@@ -141,7 +141,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 
 void gen_dart(node_t *root) {
     emit("// source file: %s\n", ifile);
-    if (o_main) { emit("import '../sys/s1.dart';\n"); } else emit("import '../../sys/s1.dart';\n")
+    emit("import '../sys/s1.dart';\n");
     bool has_main = strstr(source, " main(")!=NULL;
     if (!has_main && o_main) emit("void main() {");
     line(0);

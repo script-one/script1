@@ -95,7 +95,7 @@ int asm2ir(char *line) {
 }
 
 int run() {
-  printf("==================run================\n");
+  printf("==================run==================\n");
   word_t *p = code;
   while (1) {
     if (p >= cp) error("no more code...\n");
