@@ -22,7 +22,7 @@ int asm2ir(char *line) {
   if (op == Float) {
     sscanf(p2, "%lf", &f);
     debug("=> %s %lf\n", p1, f);
-    eir(s);
+    eir(f);
   } else if (op == Str || op == Get || op == Var || op == Fn) {
     s = st_printf("%s", p2);
     printf("=> %s %s\n", p1, s);
@@ -98,8 +98,24 @@ int run() {
         a = env_new_obj(TSTRING);
         a->str = s;
         break;
+      case Float:
+        a = env_new_obj(TFLOAT);
+        a->f = f;
+        break;
       case '+':
         o_add(*--sp, a);
+        break;
+      case '-':
+        o_sub(*--sp, a);
+        break;
+      case '*':
+        o_mul(*--sp, a);
+        break;
+      case '/':
+        o_div(*--sp, a);
+        break;
+      case '%':
+        o_mod(*--sp, a);
         break;
       case Call:
         o = *--sp;
@@ -125,12 +141,6 @@ int run() {
       case Lev: case Ret: 
         env_popf();
         break;
-      case Float:
-        a = o_new(TFLOAT);
-        a->f = f;
-        // code_o[pc-code] = a;
-        break;
-
       case Jmp:
         pc = pc + n;
         break;
@@ -169,18 +179,6 @@ int run() {
         break;
       case Neg:
         o_neg(a);
-        break;
-      case '-':
-        o_sub(--sp, a);
-        break;
-      case '*':
-        o_mul(--sp, a);
-        break;
-      case '/':
-        o_div(--sp, a);
-        break;
-      case '%':
-        o_mod(--sp, a);
         break;
       case '&':
         o_band(--sp, a);
