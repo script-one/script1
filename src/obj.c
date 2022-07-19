@@ -35,119 +35,148 @@ struct obj {
     };
 };
 
-#define fop2(a, op, o) \
-    if ((a)->type == TFLOAT && (o)->type == TFLOAT) { \
-      (o)->f = (a)->f op (o)->f; \
+struct obj* env_new_obj(int type);
+
+#define fop2(a, op, b) \
+    if ((a)->type == TFLOAT && (b)->type == TFLOAT) { \
+      struct obj *o = env_new_obj(TFLOAT); \
+      o->f = (a)->f op (b)->f; \
+      return o; \
     }
 
-#define iop2(a, op, o) \
-    if ((a)->type == TFLOAT && (o)->type == TFLOAT) { \
-      (o)->f = i32((a)->f) op i32((o)->f); \
+#define iop2(a, op, b) \
+    if ((a)->type == TFLOAT && (b)->type == TFLOAT) { \
+      struct obj *o = env_new_obj(TFLOAT); \
+      o->f = i32((a)->f) op i32((b)->f); \
+      return o; \
     }
 
-#define fop1(op, o) \
-    if ((o)->type == TFLOAT) { \
-      (o)->f = op (o)->f; \
+#define fop1(op, a) \
+    if ((a)->type == TFLOAT) { \
+      struct obj *o = env_new_obj(TFLOAT); \
+      o->f = op (a)->f; \
+      return o; \
     }
 
-#define iop1(op, o) \
-    if ((o)->type == TFLOAT) { \
-      (o)->f = op i32((o)->f); \
+#define iop1(op, a) \
+    if ((a)->type == TFLOAT) { \
+      struct obj *o = env_new_obj(TFLOAT); \
+      o->f = op i32((a)->f); \
+      return o; \
     }
 
 bool o_iszero(struct obj *o) {
     return o->f == 0.0;
 }
 
-void o_neg(struct obj *o) {
-    fop1(-, o);
+struct obj *o_neg(struct obj *a) {
+    fop1(-, a);
+    return NULL;
 }
 
-void o_not(struct obj *o) {
-    fop1(!, o);
+struct obj *o_not(struct obj *a) {
+    fop1(!, a);
+    return NULL;
 }
 
-void o_lor(struct obj *a, struct obj *o) {
-    fop2(a, ||, o);
+struct obj *o_lnot(struct obj *a) {
+    iop1(~, a);
+    return NULL;
 }
 
-void o_land(struct obj *a, struct obj *o) {
-    fop2(a, &&, o);
+struct obj *o_lor(struct obj *a, struct obj *b) {
+    iop2(a, ||, b);
+    return NULL;
 }
 
-void o_lnot(struct obj *o) {
-    fop1(!, o);
+struct obj *o_land(struct obj *a, struct obj *b) {
+    iop2(a, &&, b);
+    return NULL;
 }
 
-void o_eq(struct obj *a, struct obj *o) {
-    fop2(a, ==, o);
+struct obj *o_eq(struct obj *a, struct obj *b) {
+    fop2(a, ==, b);
+    return NULL;
 }
 
-void o_neq(struct obj *a, struct obj *o) {
-    fop2(a, !=, o);
+struct obj *o_neq(struct obj *a, struct obj *b) {
+    fop2(a, !=, b);
+    return NULL;
 }
 
-void o_le(struct obj *a, struct obj *o) {
-    fop2(a, <=, o);
+struct obj *o_le(struct obj *a, struct obj *b) {
+    fop2(a, <=, b);
+    return NULL;
 }
 
-void o_ge(struct obj *a, struct obj *o) {
-    fop2(a, >=, o);
+struct obj *o_ge(struct obj *a, struct obj *b) {
+    fop2(a, >=, b);
+    return NULL;
 }
 
-void o_lt(struct obj *a, struct obj *o) {
-    fop2(a, <, o);
+struct obj *o_lt(struct obj *a, struct obj *b) {
+    fop2(a, <, b);
+    return NULL;
 }
 
-void o_gt(struct obj *a, struct obj *o) {
-    fop2(a, >, o);
+struct obj *o_gt(struct obj *a, struct obj *b) {
+    fop2(a, >, b);
+    return NULL;
 }
 
-void o_add(struct obj *a, struct obj *o) {
-    fop2(a, +, o);
-    if (a->type == TSTRING && o->type == TSTRING) {
-        o->str = st_printf("%s%s", a->str, o->str);
+struct obj *o_add(struct obj *a, struct obj *b) {
+    fop2(a, +, b);
+    if (a->type == TSTRING && b->type == TSTRING) {
+        struct obj *o = env_new_obj(TSTRING);
+        o->str = st_printf("%s%s", a->str, b->str);
+        return o;
     }
+    return NULL;
 }
 
-void o_sub(struct obj *a, struct obj *o) {
-    fop2(a, -, o);
+struct obj *o_sub(struct obj *a, struct obj *b) {
+    fop2(a, -, b);
+    return NULL;
 }
 
-void o_mul(struct obj *a, struct obj *o) {
-    fop2(a, *, o);
+struct obj *o_mul(struct obj *a, struct obj *b) {
+    fop2(a, *, b);
+    return NULL;
 }
 
-void o_div(struct obj *a, struct obj *o) {
-    fop2(a, /, o);
+struct obj *o_div(struct obj *a, struct obj *b) {
+    fop2(a, /, b);
+    return NULL;
 }
 
-void o_mod(struct obj *a, struct obj *o) {
-    iop2(a, %, o);
+struct obj *o_mod(struct obj *a, struct obj *b) {
+    iop2(a, %, b);
+    return NULL;
 }
 
-void o_band(struct obj *a, struct obj *o) {
-    iop2(a, &, o);
+struct obj *o_band(struct obj *a, struct obj *b) {
+    iop2(a, &, b);
+    return NULL;
 }
 
-void o_bor(struct obj *a, struct obj *o) {
-    iop2(a, |, o);
+struct obj * o_bor(struct obj *a, struct obj *b) {
+    iop2(a, |, b);
+    return NULL;
 }
 
-void o_bxor(struct obj *a, struct obj *o) {
-    iop2(a, ^, o);
+struct obj *o_bxor(struct obj *a, struct obj *b) {
+    iop2(a, ^, b);
+    return NULL;
 }
 
-void o_shl(struct obj *a, struct obj *o) {
-    if ((a)->type == TFLOAT && (o)->type == TFLOAT) {
-      (o)->f = i32((o)->f) << i32((a)->f);
-    }
+struct obj *o_shl(struct obj *a, struct obj *b) {
+    iop2(a, <<, b);
+    return NULL;
 }
 
-void o_shr(struct obj *a, struct obj *o) {
-    if ((a)->type == TFLOAT && (o)->type == TFLOAT) {
-      (o)->f = i32((o)->f) << i32((a)->f);
-    }
+struct obj *o_shr(struct obj *a, struct obj *b) {
+    iop2(a, >>, b);
+    return NULL;
 }
 
 struct obj *o_print(struct obj *o) {
@@ -160,7 +189,7 @@ struct obj *o_print(struct obj *o) {
             printf("(obj:none)");
             break;
         case TFLOAT:
-            printf("%lf", o->f);
+            printf("%g", o->f);
             break;
         case TSTRING:
             printf("%s", o->str);

@@ -62,14 +62,14 @@ void scan() { // 詞彙解析 lexer
     } else { // 以下為運算元 =+-!<>|&^%*[?~, ++, --, !=, <=, >=, ||, &&, ~  ;{}()],:
       tk = ch;
       if (ch == '=') { if (*p == '=') { ++p; tk = Eq; } break; }
-      // else if (ch == '+') { if (*p == '+') { ++p; tk = Inc; } break; }
-      // else if (ch == '-') { if (*p == '-') { ++p; tk = Dec; } break; }
       else if (ch == '!') { if (*p == '=') { ++p; tk = Neq; } break; }
       else if (ch == '<') { if (*p == '=') { ++p; tk = Le; } else if (*p == '<') { ++p; tk = Shl; } break; }
       else if (ch == '>') { if (*p == '=') { ++p; tk = Ge; } else if (*p == '>') { ++p; tk = Shr; } break; }
-      else if (ch == '|') { if (*p == '|') { ++p; tk = Lor; } else break; }
-      else if (ch == '&') { if (*p == '&') { ++p; tk = Land; } else break; }
+      else if (ch == '|') { if (*p == '|') { ++p; tk = Lor; } break; }
+      else if (ch == '&') { if (*p == '&') { ++p; tk = Land; } break; }
       else { break; } // 其他字元，單一個字即 token
+      // else if (ch == '+') { if (*p == '+') { ++p; tk = Inc; } break; }
+      // else if (ch == '-') { if (*p == '-') { ++p; tk = Dec; } break; }
     }
   }
   token.len = p-token.str;
@@ -80,7 +80,7 @@ void scan() { // 詞彙解析 lexer
     if (kc > KeyBegin && kc < KeyEnd) tk = kc;
   }
   token.tk = tk;
-  debug("%.*s ", token.len, token.str);
+  // debug("  token=%.*s\n", token.len, token.str);
   // if (tk == Id && !isalpha(token.str[0])) {
   //   printf("Id should started with alpha char...\n");
   //   exit(1);

@@ -1,6 +1,7 @@
 set -x
 set -e
 ./ir_run.sh exp
+./ir_run.sh exp2
 ./ir_run.sh hello
 ./ir_run.sh while
 #./ir_run.sh sum

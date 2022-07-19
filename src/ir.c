@@ -63,6 +63,7 @@ static char* op_name(int key, char *name) {
 }
 
 static int op_code(char *name) {
+  if (strlen(name)==1 && name[0] < 128) return name[0];
   return k2i(ops, 0, size(ops), name, strlen(name));
 }
 

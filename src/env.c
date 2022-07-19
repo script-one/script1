@@ -79,7 +79,7 @@ struct var *env_find_local(char *vname) {
 struct var *env_get_var(char *name) {
     for (struct var *v=varp-1; v>=vars; v--) {
         if (strcmp(v->name, name)==0) {
-            printf("==> env_get_var: %s at %d\n", name, (int) (v-vars));
+            // printf("==> env_get_var: %s at %d\n", name, (int) (v-vars));
             return v;
         }
     }

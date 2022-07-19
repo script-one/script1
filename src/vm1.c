@@ -13,9 +13,10 @@ void parse_ir(char *line, char *op, char *arg) {
 
 int asm2ir(char *line) {
   char p1[101], p2[101];
-  printf("%s", line);
+  debug("%s", line);
   parse_ir(line, p1, p2);
   ir_t op = op_code(p1);
+  // debug("op=%d:\n", (int) op);
   if (op < 0 || op==Src) return -1;
   eir(op);
   char *s=NULL; int n; double f;
@@ -25,24 +26,25 @@ int asm2ir(char *line) {
     eir(f);
   } else if (op == Str || op == Get || op == Var || op == Fn) {
     s = st_printf("%s", p2);
-    printf("=> %s %s\n", p1, s);
+    debug("=> %s %s\n", p1, s);
     eir(s);
   } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
     n = atoi(p2);
-    printf("=> %s %d\n", p1, n);
+    debug("=> %s %d\n", p1, n);
     eir(n);
   } else {
-    printf("=> %s\n", p1);
+    debug("=> %s\n", p1);
   }
   return 0;
 }
 
 void watch(char *head, struct obj **sp, struct obj *a) {
-    printf(" %s a=", head); o_print(a); 
-    if (sp > ostack) {
-      printf(" top="); o_print(*(sp-1));
-    }
-    printf("\n");
+  if (!dbg) return; 
+  debug(" %s a=", head); o_print(a); 
+  if (sp > ostack) {
+    debug(" top="); o_print(*(sp-1));
+  }
+  debug("\n");
 }
 
 // #define code_obj(pc) code_o[(pc)-code]
@@ -58,23 +60,23 @@ int run() {
     ir_t op = *pc++;
     char opname[20];
     op_name(op, opname);
-    printf("%s ", opname);
+    debug("%s ", opname);
     char *s; int n; double f; struct var *v; struct obj *o;
 
     if (op == Float) {
       f = (double) *pc++;
-      printf(" %lf", f);
+      debug(" %lf", f);
     } else if (op == Str) {
       s = (char*) *pc++;
-      printf(" '%s'", s);
+      debug(" '%s'", s);
     } else if (op == Get || op == Var || op == Fn || op == Src) {
       s = (char*) *pc++;
-      printf(" %s", s);
+      debug(" %s", s);
     } else if (op == Local || op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
       n = *pc++;
-      printf(" %d", n);
+      debug(" %d", n);
     }
-    printf("\n");
+    debug("\n");
 
     watch("before:", sp, a);
     switch (op) {
@@ -102,20 +104,65 @@ int run() {
         a = env_new_obj(TFLOAT);
         a->f = f;
         break;
+      case '!':
+        a = o_lnot(a);
+        break;
+      case Neg:
+        a = o_neg(a);
+        break;
       case '+':
-        o_add(*--sp, a);
+        a = o_add(*--sp, a);
         break;
       case '-':
-        o_sub(*--sp, a);
+        a = o_sub(*--sp, a);
         break;
       case '*':
-        o_mul(*--sp, a);
+        a = o_mul(*--sp, a);
         break;
       case '/':
-        o_div(*--sp, a);
+        a = o_div(*--sp, a);
         break;
       case '%':
-        o_mod(*--sp, a);
+        a = o_mod(*--sp, a);
+        break;
+      case Eq:
+        a = o_eq(*--sp, a);
+        break;
+      case Neq:
+        a = o_neq(*--sp, a);
+        break;
+      case Le:
+        a = o_le(*--sp, a);
+        break;
+      case Ge:
+        a = o_ge(*--sp, a);
+        break;
+      case '<':
+        a = o_lt(*--sp, a);
+        break;
+      case '>':
+        a = o_gt(*--sp, a);
+        break;
+      case Shl:
+        a = o_shl(*--sp, a);
+        break;
+      case Shr:
+        a = o_shr(*--sp, a);
+        break;
+      case '&':
+        a = o_band(*--sp, a);
+        break;
+      case '|':
+        a = o_bor(*--sp, a);
+        break;
+      case '^':
+        a = o_bxor(*--sp, a);
+        break;
+      case Lor:
+        a = o_lor(*--sp, a);
+        break;
+      case Land:
+        a = o_land(*--sp, a);
         break;
       case Call:
         o = *--sp;
@@ -150,51 +197,7 @@ int run() {
       case Bnz:
         if (!o_iszero(a)) pc = pc + n;
         break;
-      case Lor:
-        o_lor(--sp, a);
-        break;
-      case Land:
-        o_land(--sp, a);
-        break;
-      case '!':
-        o_lnot(a);
-        break;
-      case Eq:
-        o_eq(--sp, a);
-        break;
-      case Neq:
-        o_neq(--sp, a);
-        break;
-      case Le:
-        o_le(--sp, a);
-        break;
-      case Ge:
-        o_ge(--sp, a);
-        break;
-      case Shl:
-        o_shl(--sp, a);
-        break;
-      case Shr:
-        o_shr(--sp, a);
-        break;
-      case Neg:
-        o_neg(a);
-        break;
-      case '&':
-        o_band(--sp, a);
-        break;
-      case '|':
-        o_bor(--sp, a);
-        break;
-      case '^':
-        o_bxor(--sp, a);
-        break;
-      case '<':
-        o_lt(--sp, a);
-        break;
-      case '>':
-        o_gt(--sp, a);
-        break;
+
       case Local:
         a = env_get_local(n)->o;
         break;
@@ -209,10 +212,12 @@ int run() {
 }
 
 int main(int argc, char **argv) {
+  // dbg = 1;
   if (argc < 2) error("%s <ir_file>\n", argv[0]);
   char *ifile = argv[1];
 
   FILE *f = fopen(ifile, "r");
+  if (!f) error("open %s fail!\n", ifile);
   while (!feof(f)) {
     char line[256];
     fgets(line, sizeof(line), f);

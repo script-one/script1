@@ -37,4 +37,5 @@ int main(int argc, char **argv) {
   else if (tail_eq(ofile, ".ir")) gen_ir(ast);
   else error("%s: file type not supported!\n", ofile);
   pool_free();
+  return 0;
 }
