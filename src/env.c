@@ -29,6 +29,13 @@ struct obj* env_new_obj(int type) {
     return r;
 }
 
+struct obj* env_new_array(int size) {
+    struct obj *o = env_new_obj(TARRAY);
+    o->a = calloc(size, sizeof(struct obj*));
+    o->size = size;
+    return o;
+}
+
 struct var* env_push_var(char *vname) {
     struct var *v = varp++;
     v->name = vname;
@@ -85,6 +92,5 @@ void env_init() {
     sp = ostack; memset(ostack, 0, sizeof(ostack));
     struct var *v;
     struct obj *o;
-    v = env_push_var("log"); o = env_new_obj(TFUNCTION); v->o = o; v->o->func = o_print;
-    printf("v->o->func=%p o_print=%p\n", v->o->func, o_print);
+    v = env_push_var("log"); o = env_new_obj(TFUNCTION); v->o = o; v->o->func = o_log;
 }

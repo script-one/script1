@@ -102,10 +102,14 @@ int run() {
         o_add(*--sp, a);
         break;
       case Call:
-        a = *--sp; o = *--sp;
+        o = *--sp;
         a = o_call(o, a);
         break;
-      case Narg: // do nothing...
+      case Narg:
+        a = env_new_array(n);
+        for (int i=n-1; i>=0; i--) {
+          a->a[i] = *--sp;
+        }
         break;
 /*
       case Fn:

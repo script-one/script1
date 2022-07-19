@@ -9,7 +9,8 @@ enum {
     // TINT,      // 整數
     TFLOAT,    // 雙精度浮點數
     TSTRING,   // 字串
-    TLIST,     // 串列
+    TARRAY,    // 陣列
+    // TLIST,     // 串列
     // TSYMBOL,   // 符號
     // TPRIMITIVE,// 基本函數
     TFUNCTION, // 自訂函數
@@ -23,18 +24,15 @@ enum {
 // The object type
 struct obj {
     int type; // 物件型態
+    int size; // 大小 (a->size or string length ...)
     union {
         // int64_t i;   // 程式位址
         double f;    // 浮點數值
         char   *str; // 字串常數
-        struct olink *list; // 物件串列
+        // struct olink *list; // 物件串列
+        struct obj** a;
         struct obj* (*func)(struct obj*); // 函數
     };
-};
-
-struct olink {
-  struct obj *obj;
-  struct olink *next;
 };
 
 #define fop2(a, op, o) \
@@ -167,17 +165,35 @@ struct obj *o_print(struct obj *o) {
         case TSTRING:
             printf("%s", o->str);
             break;
+        case TARRAY:
+            printf("[");
+            for (int i=0; i<o->size; i++) {
+                o_print(o->a[i]);
+                if (i != o->size-1) printf(",");
+            }
+            printf("]");
+            break;
+        /*
         case TLIST:
             for (struct olink *p = o->list; p!=NULL; p=p->next) {
                 o_print(p->obj);
             }
             break;
+        */
         case TFUNCTION:
             printf("(function:%p)", o->func);
             break;
         default:
             printf("(unknown:type=%d)", o->type);
     }
+    return NULL;
+}
+
+struct obj *o_log(struct obj *args) {
+    for (int i=0; i<args->size; i++) {
+        o_print(args->a[i]);
+    }
+    printf("\n");
     return NULL;
 }
 
