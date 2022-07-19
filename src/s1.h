@@ -56,12 +56,12 @@ enum {
   End,
 };
 
-typedef struct {
+typedef struct k2i {
   char *k;
   int  i;
 } k2i_t;
 
-typedef struct token_t {
+typedef struct token {
     int tk;     // token 型態
     int line;   // 所在行號
     char *str;  // token 的字串
@@ -69,30 +69,26 @@ typedef struct token_t {
 } token_t;
 
 // ast
-typedef struct node_t node_t;
-typedef struct array_t array_t;
-typedef struct link_t link_t;
-typedef struct list_t list_t;
 
-struct node_t {
+typedef struct node {
   int type;
   int len;
-  token_t *ptk;
+  struct token *ptk;
   union {
-    list_t  *list;
-    node_t  *node;
-    node_t  **array;
+    struct list *list;
+    struct node *node;
+    struct node **array;
   };
-};
+} node_t;
 
-struct link_t {
-  node_t *node;
-  link_t *next;
-};
+typedef struct link {
+  struct node *node;
+  struct link *next;
+} link_t;
 
-struct list_t {
-  link_t *head;
-};
+typedef struct list {
+  struct link *head;
+} list_t;
 
 char *ifile, *ofile;
 FILE *ofp;

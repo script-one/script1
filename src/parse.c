@@ -193,7 +193,6 @@ node_t *assign() {
         n = id();
         if (tk == ':') { // 如果沒有 : 會傳回 NULL
             next();
-            // env_pushvar(st_token(n->ptk)); // 新增該變數到環境中
             t = type(); // 如果是空的，會傳回 node with empty list
         }
         if (tk == '=') {
@@ -218,8 +217,6 @@ node_t *assign() {
 // param = id(:type?)?=expr
 node_t *param() {
     node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
-
-    // env_pushvar(st_token(nid->ptk));
 
     if (tk == ':') {
         next();

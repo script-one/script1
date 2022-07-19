@@ -21,7 +21,7 @@ int asm2ir(char *line) {
   char *s=NULL; int n; double f;
   if (op == Float) {
     sscanf(p2, "%lf", &f);
-    printf("=> %s %lf\n", p1, f);
+    debug("=> %s %lf\n", p1, f);
     eir(s);
   } else if (op == Str || op == Get || op == Var || op == Fn) {
     s = st_printf("%s", p2);
@@ -37,21 +37,30 @@ int asm2ir(char *line) {
   return 0;
 }
 
-struct obj stack[NMAX];
+void watch(char *head, struct obj **sp, struct obj *a) {
+    printf(" %s a=", head); o_print(a); 
+    if (sp > ostack) {
+      printf(" top="); o_print(*(sp-1));
+    }
+    printf("\n");
+}
 
+// #define code_obj(pc) code_o[(pc)-code]
 int run() {
   printf("==================run================\n");
   env_init();
   ir_t *pc = code;
-  struct obj *a = NULL, *sp = stack;
+  struct obj *a;
   bool is_stop = false;
+
   while (1) {
     if (pc >= cp) error("no more code...\n");
     ir_t op = *pc++;
     char opname[20];
     op_name(op, opname);
     printf("%s ", opname);
-    char *s; int n; double f; // struct obj *o;
+    char *s; int n; double f; struct var *v; struct obj *o;
+
     if (op == Float) {
       f = (double) *pc++;
       printf(" %lf", f);
@@ -67,13 +76,44 @@ int run() {
     }
     printf("\n");
 
+    watch("before:", sp, a);
     switch (op) {
+      case Var:
+        v = env_push_var(s);
+        a = v->o = env_new_obj(TNONE);
+        break;
+      case Push: case Arg:
+        *sp++ = a;
+        break;
+      case Get:
+        v=env_get_var(s);
+        if (!v) error("Error: get %s fail!\n", s);
+        a = v->o;
+        break;
+      case Store:
+        o = *--sp;
+        *o = *a;
+        break;
+      case Str:
+        a = env_new_obj(TSTRING);
+        a->str = s;
+        break;
+      case '+':
+        o_add(*--sp, a);
+        break;
+      case Call:
+        a = *--sp; o = *--sp;
+        a = o_call(o, a);
+        break;
+      case Narg: // do nothing...
+        break;
+/*
       case Fn:
         env_pushf(s); // 新增函數堆疊，將參數加入其中
         break;
-      case Param: case Var:
-        n = env_pushvar(s);
-        a = vars[n].o;
+      case Param: 
+        v = env_push_var(s);
+        // v->o = env_paramobj(s); // 綁定 param 到 frame 的物件
         break;
       case Ent:
         env_params_end();
@@ -81,29 +121,12 @@ int run() {
       case Lev: case Ret: 
         env_popf();
         break;
-      case Get:
-        // a = env_get_var(s);
-        break;
-      case Local:
-        a = env_get_local(n)->o;
-        break;
-      case Store:
-        o_assign(--sp, a);
-        break;
-      case Push:
-        o_assign(sp++, a);
-        break;
-      case Str:
-        // a = env_get_str(s); 
-        break;
       case Float:
-        // a = env_get_float(f);
+        a = o_new(TFLOAT);
+        a->f = f;
+        // code_o[pc-code] = a;
         break;
-      case Call:
-        // pc = call(a);
-        break;
-      case Narg: // do nothing...
-        break;
+
       case Jmp:
         pc = pc + n;
         break;
@@ -112,12 +135,6 @@ int run() {
         break;
       case Bnz:
         if (!o_iszero(a)) pc = pc + n;
-        break;
-      case Print:
-        o_print(a);
-        break;
-      case Exit:
-        is_stop = true;
         break;
       case Lor:
         o_lor(--sp, a);
@@ -149,9 +166,6 @@ int run() {
       case Neg:
         o_neg(a);
         break;
-      case '+':
-        o_add(--sp, a);
-        break;
       case '-':
         o_sub(--sp, a);
         break;
@@ -179,13 +193,14 @@ int run() {
       case '>':
         o_gt(--sp, a);
         break;
-      // case Adj:
-      //   break;
-      // case Src:
-      //   break;
-      default:
+      case Local:
+        a = env_get_local(n)->o;
         break;
+*/
+      default:
+        error("op=%d not handled!", (int) op);
     }
+    watch("after :", sp, a);
     if (is_stop) break;
   }
   return 0;

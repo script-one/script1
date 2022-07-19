@@ -1,71 +1,90 @@
 #include <obj.c>
 
+#define NOBJ 10000
 #define NVAR 10000
 #define NFUNC 100
-
-struct func {
-    char *fname;
-    int frame_start;
-    int frame_base;
-    int frame_end;
-};
 
 struct var {
     char *name;
     struct obj *o;
 };
 
-struct var vars[NVAR];
-int var_top;
-struct func fstack[NFUNC];
-int f_top;
+struct func {
+    char *fname;
+    struct var *vptr;
+    struct var *vstart;
+    struct var *vbase;
+    struct var *vend;
+};
 
-void env_init() {
-    var_top = 0;
-    f_top = 0;
+struct obj objs[NOBJ], *objp=objs;
+struct var vars[NVAR], *varp = vars;
+struct func fstack[NFUNC], *fp=fstack;
+struct obj *ostack[NMAX], **sp=ostack;
+
+struct obj* env_new_obj(int type) {
+    struct obj *r = objp++;
+    memset(r, 0, sizeof(struct obj));
+    r->type = type;
+    return r;
 }
 
-int env_pushvar(char *vname) {
-    struct var *v = &vars[var_top];
+struct var* env_push_var(char *vname) {
+    struct var *v = varp++;
     v->name = vname;
-    v->o = o_new(TNONE);
-    return var_top++;
+    v->o = NULL;
+    return v;
 }
 
 struct func* env_pushf(char *fname) {
-    struct func *f = &fstack[f_top++];
+    struct func *f = fp++;
     f->fname = fname;
-    f->frame_start = var_top;
+    f->vstart = varp;
+    f->vptr = varp;
     return f;
 }
 
 struct func* env_peekf() {
-    struct func *f = &fstack[f_top];
-    return f;
+    return fp-1;
 }
 
 struct func* env_popf() {
-    struct func *f = &fstack[--f_top];
-    f->frame_end = var_top;
-    var_top = f->frame_start;
+    struct func *f = --fp;
+    f->vend = varp;
+    varp = f->vstart;
     return f;
 }
 
 void env_params_end() {
-    env_peekf()->frame_base = env_pushvar("");
+    env_peekf()->vbase = varp;
 }
 
-int env_find_local(char *vname) {
+struct var *env_find_local(char *vname) {
     struct func *f = env_peekf();
-    for (int i=f->frame_start; i<var_top; i++) {
-        if (strcmp(vname, vars[i].name)==0) {
-            return i-f->frame_base;
+    for (struct var *v = f->vstart; v<f->vend; v++) {
+        if (strcmp(vname, v->name)==0) {
+            return v;
         }
     }
-    return 0;
+    return NULL;
 }
 
-struct var *env_get_local(int i) {
-    struct func *f = env_peekf();
-    return &vars[f->frame_base+i];
+struct var *env_get_var(char *name) {
+    for (struct var *v=varp-1; v>=vars; v--) {
+        if (strcmp(v->name, name)==0) {
+            printf("==> env_get_var: %s at %d\n", name, (int) (v-vars));
+            return v;
+        }
+    }
+    return NULL;
+}
+
+void env_init() {
+    varp = vars; memset(vars, 0, sizeof(vars));
+    fp = fstack; memset(fstack, 0, sizeof(fstack));
+    sp = ostack; memset(ostack, 0, sizeof(ostack));
+    struct var *v;
+    struct obj *o;
+    v = env_push_var("log"); o = env_new_obj(TFUNCTION); v->o = o; v->o->func = o_print;
+    printf("v->o->func=%p o_print=%p\n", v->o->func, o_print);
 }

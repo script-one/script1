@@ -1,9 +1,13 @@
 #include <s1.h>
 
-static int stack[1000];
-static int top = 0;
+struct func {
+    struct node *node;
+    int nlocal;
+};
+
+static int stack[1000]; static int top = 0;
+static struct func fstack[100]; static int ftop = 0;
 static int block_level = 0;
-static int fn_level = 0;
 static bool show_line = true;
 
 static char ebuf[1024], *ep=ebuf;
@@ -124,9 +128,13 @@ static void gen_code(node_t *me) {
         gen_for_in(args[0], args[1], args[2]);
         pop(ForIn);
     } else if (type == Function || type == Lambda) {
-        push(Function); fn_level++;
+        push(Function); 
+        struct func *f = &fstack[ftop++];
+        f->node = me;
+        f->nlocal = 0;
         gen_function(type, args[0], args[1], args[2], args[3], args[4]);
-        pop(Function);  fn_level--;
+        pop(Function);
+        ftop--;
     } else if (type == Return || type == '?') {
         gen_return(type, args[0]); // gen_return(type, me->node);
     } else if (type == Continue || type == Break) {
@@ -158,6 +166,7 @@ static void gen_code(node_t *me) {
         gen_pid(me);
     } else if (type==Assign) {
         gen_assign(args[0], args[1], args[2]); // assign = term(:type?)?(= expr)?
+        if (args[1]) fstack[ftop-1].nlocal++; // := 宣告區域變數
     } else if (type == Pair) {
         gen_pair(args[0], args[1]);
     } else if (type == Token) {

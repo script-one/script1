@@ -6,14 +6,14 @@
 enum {
     // Regular objects visible from the user
     TNONE = 0, // 未定義
-    TINT,      // 整數
-    TFLOAT,   // 雙精度浮點數
+    // TINT,      // 整數
+    TFLOAT,    // 雙精度浮點數
     TSTRING,   // 字串
     TLIST,     // 串列
-    TSYMBOL,   // 符號
-    TPRIMITIVE,// 基本函數
+    // TSYMBOL,   // 符號
+    // TPRIMITIVE,// 基本函數
     TFUNCTION, // 自訂函數
-    TENV       // 環境變數 frame
+    // TENV       // 環境變數 frame
 };
 
 // typedef struct struct obj struct obj;
@@ -24,7 +24,7 @@ enum {
 struct obj {
     int type; // 物件型態
     union {
-        int64_t i;   // 程式位址
+        // int64_t i;   // 程式位址
         double f;    // 浮點數值
         char   *str; // 字串常數
         struct olink *list; // 物件串列
@@ -36,10 +36,6 @@ struct olink {
   struct obj *obj;
   struct olink *next;
 };
-
-#define OMAX 10000
-struct obj objs[OMAX];
-int o_top = 0;
 
 #define fop2(a, op, o) \
     if ((a)->type == TFLOAT && (o)->type == TFLOAT) { \
@@ -60,21 +56,6 @@ int o_top = 0;
     if ((o)->type == TFLOAT) { \
       (o)->f = op i32((o)->f); \
     }
-
-int o_idx(struct obj *o) {
-    return o-objs;
-}
-
-struct obj *o_new(int type) {
-    struct obj *r = &objs[o_top++];
-    r->type = type;
-    return r;
-}
-
-void o_assign(struct obj *o, struct obj *a) {
-    o->type = a->type;
-    o->f = a->f; // union 中的所有型態最大必須是 64bits，所以可以用 f (double) 指定之。
-}
 
 bool o_iszero(struct obj *o) {
     return o->f == 0.0;
@@ -126,6 +107,9 @@ void o_gt(struct obj *a, struct obj *o) {
 
 void o_add(struct obj *a, struct obj *o) {
     fop2(a, +, o);
+    if (a->type == TSTRING && o->type == TSTRING) {
+        o->str = st_printf("%s%s", a->str, o->str);
+    }
 }
 
 void o_sub(struct obj *a, struct obj *o) {
@@ -169,8 +153,14 @@ void o_shr(struct obj *a, struct obj *o) {
 }
 
 struct obj *o_print(struct obj *o) {
-    printf("obj=");
+    if (o == NULL) {
+        printf("(obj:null)");
+        return NULL;
+    }
     switch (o->type) {
+        case TNONE:
+            printf("(obj:none)");
+            break;
         case TFLOAT:
             printf("%lf", o->f);
             break;
@@ -182,14 +172,16 @@ struct obj *o_print(struct obj *o) {
                 o_print(p->obj);
             }
             break;
+        case TFUNCTION:
+            printf("(function:%p)", o->func);
+            break;
         default:
-            printf("(unknown type)");
+            printf("(unknown:type=%d)", o->type);
     }
-    printf("\n");
     return NULL;
 }
 
 struct obj *o_call(struct obj *o, struct obj *arg) {
-    ok(o->type = TFUNCTION);
+    ok(o->type == TFUNCTION);
     return o->func(arg);
 }

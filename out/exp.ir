@@ -23,7 +23,7 @@ push
 float 3
 +
 push
-local 1
+get y
 *
 store
 // 4:log('z=', z)
@@ -31,7 +31,7 @@ get log
 push
 str 'z='
 arg
-local 2
+get z
 arg
 narg 2
 call

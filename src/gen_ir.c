@@ -1,6 +1,6 @@
 #include <gen0.c>
 #include <ir.c>
-#include <env.c>
+// #include <env.c>
 
 static void dump_ir() {
     while (lcp < cp) {
@@ -21,17 +21,17 @@ static void dump_ir() {
     }
     emit("\n");
 }
-
+/*
 // 產生載入變數的指令，可能是 get name 或 local i
 void eir_load(char *name) {
-    int local_idx = env_find_local(name);
-    if (local_idx == 0) { // not found!
-        eir(Get); eir(name); // get name
+    struct var *v = env_find_local(name);
+    if (v) {
+        eir(Local); eir(v-vars); // local i
     } else {
-        eir(Local); eir(local_idx); // local i
+        eir(Get); eir(name); // get name
     }
 }
-
+*/
 static int in_param = false;
 
 static void gen_num(node_t *node) {
@@ -268,7 +268,7 @@ static void gen_pid(node_t *pid) {
         name = st_printf("%.*s", nid->ptk->len, nid->ptk->str);
     }
     gen_code(nid);
-    eir_load(name);
+    eir(Get), eir(name);
 }
 
 // assign = (term|id(:type?)?) (= expr)?
@@ -278,12 +278,11 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
         emit(name);
         if (type || in_param) {
             eir(in_param?Param:Var); eir(name);
-            env_pushvar(name); // 新增該變數到環境中
             emit(":");
             if (type && type->list != NULL)
                 gen_list(type->list->head, "");
         } else {
-            eir_load(name);
+            eir(Get); eir(name); // eir_load(name);
         }
     } else {
         gen_code(head);
@@ -340,21 +339,17 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
     }
     eir(sid);
 
-    env_pushf(sid); // 新增函數堆疊，將參數加入其中
     gen_code(params);
-    env_params_end();
-    // f->local_start = var_top; // 紀錄區域變數起始點
     eir(Ent); ir_t *ecount = eir(0); // eir(param_count);
     gen_code(block);
-    struct func *f = env_popf();
-    *ecount = f->frame_end-f->frame_base;
+    *ecount = fstack[ftop-1].nlocal;
     eir(Lev);
 }
 
 void gen_ir(node_t *root) {
     emit("// source file: %s\n", ifile);
     line(0);
-    env_init();
+    // env_init();
     gen_code(root);
     emit("\n");
     dump_ir();
