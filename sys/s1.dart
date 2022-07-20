@@ -8,7 +8,6 @@ export 'dart/console.dart';
 export 'dart/json.dart';
 export 'dart/fs.dart';
 export 'dart/regexp.dart';
-export 'dart:math';
 
 /*
 import 'dart:io';

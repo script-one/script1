@@ -22,7 +22,7 @@ class SportsCar extends Car {
 }
   
 fn main() {
-  benzzz := new SportsCar('Benzzz')
-  log(benzzz.brand)
-  benzzz.honk()
+  bentley := new SportsCar('Bentley')
+  log(bentley.brand)
+  bentley.honk()
 }
