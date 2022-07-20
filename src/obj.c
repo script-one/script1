@@ -6,32 +6,23 @@
 enum {
     // Regular objects visible from the user
     TNONE = 0, // 未定義
-    // TINT,      // 整數
     TFLOAT,    // 雙精度浮點數
     TSTRING,   // 字串
     TARRAY,    // 陣列
-    // TLIST,     // 串列
-    // TSYMBOL,   // 符號
-    // TPRIMITIVE,// 基本函數
     TFUNCTION, // 自訂函數
-    // TENV       // 環境變數 frame
 };
 
-// typedef struct struct obj struct obj;
-// typedef struct obj_link_t obj_link_t;
-// typedef struct obj_func_t obj_func_t;
+typedef struct obj* (*func_t)(struct obj*); // 函數
 
 // The object type
 struct obj {
     int type; // 物件型態
     int size; // 大小 (a->size or string length ...)
     union {
-        // int64_t i;   // 程式位址
         double f;    // 浮點數值
         char   *str; // 字串常數
-        // struct olink *list; // 物件串列
         struct obj** a;
-        struct obj* (*func)(struct obj*); // 函數
+        func_t func; // 函數
     };
 };
 
@@ -215,14 +206,6 @@ struct obj *o_print(struct obj *o) {
         default:
             printf("(unknown:type=%d)", o->type);
     }
-    return NULL;
-}
-
-struct obj *o_log(struct obj *args) {
-    for (int i=0; i<args->size; i++) {
-        o_print(args->a[i]);
-    }
-    printf("\n");
     return NULL;
 }
 

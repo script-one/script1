@@ -86,11 +86,32 @@ struct var *env_get_var(char *name) {
     return NULL;
 }
 
+struct obj *env_log(struct obj *args) {
+    for (int i=0; i<args->size; i++) {
+        o_print(args->a[i]);
+    }
+    printf("\n");
+    return NULL;
+}
+
+struct obj *env_exit(struct obj *args) {
+    exit(0);
+    return NULL;
+}
+
+void env_sysf(char *fname, func_t func) {
+    struct var *v;
+    struct obj *o;
+    v = env_push_var(fname);
+    o = env_new_obj(TFUNCTION);
+    v->o = o;
+    v->o->func = func;
+}
+
 void env_init() {
     varp = vars; memset(vars, 0, sizeof(vars));
     fp = fstack; memset(fstack, 0, sizeof(fstack));
     sp = ostack; memset(ostack, 0, sizeof(ostack));
-    struct var *v;
-    struct obj *o;
-    v = env_push_var("log"); o = env_new_obj(TFUNCTION); v->o = o; v->o->func = o_log;
+    env_sysf("log", env_log);
+    env_sysf("exit", env_exit);
 }

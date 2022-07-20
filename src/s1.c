@@ -6,8 +6,6 @@
 #include <parse.c>
 
 int main(int argc, char **argv) {
-  char *narg;
-
   --argc; ++argv; // skip exe file name
   if (argc > 0 && **argv == '-' && (*argv)[1] == 'l') { o_lex = 1; --argc; ++argv; }
   if (argc > 0 && **argv == '-' && (*argv)[1] == 's') { src = 1; --argc; ++argv; }
@@ -18,7 +16,7 @@ int main(int argc, char **argv) {
   if (argc < 1) { printf("usage: s1 [-s] [-d] [-r] [-u] [-m] in_file [-o] out_file...\n"); return -1; }
   ifile = *argv;
   if (argc > 1) {
-    narg = *(argv+1);
+    char *narg = *(argv+1);
     if (*narg == '-' && narg[1] == 'o') {
       ofile = *(argv+2);
     }

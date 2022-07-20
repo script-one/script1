@@ -28,7 +28,7 @@ int asm2ir(char *line) {
     s = st_printf("%s", p2);
     debug("=> %s %s\n", p1, s);
     eir(s);
-  } else if (op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
+  } else if (op == Array || op == Call || op == Ent || op == Jmp || op == Bz || op == Bnz) { //  || op == Adj
     n = atoi(p2);
     debug("=> %s %d\n", p1, n);
     eir(n);
@@ -49,7 +49,7 @@ void watch(char *head, struct obj **sp, struct obj *a) {
 
 // #define code_obj(pc) code_o[(pc)-code]
 int run() {
-  printf("==================run================\n");
+  debug("==================run================\n");
   env_init();
   ir_t *pc = code;
   struct obj *a;
@@ -72,7 +72,7 @@ int run() {
     } else if (op == Get || op == Var || op == Fn || op == Src) {
       s = (char*) *pc++;
       debug(" %s", s);
-    } else if (op == Local || op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj) {
+    } else if (op == Array || op == Call || op == Ent || op == Jmp || op == Bz || op == Bnz) { // || op == Narg || op == Adj
       n = *pc++;
       debug(" %d", n);
     }
@@ -164,17 +164,19 @@ int run() {
       case Land:
         a = o_land(*--sp, a);
         break;
-      case Call:
-        o = *--sp;
-        a = o_call(o, a);
-        break;
-      case Narg:
+      case Array: case Call:
         a = env_new_array(n);
         for (int i=n-1; i>=0; i--) {
           a->a[i] = *--sp;
         }
+        if (op == Call) {
+          o = *--sp;
+          a = o_call(o, a);
+        }
         break;
 /*
+      case Narg:
+        break;
       case Fn:
         env_pushf(s); // 新增函數堆疊，將參數加入其中
         break;
@@ -212,9 +214,10 @@ int run() {
 }
 
 int main(int argc, char **argv) {
-  // dbg = 1;
-  if (argc < 2) error("%s <ir_file>\n", argv[0]);
-  char *ifile = argv[1];
+  --argc; ++argv; // skip exe file name
+  if (argc > 0 && **argv == '-' && (*argv)[1] == 'd') { dbg = 1; --argc; ++argv; }
+  if (argc <= 0) error("%s <ir_file>\n", argv[0]);
+  char *ifile = *argv;
 
   FILE *f = fopen(ifile, "r");
   if (!f) error("open %s fail!\n", ifile);
@@ -226,4 +229,5 @@ int main(int argc, char **argv) {
   fclose(f);
 
   run();
+  return 0;
 }

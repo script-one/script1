@@ -49,9 +49,9 @@ enum {
   Op2End, 
   VmOpBegin = 220, 
     Get, Local, Var, Float, Src, 
-    Narg, Arg, Ent, Jmp, Bz ,Bnz, 
-    Adj, Call, Ret, Lev, Store, Push, 
-    Print, Exit, 
+    Arg, Ent, Jmp, Bz ,
+    Bnz, Adj, Call, Ret, Lev, 
+    Store, Push, /*Print, Exit,Narg, */ 
   VmOpEnd,
   End,
 };

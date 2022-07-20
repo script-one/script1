@@ -16,6 +16,8 @@ push
 get name
 +
 arg
-narg 1
-call
+call 1
+get exit
+push
+call 0
 

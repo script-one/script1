@@ -13,7 +13,7 @@ static void dump_ir() {
         if (op == Str || op == Float || op == Get || op == Var || op == Param || op == Fn || op == Src) {
             arg = *lcp++;
             emit(" %s", (char*) arg);
-        } else if (op == Local || op == Narg || op == Ent || op == Jmp || op == Bz || op == Bnz || op == Adj ) {
+        } else if (op==Array || op == Call || op == Ent || op == Jmp || op == Bz || op == Bnz) { //|| op == Narg  || op == Adj
             arg = *lcp++;
             emit(" %d", (int) arg);
         }
@@ -88,7 +88,7 @@ static void gen_args(link_t *head) {
         if (p->next != NULL) emit(",");
         narg++;
     }
-    eir(Narg); eir(narg);
+    eir(Call); eir(narg);
     emit(")");
 }
 
@@ -129,8 +129,15 @@ static void gen_stmts(node_t *node) {
 // array = [ expr* ]
 static void gen_array(link_t *head) {
     emit("[");
-    gen_list(head, ",");
+    int count=0;
+    for (link_t *p = head; p != NULL; p = p->next) {
+        gen_code(p->node);
+        eir(Push);
+        if (p->next != NULL) emit("%s", ",");
+        count ++;
+    }
     emit("]");
+    eir(Array); eir(count);
 }
 
 static void gen_key(node_t *node) {
@@ -181,7 +188,7 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
         } else if (op == Args) { // function call
             eir(Push);
             gen_code(n);
-            eir(Call);
+            // eir(Call);
         }
     }
 }
@@ -349,8 +356,13 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 void gen_ir(node_t *root) {
     emit("// source file: %s\n", ifile);
     line(0);
-    // env_init();
     gen_code(root);
+
+    // append exit(0)
+    eir(Get); eir(st_printf("exit")); // get exit
+    eir(Push);                        // push
+    eir(Call); eir(0);                // call(0)
+
     emit("\n");
     dump_ir();
 }
