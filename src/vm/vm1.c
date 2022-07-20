@@ -1,7 +1,7 @@
 #include <s1.h>
 #include <lib.c>
 #include <ir.c>
-#include <env.c>
+#include "env.c"
 
 void parse_ir(char *line, char *op, char *arg) {
   *op='\0'; *arg='\0';

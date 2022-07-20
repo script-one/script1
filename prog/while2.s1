@@ -1,0 +1,8 @@
+i:=1
+s:=0
+n:=2
+while (i<=n) {
+    s=s+i
+    i=i+1
+}
+log('sum(3)=', s)

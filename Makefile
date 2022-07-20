@@ -7,7 +7,7 @@ all: $(OBJS)
 s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c src/gen_py.c src/gen_ir.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-vm1: src/vm1.c
+vm1: src/vm/vm1.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 hello: $(OBJS)

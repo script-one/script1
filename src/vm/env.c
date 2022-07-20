@@ -1,4 +1,4 @@
-#include <obj.c>
+#include "obj.c"
 
 #define NOBJ 10000
 #define NVAR 10000
