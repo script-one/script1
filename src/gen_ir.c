@@ -131,12 +131,11 @@ static void gen_block(node_t *block) {
 
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
-    ir_t *begin = cp, *j_end;
+    ir_t *begin = cp;
     gen_code(exp);
-    eir(Jz); j_end = eir(0);
+    eir(Jz); ir_t *j_end = eir(0); // Jz end
     gen_code(stmt);
-    ir_t *end = cp+2; // 指向 Jmp xxx 之後
-    eir(Jmp); eir(begin-end);
+    ir_t *end = eir(Jmp)+2; eir(begin-end); // Jmp begin
     *j_end = end - (j_end+1);
 }
 
@@ -163,26 +162,30 @@ static void gen_map(node_t *nmap) {
 
 static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
     gen_code(e1);
-    eir(Jz); ir_t *j_else = cp; eir(0);
+    eir(Jz); ir_t *j_else = eir(0);
+    ir_t *begin1 = cp;
     gen_code(e2);
-    *j_else = (ir_t) (cp-j_else);
-    eir(Jmp); ir_t *j_end = cp; eir(0);
+    eir(Jmp); ir_t *j_end = eir(0);
+    ir_t *begin2 = cp;
+    *j_else = (ir_t) (begin2-begin1);
     gen_code(e3);
-    *j_end = (ir_t) (cp-j_end);
+    ir_t *end = cp;
+    *j_end = (ir_t) (end-j_end);
 }
 
 // if expr stmt (else stmt)?
 static void gen_if(node_t *exp, node_t *stmt1, node_t *stmt2) {
     gen_code(exp);
     eir(Jz); ir_t *j_else = eir(0);
+    ir_t *begin1 = cp;
     gen_code(stmt1);
     eir(Jmp); ir_t *j_end = eir(0);
-    *j_else = (ir_t) (cp-j_else);
-    if (stmt2) {
-        gen_code(stmt2);
-    }
+    ir_t *begin2 = cp;
+    *j_else = (ir_t) (begin2-begin1);
+    if (stmt2)
+       gen_code(stmt2);
     ir_t *end = cp;
-    *j_end = (ir_t) (end-j_end);
+    *j_end = (ir_t) (end-begin2);
 }
 
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {

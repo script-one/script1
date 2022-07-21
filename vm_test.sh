@@ -6,4 +6,5 @@ set -e
 ./vm_run.sh hello_array
 ./vm_run.sh while2
 ./vm_run.sh if2
-./vm_run.sh sum
+./vm_run.sh cond2
+# ./vm_run.sh sum

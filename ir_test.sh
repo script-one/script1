@@ -17,6 +17,7 @@ set -e
 #./ir_run.sh global
 # ./ir_run.sh obj
 ./ir_run.sh cond
+./ir_run.sh cond2
 #./ir_run.sh lambda
 #./ir_run.sh map
 #./ir_run.sh try

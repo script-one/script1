@@ -1,0 +1,4 @@
+x:=3
+y:=5
+max:=x>y ? x : y
+log('max(3,5)=', max)
