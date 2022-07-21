@@ -249,14 +249,9 @@ node_t *function(int type) { // type=Function | Lambda
     if (tk == ':') { next(); nret = id(); }
     node_t *nid = (type==Function)?id():NULL;    
     skip('(');
-
-    // struct func *f = env_pushf(st_token(nid->ptk)); // 新增函數堆疊，將參數加入其中
     node_t *nparam = params();
-    // f->local_start = var_top; // 紀錄區域變數起始點
-    
     skip(')');
     node_t *nbody = NULL;
-
     // 繼續 parse
     if (type == Lambda) {
         skip('{');
@@ -265,8 +260,6 @@ node_t *function(int type) { // type=Function | Lambda
     } else {
         nbody = block();
     }
-
-    // env_popf();
     return op5(type, nasync, nid, nret, nparam, nbody);
 }
 

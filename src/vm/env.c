@@ -4,59 +4,59 @@
 #define NVAR 10000
 #define NFUNC 100
 
-struct var {
+typedef struct var {
     char *name;
-    struct obj *o;
-};
+    obj_t *o;
+} var_t;
 
-struct func {
+typedef struct func {
     char *fname;
-    struct var *vptr;
-    struct var *vstart;
-    struct var *vbase;
-    struct var *vend;
-};
+    var_t *vptr;
+    var_t *vstart;
+    var_t *vbase;
+    var_t *vend;
+} func_t;
 
-struct obj objs[NOBJ], *objp=objs;
-struct var vars[NVAR], *varp = vars;
-struct func fstack[NFUNC], *fp=fstack;
-struct obj *ostack[NMAX], **sp=ostack;
+obj_t objs[NOBJ], *objp=objs;
+var_t vars[NVAR], *varp = vars;
+func_t fstack[NFUNC], *fp=fstack;
+obj_t *ostack[NMAX], **sp=ostack;
 
-struct obj* env_new_obj(int type) {
-    struct obj *r = objp++;
-    memset(r, 0, sizeof(struct obj));
+obj_t* env_new_obj(int type) {
+    obj_t *r = objp++;
+    memset(r, 0, sizeof(obj_t));
     r->type = type;
     return r;
 }
 
-struct obj* env_new_array(int size) {
-    struct obj *o = env_new_obj(TARRAY);
-    o->a = calloc(size, sizeof(struct obj*));
+obj_t* env_new_array(int size) {
+    obj_t *o = env_new_obj(TARRAY);
+    o->a = calloc(size, sizeof(obj_t*));
     o->size = size;
     return o;
 }
 
-struct var* env_push_var(char *vname) {
-    struct var *v = varp++;
+var_t* env_push_var(char *vname) {
+    var_t *v = varp++;
     v->name = vname;
     v->o = NULL;
     return v;
 }
 
-struct func* env_pushf(char *fname) {
-    struct func *f = fp++;
+func_t* env_pushf(char *fname) {
+    func_t *f = fp++;
     f->fname = fname;
     f->vstart = varp;
     f->vptr = varp;
     return f;
 }
 
-struct func* env_peekf() {
+func_t* env_peekf() {
     return fp-1;
 }
 
-struct func* env_popf() {
-    struct func *f = --fp;
+func_t* env_popf() {
+    func_t *f = --fp;
     f->vend = varp;
     varp = f->vstart;
     return f;
@@ -66,9 +66,9 @@ void env_params_end() {
     env_peekf()->vbase = varp;
 }
 
-struct var *env_find_local(char *vname) {
-    struct func *f = env_peekf();
-    for (struct var *v = f->vstart; v<f->vend; v++) {
+var_t *env_find_local(char *vname) {
+    func_t *f = env_peekf();
+    for (var_t *v = f->vstart; v<f->vend; v++) {
         if (strcmp(vname, v->name)==0) {
             return v;
         }
@@ -76,8 +76,8 @@ struct var *env_find_local(char *vname) {
     return NULL;
 }
 
-struct var *env_get_var(char *name) {
-    for (struct var *v=varp-1; v>=vars; v--) {
+var_t *env_get_var(char *name) {
+    for (var_t *v=varp-1; v>=vars; v--) {
         if (strcmp(v->name, name)==0) {
             // printf("==> env_get_var: %s at %d\n", name, (int) (v-vars));
             return v;
@@ -86,32 +86,21 @@ struct var *env_get_var(char *name) {
     return NULL;
 }
 
-struct obj *env_log(struct obj *args) {
-    for (int i=0; i<args->size; i++) {
-        o_print(args->a[i]);
-    }
-    printf("\n");
-    return NULL;
-}
-
-struct obj *env_exit(struct obj *args) {
-    exit(0);
-    return NULL;
-}
-
-void env_sysf(char *fname, func_t func) {
-    struct var *v;
-    struct obj *o;
+void env_sysf(char *fname, fcall_t fcall) {
+    var_t *v;
+    obj_t *o;
     v = env_push_var(fname);
     o = env_new_obj(TFUNCTION);
     v->o = o;
-    v->o->func = func;
+    v->o->fcall = fcall;
 }
+
+#include "sys.c"
 
 void env_init() {
     varp = vars; memset(vars, 0, sizeof(vars));
     fp = fstack; memset(fstack, 0, sizeof(fstack));
     sp = ostack; memset(ostack, 0, sizeof(ostack));
-    env_sysf("log", env_log);
-    env_sysf("exit", env_exit);
+    env_sysf("log", sys_log);
+    env_sysf("exit", sys_exit);
 }

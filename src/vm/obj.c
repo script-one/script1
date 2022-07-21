@@ -10,9 +10,12 @@ enum {
     TSTRING,   // 字串
     TARRAY,    // 陣列
     TFUNCTION, // 自訂函數
+    TITERATOR, // iterator，像是 range(0,len)
 };
 
-typedef struct obj* (*func_t)(struct obj*); // 函數
+typedef struct obj obj_t;
+typedef obj_t* (*fcall_t)(obj_t*); // 函數
+typedef struct iterator iterator_t;
 
 // The object type
 struct obj {
@@ -21,156 +24,164 @@ struct obj {
     union {
         double f;    // 浮點數值
         char   *str; // 字串常數
-        struct obj** a;
-        func_t func; // 函數
+        obj_t **a;
+        fcall_t fcall; // 函數
+        iterator_t *iter;
     };
 };
 
-struct obj* env_new_obj(int type);
+struct iterator {
+    fcall_t *next;
+};
+
+obj_t* env_new_obj(int type);
 
 #define fop2(a, op, b) \
     if ((a)->type == TFLOAT && (b)->type == TFLOAT) { \
-      struct obj *o = env_new_obj(TFLOAT); \
+      obj_t *o = env_new_obj(TFLOAT); \
       o->f = (a)->f op (b)->f; \
       return o; \
     }
 
 #define iop2(a, op, b) \
     if ((a)->type == TFLOAT && (b)->type == TFLOAT) { \
-      struct obj *o = env_new_obj(TFLOAT); \
+      obj_t *o = env_new_obj(TFLOAT); \
       o->f = i32((a)->f) op i32((b)->f); \
       return o; \
     }
 
 #define fop1(op, a) \
     if ((a)->type == TFLOAT) { \
-      struct obj *o = env_new_obj(TFLOAT); \
+      obj_t *o = env_new_obj(TFLOAT); \
       o->f = op (a)->f; \
       return o; \
     }
 
 #define iop1(op, a) \
     if ((a)->type == TFLOAT) { \
-      struct obj *o = env_new_obj(TFLOAT); \
+      obj_t *o = env_new_obj(TFLOAT); \
       o->f = op i32((a)->f); \
       return o; \
     }
 
-bool o_iszero(struct obj *o) {
-    return o->f == 0.0;
+bool o_iszero(obj_t *o) {
+    if (o==NULL) return true;
+    if (o->type == TNONE) return true;
+    if (o->f == 0.0) return true;
+    return false;
 }
 
-struct obj *o_neg(struct obj *a) {
+obj_t *o_neg(obj_t *a) {
     fop1(-, a);
     return NULL;
 }
 
-struct obj *o_not(struct obj *a) {
+obj_t *o_not(obj_t *a) {
     fop1(!, a);
     return NULL;
 }
 
-struct obj *o_lnot(struct obj *a) {
+obj_t *o_lnot(obj_t *a) {
     iop1(~, a);
     return NULL;
 }
 
-struct obj *o_lor(struct obj *a, struct obj *b) {
+obj_t *o_lor(obj_t *a, obj_t *b) {
     iop2(a, ||, b);
     return NULL;
 }
 
-struct obj *o_land(struct obj *a, struct obj *b) {
+obj_t *o_land(obj_t *a, obj_t *b) {
     iop2(a, &&, b);
     return NULL;
 }
 
-struct obj *o_eq(struct obj *a, struct obj *b) {
+obj_t *o_eq(obj_t *a, obj_t *b) {
     fop2(a, ==, b);
     return NULL;
 }
 
-struct obj *o_neq(struct obj *a, struct obj *b) {
+obj_t *o_neq(obj_t *a, obj_t *b) {
     fop2(a, !=, b);
     return NULL;
 }
 
-struct obj *o_le(struct obj *a, struct obj *b) {
+obj_t *o_le(obj_t *a, obj_t *b) {
     fop2(a, <=, b);
     return NULL;
 }
 
-struct obj *o_ge(struct obj *a, struct obj *b) {
+obj_t *o_ge(obj_t *a, obj_t *b) {
     fop2(a, >=, b);
     return NULL;
 }
 
-struct obj *o_lt(struct obj *a, struct obj *b) {
+obj_t *o_lt(obj_t *a, obj_t *b) {
     fop2(a, <, b);
     return NULL;
 }
 
-struct obj *o_gt(struct obj *a, struct obj *b) {
+obj_t *o_gt(obj_t *a, obj_t *b) {
     fop2(a, >, b);
     return NULL;
 }
 
-struct obj *o_add(struct obj *a, struct obj *b) {
+obj_t *o_add(obj_t *a, obj_t *b) {
     fop2(a, +, b);
     if (a->type == TSTRING && b->type == TSTRING) {
-        struct obj *o = env_new_obj(TSTRING);
+        obj_t *o = env_new_obj(TSTRING);
         o->str = st_printf("%s%s", a->str, b->str);
         return o;
     }
     return NULL;
 }
 
-struct obj *o_sub(struct obj *a, struct obj *b) {
+obj_t *o_sub(obj_t *a, obj_t *b) {
     fop2(a, -, b);
     return NULL;
 }
 
-struct obj *o_mul(struct obj *a, struct obj *b) {
+obj_t *o_mul(obj_t *a, obj_t *b) {
     fop2(a, *, b);
     return NULL;
 }
 
-struct obj *o_div(struct obj *a, struct obj *b) {
+obj_t *o_div(obj_t *a, obj_t *b) {
     fop2(a, /, b);
     return NULL;
 }
 
-struct obj *o_mod(struct obj *a, struct obj *b) {
+obj_t *o_mod(obj_t *a, obj_t *b) {
     iop2(a, %, b);
     return NULL;
 }
 
-struct obj *o_band(struct obj *a, struct obj *b) {
+obj_t *o_band(obj_t *a, obj_t *b) {
     iop2(a, &, b);
     return NULL;
 }
 
-struct obj * o_bor(struct obj *a, struct obj *b) {
+obj_t * o_bor(obj_t *a, obj_t *b) {
     iop2(a, |, b);
     return NULL;
 }
 
-struct obj *o_bxor(struct obj *a, struct obj *b) {
+obj_t *o_bxor(obj_t *a, obj_t *b) {
     iop2(a, ^, b);
     return NULL;
 }
 
-struct obj *o_shl(struct obj *a, struct obj *b) {
+obj_t *o_shl(obj_t *a, obj_t *b) {
     iop2(a, <<, b);
     return NULL;
 }
 
-struct obj *o_shr(struct obj *a, struct obj *b) {
+obj_t *o_shr(obj_t *a, obj_t *b) {
     iop2(a, >>, b);
     return NULL;
 }
 
-struct obj *o_print(struct obj *o) {
+obj_t *o_print(obj_t *o) {
     if (o == NULL) {
         printf("(obj:null)");
         return NULL;
@@ -193,15 +204,8 @@ struct obj *o_print(struct obj *o) {
             }
             printf("]");
             break;
-        /*
-        case TLIST:
-            for (struct olink *p = o->list; p!=NULL; p=p->next) {
-                o_print(p->obj);
-            }
-            break;
-        */
         case TFUNCTION:
-            printf("(function:%p)", o->func);
+            printf("(function:%p)", o->fcall);
             break;
         default:
             printf("(unknown:type=%d)", o->type);
@@ -209,7 +213,7 @@ struct obj *o_print(struct obj *o) {
     return NULL;
 }
 
-struct obj *o_call(struct obj *o, struct obj *arg) {
+obj_t *o_call(obj_t *o, obj_t *arg) {
     ok(o->type == TFUNCTION);
-    return o->func(arg);
+    return o->fcall(arg);
 }

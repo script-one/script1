@@ -1,14 +1,13 @@
 #include <s1.h>
 
-struct func {
+typedef struct fnode {
     struct node *node;
     int nlocal;
-};
+} fnode_t;
 
 static int stack[1000]; static int top = 0;
-static struct func fstack[100]; static int ftop = 0;
+static fnode_t fstack[100]; static int ftop = 0;
 static int block_level = 0;
-
 
 static char ebuf[1024], *ep=ebuf;
 
@@ -131,7 +130,7 @@ static void gen_code(node_t *me) {
         pop(ForIn);
     } else if (type == Function || type == Lambda) {
         push(Function); 
-        struct func *f = &fstack[ftop++];
+        fnode_t *f = &fstack[ftop++];
         f->node = me;
         f->nlocal = 0;
         gen_function(type, args[0], args[1], args[2], args[3], args[4]);

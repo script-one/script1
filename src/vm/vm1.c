@@ -40,7 +40,7 @@ int asm2ir(char *line) {
   return 0;
 }
 
-void watch(char *head, struct obj **sp, struct obj *a) {
+void watch(char *head, obj_t **sp, obj_t *a) {
   if (!dbg) return; 
   debug(" %s a=", head); o_print(a); 
   if (sp > ostack) {
@@ -54,7 +54,7 @@ int run() {
   debug("==================run================\n");
   env_init();
   ir_t *pc = code;
-  struct obj *a;
+  obj_t *a;
   bool is_stop = false;
 
   while (1) {
@@ -64,7 +64,7 @@ int run() {
     char opname[20];
     ir_name(op, opname);
     debug("%s ", opname);
-    char *s; int n; double f; struct var *v; struct obj *o;
+    char *s; int n; double f; var_t *v; obj_t *o;
 
     if (op == Float) {
       f = (double) *pc++;
