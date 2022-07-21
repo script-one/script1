@@ -24,14 +24,15 @@ struct obj {
     union {
         double f;    // 浮點數值
         char   *str; // 字串常數
-        obj_t **a;
+        obj_t **a;   // 陣列
         fcall_t fcall; // 函數
-        iterator_t *iter;
+        iterator_t *iter; // iterator
     };
 };
 
 struct iterator {
-    fcall_t *next;
+    void *data;
+    fcall_t next;
 };
 
 obj_t* env_new_obj(int type);

@@ -103,4 +103,5 @@ void env_init() {
     sp = ostack; memset(ostack, 0, sizeof(ostack));
     env_sysf("log", sys_log);
     env_sysf("exit", sys_exit);
+    env_sysf("range", sys_range);
 }
