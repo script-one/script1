@@ -1,8 +1,8 @@
 i:=1
 s:=0
-n:=2
+n:=10
 while (i<=n) {
     s=s+i
     i=i+1
 }
-log('sum(3)=', s)
+log('sum(10)=', s)

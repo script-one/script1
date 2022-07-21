@@ -1,5 +1,19 @@
 #include <gen0.c>
 
+static bool show_line = true;
+
+static void line(int i) {
+  if (show_line) {
+    if (i>0) {
+      int len = 50-(int)(ep-ebuf);
+      emit("%*s", max(len, 0), "");
+      emit(" %s (%d) \n", TailComment, i);
+    }
+    else { emit("\n"); };
+    ep = ebuf;
+  }
+}
+
 static void gen_num(node_t *node) {
     gen_token(node);
 }

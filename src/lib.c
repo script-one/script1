@@ -44,6 +44,7 @@ int file_size(FILE *fp) {
 
 char *file_read(char *fname) {
     FILE *fp = fopen(fname, "r");
+    if (!fp) return NULL;
     int sz = file_size(fp);
     char *buf = pool(sz+1);
     int len = fread(buf, 1, sz, fp);

@@ -7,8 +7,9 @@
 
 ir_t code[NMAX], *cp = code, *lcp = code;
 ir_t data[NMAX], *dp = data;
+char *ir_src[NMAX];
 
-#define eir(c) ({ *cp=(ir_t) (c); cp++; })
+#define eir(c) ({ *cp=(ir_t) (c); ir_src[cp - code + 1]=ir_src[cp - code]; cp++; })
 
 static k2i_t ops[] = {
  {"get", Get},
@@ -53,6 +54,23 @@ static k2i_t ops[] = {
  {"!", '!'},
 };
 
+static void ir_init() {
+  memset(ir_src, 0, sizeof(ir_src));
+  ir_src[0] = source;
+}
+
+static bool ir_op1s(ir_t op) {
+  return op == Str || op == Get || op == Var || op == Param || op == Fn;
+}
+
+static bool ir_op1d(ir_t op) {
+  return op==Array || op == Call || op == Ent || op == Jmp || op == Jz || op == Jnz;
+}
+
+static bool ir_op1(ir_t op) {
+  return ir_op1d(op) || ir_op1s(op) || op == Float;
+}
+
 static char* ir_name(int key, char *name) {
   if (key < AsciiEnd)
     sprintf(name, "%c", (char) key);
@@ -68,37 +86,3 @@ static int ir_code(char *name) {
   return k2i(ops, 0, size(ops), name, strlen(name));
 }
 
-/*
-static void ir_dump() {
-    // int pc = 0;
-    while (lcp < cp) {
-        ir_t *pc = lcp;
-        ir_t op = *lcp++;
-        char name[20];
-        if (op >= End) emit("error\n");
-        ir_name(op, name);
-        emit("%s", name);
-
-        ir_t arg;
-        if (op == Float) {
-            arg = *lcp++;
-            emit(" %g\t // %d\n", (double) arg, (int) (pc-code));
-        } else if (ir_op1s(op)) {
-            arg = *lcp++;
-            emit(" %s\t // %d\n", (char*) arg, (int) (pc-code));
-            // pc += 2;
-        } else if (ir_op1d(op)) { //|| op == Narg  || op == Adj
-            arg = *lcp++;
-            emit(" %d\t // %d\n", (int) arg, (int) (pc-code));
-            // pc += 2;
-        } else {
-            emit("\t // %d\n", (int) (pc-code));
-            // pc += 1;
-        }
-
-        for (ir_t *irp = pc; irp < lcp; irp++) {
-            dump_src(irp);
-        }
-    }
-}
-*/

@@ -10,6 +10,7 @@ set -e
 #./ir_run.sh fn
 #./ir_run.sh for
 ./ir_run.sh if
+./ir_run.sh if2
 #./ir_run.sh array
 #./ir_run.sh matrix
 #./ir_run.sh mt

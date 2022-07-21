@@ -1,6 +1,6 @@
 #include <s1.h>
 #include <lib.c>
-#include <ir.c>
+#include "ir.c"
 #include "env.c"
 
 void parse_ir(char *line, char *op, char *arg) {
@@ -13,28 +13,30 @@ void parse_ir(char *line, char *op, char *arg) {
 
 int asm2ir(char *line) {
   char p1[101], p2[101];
-  debug("%s", line);
+  // debug("%s", line);
   parse_ir(line, p1, p2);
-  ir_t op = op_code(p1);
+  ir_t op = ir_code(p1);
   // debug("op=%d:\n", (int) op);
   if (op < 0 || op==Src) return -1;
+  debug("%02d:%s ", (int) (cp-code), p1);
   eir(op);
   char *s=NULL; int n; double f;
   if (op == Float) {
     sscanf(p2, "%lf", &f);
-    debug("=> %s %lf\n", p1, f);
+    debug("%lf", f);
     eir(f);
-  } else if (op == Str || op == Get || op == Var || op == Fn) {
+  } else if (ir_op1s(op)) {
     s = st_printf("%s", p2);
-    debug("=> %s %s\n", p1, s);
+    debug("%s", s);
     eir(s);
-  } else if (op == Array || op == Call || op == Ent || op == Jmp || op == Bz || op == Bnz) { //  || op == Adj
+  } else if (ir_op1d(op)) { //  || op == Adj
     n = atoi(p2);
-    debug("=> %s %d\n", p1, n);
+    debug("%d", n);
     eir(n);
   } else {
-    debug("=> %s\n", p1);
+    debug("%s", p1);
   }
+  debug("\n");
   return 0;
 }
 
@@ -56,10 +58,11 @@ int run() {
   bool is_stop = false;
 
   while (1) {
+    if (pc < code) error("pc before code...\n");
     if (pc >= cp) error("no more code...\n");
     ir_t op = *pc++;
     char opname[20];
-    op_name(op, opname);
+    ir_name(op, opname);
     debug("%s ", opname);
     char *s; int n; double f; struct var *v; struct obj *o;
 
@@ -72,7 +75,7 @@ int run() {
     } else if (op == Get || op == Var || op == Fn || op == Src) {
       s = (char*) *pc++;
       debug(" %s", s);
-    } else if (op == Array || op == Call || op == Ent || op == Jmp || op == Bz || op == Bnz) { // || op == Narg || op == Adj
+    } else if (op == Array || op == Call || op == Ent || op == Jmp || op == Jz || op == Jnz) { // || op == Narg || op == Adj
       n = *pc++;
       debug(" %d", n);
     }
@@ -174,6 +177,16 @@ int run() {
           a = o_call(o, a);
         }
         break;
+      case Jmp:
+        pc = pc + n;
+        debug(" => goto pc=%d\n", (int) (pc-code));
+        break;
+      case Jz:
+        if (o_iszero(a)) pc = pc + n;
+        break;
+      case Jnz:
+        if (!o_iszero(a)) pc = pc + n;
+        break;
 /*
       case Narg:
         break;
@@ -189,15 +202,6 @@ int run() {
         break;
       case Lev: case Ret: 
         env_popf();
-        break;
-      case Jmp:
-        pc = pc + n;
-        break;
-      case Bz:
-        if (o_iszero(a)) pc = pc + n;
-        break;
-      case Bnz:
-        if (!o_iszero(a)) pc = pc + n;
         break;
 
       case Local:

@@ -48,10 +48,10 @@ enum {
     Lor, Land, Eq, Neq, Le, Ge, Shl, Shr, 
   Op2End, 
   VmOpBegin = 220, 
-    Get, Local, Var, Float, Src, 
-    Arg, Ent, Jmp, Bz ,
-    Bnz, Adj, Call, Ret, Lev, 
-    Store, Push, /*Print, Exit,Narg, */ 
+    Get, Var, Float, Src, 
+    Arg, Ent, Jmp, Jz ,
+    Jnz, Adj, Call, Ret, Lev, 
+    Store, Push, /*Local, Print, Exit,Narg, */ 
   VmOpEnd,
   End,
 };

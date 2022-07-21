@@ -8,7 +8,7 @@ struct func {
 static int stack[1000]; static int top = 0;
 static struct func fstack[100]; static int ftop = 0;
 static int block_level = 0;
-static bool show_line = true;
+
 
 static char ebuf[1024], *ep=ebuf;
 
@@ -29,6 +29,7 @@ static char ebuf[1024], *ep=ebuf;
 #define BlockEnd    "}"
 #endif
 
+/*
 #define line(i) \
   if (show_line) { \
     if (i>0) { \
@@ -38,6 +39,7 @@ static char ebuf[1024], *ep=ebuf;
     } \
     else { emit("\n"); }; ep = ebuf; \
   }
+*/
 
 static void gen_str(node_t *node);
 static void gen_num(node_t *node);

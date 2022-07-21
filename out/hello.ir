@@ -1,23 +1,19 @@
 // source file: prog/hello.s1
 
-// name:='script1';                                // (1) 
-// log(('hello '+name));                           // (2) 
-
-// 1:name:='script1'
-var name
-push
-str 'script1'
-store
-// 2:log('hello '+name)
-get log
-push
-str 'hello '
-push
-get name
-+
-arg
-call 1
-get exit
-push
-call 0
-
+// name:='script1'\n
+var name	 // 0
+push	 // 2
+str 'script1'	 // 3
+store	 // 5
+// log('hello '+name)\n
+get log	 // 6
+push	 // 8
+str 'hello '	 // 9
+push	 // 11
+get name	 // 12
++	 // 14
+arg	 // 15
+call 1	 // 16
+get exit	 // 18
+push	 // 20
+call 0	 // 21
