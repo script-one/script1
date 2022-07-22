@@ -10,12 +10,20 @@ export function values(o) {
     return Object.keys(o)
 }
 
+/*
 export function range(from, to, step=1) {
     let list=[]
     for (let i=from; i<to; i+=step) {
         list.push(i);
     }
     return list;
+}
+*/
+
+export function* range(from, to, step=1) {
+    for (let x=from; x<to; x+=step) {
+        yield x
+    }
 }
 
 export function push(list, a) {

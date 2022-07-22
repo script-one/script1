@@ -10,6 +10,7 @@ List values(o) {
     return o.values.toList();
 }
 
+/*
 List<int> range(int from, int to, [int step=1]) {
     List<int> list=[];
     int i=from;
@@ -18,6 +19,12 @@ List<int> range(int from, int to, [int step=1]) {
         i+=step;
     }
     return list;
+}
+*/
+Iterable<dynamic> range(from, to, [step=1]) sync* {
+    for (var x=from; x<to; x+=step) {
+        yield x;
+    }
 }
 
 List list(List a) {
