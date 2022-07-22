@@ -12,7 +12,9 @@ obj_t *sys_exit(obj_t *args) {
 }
 
 // system function range(from, to, step)
-
+// 這裡牽涉到 generator/yield 的議題，要仔細考慮如何處理才下手
+// https://www.sobyte.net/post/2022-05/deep-learn-generators/ 
+// 以上這篇有詳細介紹 js 的 yield 實作方法
 typedef struct range {
     double from, to, step, v;
 } range_t;

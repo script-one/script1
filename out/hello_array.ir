@@ -1,0 +1,21 @@
+// source file: prog/hello_array.s1
+
+// log([1,2,3,4,5])\n
+get log	 // 0
+push	 // 2
+float 1	 // 3
+push	 // 5
+float 2	 // 6
+push	 // 8
+float 3	 // 9
+push	 // 11
+float 4	 // 12
+push	 // 14
+float 5	 // 15
+push	 // 17
+array 5	 // 18
+arg	 // 20
+call 1	 // 21
+get exit	 // 23
+push	 // 25
+call 0	 // 26

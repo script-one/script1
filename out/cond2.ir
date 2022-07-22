@@ -1,0 +1,35 @@
+// source file: prog/cond2.s1
+
+// x:=3\n
+var x	 // 0
+push	 // 2
+float 3	 // 3
+store	 // 5
+// y:=5\n
+var y	 // 6
+push	 // 8
+float 5	 // 9
+store	 // 11
+// max:=x>y ? x : y\n
+var max	 // 12
+push	 // 14
+get x	 // 15
+push	 // 17
+get y	 // 18
+>	 // 20
+jz 4	 // 21
+get x	 // 23
+jmp 2	 // 25
+get y	 // 27
+store	 // 29
+// log('max(3,5)=', max)\n
+get log	 // 30
+push	 // 32
+str 'max(3,5)='	 // 33
+arg	 // 35
+get max	 // 36
+arg	 // 38
+call 2	 // 39
+get exit	 // 41
+push	 // 43
+call 0	 // 44

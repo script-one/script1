@@ -1,0 +1,66 @@
+// source file: prog/if.s1
+,,
+// fn:num max(x,y) { 
+fn max	 // 0
+param x	 // 2
+param y	 // 4
+ent 0	 // 6
+// return x>y ? x : y }\n
+get x	 // 8
+push	 // 10
+get y	 // 11
+>	 // 13
+jz 4	 // 14
+get x	 // 16
+jmp 2	 // 18
+get y	 // 20
+ret	 // 22
+lev	 // 23
+// min:=fn:num (x,y) { x<y ? x : y }\n\n
+var min	 // 24
+push	 // 26
+fn _	 // 27
+param x	 // 29
+param y	 // 31
+ent 0	 // 33
+get x	 // 35
+push	 // 37
+get y	 // 38
+<	 // 40
+jz 4	 // 41
+get x	 // 43
+jmp 2	 // 45
+get y	 // 47
+lev	 // 49
+store	 // 50
+// log('max(3,5)=', max(3,5))\n
+get log	 // 51
+push	 // 53
+str 'max(3,5)='	 // 54
+arg	 // 56
+get max	 // 57
+push	 // 59
+float 3	 // 60
+arg	 // 62
+float 5	 // 63
+arg	 // 65
+call 2	 // 66
+arg	 // 68
+call 2	 // 69
+// log('min(3,5)=', min(3,5))
+get log	 // 71
+push	 // 73
+str 'min(3,5)='	 // 74
+arg	 // 76
+get min	 // 77
+push	 // 79
+float 3	 // 80
+arg	 // 82
+float 5	 // 83
+arg	 // 85
+call 2	 // 86
+arg	 // 88
+call 2	 // 89
+get exit	 // 91
+push	 // 93
+call 0	 // 94

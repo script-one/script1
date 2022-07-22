@@ -1,0 +1,51 @@
+// source file: prog/while2.s1
+
+// i:=1\n
+var i	 // 0
+push	 // 2
+float 1	 // 3
+store	 // 5
+// s:=0\n
+var s	 // 6
+push	 // 8
+float 0	 // 9
+store	 // 11
+// n:=10\n
+var n	 // 12
+push	 // 14
+float 10	 // 15
+store	 // 17
+// while (i<=n) {\n    
+get i	 // 18
+push	 // 20
+get n	 // 21
+<=	 // 23
+jz 22	 // 24
+// s=s+i\n    
+get s	 // 26
+push	 // 28
+get s	 // 29
+push	 // 31
+get i	 // 32
++	 // 34
+store	 // 35
+// i=i+1\n}\n
+get i	 // 36
+push	 // 38
+get i	 // 39
+push	 // 41
+float 1	 // 42
++	 // 44
+store	 // 45
+jmp -30	 // 46
+// log('sum(10)=', s)\n
+get log	 // 48
+push	 // 50
+str 'sum(10)='	 // 51
+arg	 // 53
+get s	 // 54
+arg	 // 56
+call 2	 // 57
+get exit	 // 59
+push	 // 61
+call 0	 // 62

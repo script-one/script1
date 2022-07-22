@@ -1,0 +1,58 @@
+// source file: prog/while.s1
+
+// fn:int sum(n) {\n    
+fn sum	 // 0
+param n	 // 2
+ent 2	 // 4
+// i:=1\n    
+var i	 // 6
+push	 // 8
+float 1	 // 9
+store	 // 11
+// s:=0\n    
+var s	 // 12
+push	 // 14
+float 0	 // 15
+store	 // 17
+// while (i<=n) {\n        
+get i	 // 18
+push	 // 20
+get n	 // 21
+<=	 // 23
+jz 22	 // 24
+// s=s+i\n        
+get s	 // 26
+push	 // 28
+get s	 // 29
+push	 // 31
+get i	 // 32
++	 // 34
+store	 // 35
+// i=i+1\n    }\n    
+get i	 // 36
+push	 // 38
+get i	 // 39
+push	 // 41
+float 1	 // 42
++	 // 44
+store	 // 45
+jmp -30	 // 46
+// return s\n}\n\n
+get s	 // 48
+ret	 // 50
+lev	 // 51
+// log('sum(10)=', sum(10))\n
+get log	 // 52
+push	 // 54
+str 'sum(10)='	 // 55
+arg	 // 57
+get sum	 // 58
+push	 // 60
+float 10	 // 61
+arg	 // 63
+call 1	 // 64
+arg	 // 66
+call 2	 // 67
+get exit	 // 69
+push	 // 71
+call 0	 // 72

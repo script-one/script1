@@ -8,14 +8,14 @@ bak
 *.zip
 *.dSYM
 *.db
-out/*.js
-out/*.dart
-out/*.py
-out/*.ir
-out/*/*.js
-out/*/*.dart
-out/*/*.py
-out/*/*.ir
+# out/*.js
+# out/*.dart
+# out/*.py
+# out/*.ir
+# out/*/*.js
+# out/*/*.dart
+# out/*/*.py
+# out/*/*.ir
 __pycache__
 .DS_Store
 s1

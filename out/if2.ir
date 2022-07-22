@@ -1,0 +1,45 @@
+// source file: prog/if2.s1
+
+// a:=3\n
+var a	 // 0
+push	 // 2
+float 3	 // 3
+store	 // 5
+// b:=5\n
+var b	 // 6
+push	 // 8
+float 5	 // 9
+store	 // 11
+// c:=0\n
+var c	 // 12
+push	 // 14
+float 0	 // 15
+store	 // 17
+// if (a>b)\n    
+get a	 // 18
+push	 // 20
+get b	 // 21
+>	 // 23
+jz 8	 // 24
+// c=a\nelse\n    
+get c	 // 26
+push	 // 28
+get a	 // 29
+store	 // 31
+jmp 6	 // 32
+// c=b\n
+get c	 // 34
+push	 // 36
+get b	 // 37
+store	 // 39
+// log('c=', c)\n
+get log	 // 40
+push	 // 42
+str 'c='	 // 43
+arg	 // 45
+get c	 // 46
+arg	 // 48
+call 2	 // 49
+get exit	 // 51
+push	 // 53
+call 0	 // 54

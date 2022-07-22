@@ -1,0 +1,213 @@
+// source file: prog/exp2.s1
+
+// x := 3\n
+var x	 // 0
+push	 // 2
+float 3	 // 3
+store	 // 5
+// y := 5\n
+var y	 // 6
+push	 // 8
+float 5	 // 9
+store	 // 11
+// log('x+y=', x+y)\n
+get log	 // 12
+push	 // 14
+str 'x+y='	 // 15
+arg	 // 17
+get x	 // 18
+push	 // 20
+get y	 // 21
++	 // 23
+arg	 // 24
+call 2	 // 25
+// log('x-y=', x-y)\n
+get log	 // 27
+push	 // 29
+str 'x-y='	 // 30
+arg	 // 32
+get x	 // 33
+push	 // 35
+get y	 // 36
+-	 // 38
+arg	 // 39
+call 2	 // 40
+// log('x*y=', x*y)\n
+get log	 // 42
+push	 // 44
+str 'x*y='	 // 45
+arg	 // 47
+get x	 // 48
+push	 // 50
+get y	 // 51
+*	 // 53
+arg	 // 54
+call 2	 // 55
+// log('x/y=', x/y)\n
+get log	 // 57
+push	 // 59
+str 'x/y='	 // 60
+arg	 // 62
+get x	 // 63
+push	 // 65
+get y	 // 66
+/	 // 68
+arg	 // 69
+call 2	 // 70
+// log('x%y=', x%y)\n
+get log	 // 72
+push	 // 74
+str 'x%y='	 // 75
+arg	 // 77
+get x	 // 78
+push	 // 80
+get y	 // 81
+%	 // 83
+arg	 // 84
+call 2	 // 85
+// log('x==y=', x==y)\n
+get log	 // 87
+push	 // 89
+str 'x==y='	 // 90
+arg	 // 92
+get x	 // 93
+push	 // 95
+get y	 // 96
+==	 // 98
+arg	 // 99
+call 2	 // 100
+// log('x!=y=', x!=y)\n
+get log	 // 102
+push	 // 104
+str 'x!=y='	 // 105
+arg	 // 107
+get x	 // 108
+push	 // 110
+get y	 // 111
+!=	 // 113
+arg	 // 114
+call 2	 // 115
+// log('x<=y=', x<=y)\n
+get log	 // 117
+push	 // 119
+str 'x<=y='	 // 120
+arg	 // 122
+get x	 // 123
+push	 // 125
+get y	 // 126
+<=	 // 128
+arg	 // 129
+call 2	 // 130
+// log('x>=y=', x>=y)\n
+get log	 // 132
+push	 // 134
+str 'x>=y='	 // 135
+arg	 // 137
+get x	 // 138
+push	 // 140
+get y	 // 141
+>=	 // 143
+arg	 // 144
+call 2	 // 145
+// log('x<y=', x<y)\n
+get log	 // 147
+push	 // 149
+str 'x<y='	 // 150
+arg	 // 152
+get x	 // 153
+push	 // 155
+get y	 // 156
+<	 // 158
+arg	 // 159
+call 2	 // 160
+// log('x>y=', x>y)\n
+get log	 // 162
+push	 // 164
+str 'x>y='	 // 165
+arg	 // 167
+get x	 // 168
+push	 // 170
+get y	 // 171
+>	 // 173
+arg	 // 174
+call 2	 // 175
+// log('x<<y=', x<<y)\n
+get log	 // 177
+push	 // 179
+str 'x<<y='	 // 180
+arg	 // 182
+get x	 // 183
+push	 // 185
+get y	 // 186
+<<	 // 188
+arg	 // 189
+call 2	 // 190
+// log('x>>y=', x>>y)\n
+get log	 // 192
+push	 // 194
+str 'x>>y='	 // 195
+arg	 // 197
+get x	 // 198
+push	 // 200
+get y	 // 201
+>>	 // 203
+arg	 // 204
+call 2	 // 205
+// log('x&y=', x&y)\n
+get log	 // 207
+push	 // 209
+str 'x&y='	 // 210
+arg	 // 212
+get x	 // 213
+push	 // 215
+get y	 // 216
+&	 // 218
+arg	 // 219
+call 2	 // 220
+// log('x|y=', x|y)\n
+get log	 // 222
+push	 // 224
+str 'x|y='	 // 225
+arg	 // 227
+get x	 // 228
+push	 // 230
+get y	 // 231
+|	 // 233
+arg	 // 234
+call 2	 // 235
+// log('x^y=', x^y)\n
+get log	 // 237
+push	 // 239
+str 'x^y='	 // 240
+arg	 // 242
+get x	 // 243
+push	 // 245
+get y	 // 246
+^	 // 248
+arg	 // 249
+call 2	 // 250
+// log('x&&y=', x&&y)\n
+get log	 // 252
+push	 // 254
+str 'x&&y='	 // 255
+arg	 // 257
+get x	 // 258
+push	 // 260
+get y	 // 261
+&&	 // 263
+arg	 // 264
+call 2	 // 265
+// log('x||y=', x||y)\n
+get log	 // 267
+push	 // 269
+str 'x||y='	 // 270
+arg	 // 272
+get x	 // 273
+push	 // 275
+get y	 // 276
+||	 // 278
+arg	 // 279
+call 2	 // 280
+get exit	 // 282
+push	 // 284
+call 0	 // 285

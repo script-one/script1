@@ -1,0 +1,22 @@
+// source file: prog/_calllib.s1
+import '../sys/s1.js'
+
+import * as R from './lib/rnd.js';                 // (1) 
+import * as F from './lib/file.js';                // (2) 
+import * as G from './lib/guid.js';                // (3) 
+import * as C from './lib/calculus.js';            // (4) 
+import * as V from './lib/vector.js';              // (5) 
+import * as O from './lib/obj.js';                 // (6) 
+export async function main()                       // (8) 
+{                                                  // (8) 
+    log('rUnif(5,10)=',R.rUnif(5,10));             // (9) 
+    await F.copyText('data/test.txt','data/test2.txt'); // (10) 
+    log('rInt()=',R.rInt(10,20));                  // (11) 
+    log('guid()=',G.guid());                       // (12) 
+    log('diff(sin, PI/4)=',C.df(sin,(math.PI/4))); // (13) 
+    log('dot([1,2,3], [1,1,1])=',V.dot([1,2,3],[1,1,1])); // (14) 
+    let obj={'name':'snoopy','age':3};             // (15) 
+    let obj2=O.copy(obj);                          // (16) 
+    log('obj2=',obj2);                             // (17) 
+}                                                  // (8) 
+if (typeof main == 'function') main()

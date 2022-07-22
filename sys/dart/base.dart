@@ -21,7 +21,16 @@ List<int> range(int from, int to, [int step=1]) {
     return list;
 }
 */
+
+// ref -- https://www.javatpoint.com/dart-generators
 Iterable<dynamic> range(from, to, [step=1]) sync* {
+    for (var x=from; x<to; x+=step) {
+        yield x;
+    }
+}
+
+// ref -- https://www.javatpoint.com/dart-generators
+Stream<dynamic> asyncRange(from, to, [step=1]) async* {
     for (var x=from; x<to; x+=step) {
         yield x;
     }

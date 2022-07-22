@@ -1,0 +1,36 @@
+// source file: prog/cond.s1
+,
+// max:=fn (x,y) { x>y ? x : y }\n\n
+var max	 // 0
+push	 // 2
+fn _	 // 3
+param x	 // 5
+param y	 // 7
+ent 0	 // 9
+get x	 // 11
+push	 // 13
+get y	 // 14
+>	 // 16
+jz 4	 // 17
+get x	 // 19
+jmp 2	 // 21
+get y	 // 23
+lev	 // 25
+store	 // 26
+// log('max(3,5)=', max(3,5))\n
+get log	 // 27
+push	 // 29
+str 'max(3,5)='	 // 30
+arg	 // 32
+get max	 // 33
+push	 // 35
+float 3	 // 36
+arg	 // 38
+float 5	 // 39
+arg	 // 41
+call 2	 // 42
+arg	 // 44
+call 2	 // 45
+get exit	 // 47
+push	 // 49
+call 0	 // 50
