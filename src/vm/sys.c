@@ -25,7 +25,7 @@ obj_t *range_next(obj_t *o) {
     return o;
 }
 
-#define clone(o) ({ void *p=calloc(sizeof(o), 1); memcpy(p, &o, sizeof(o)); p; })
+#define clone(o) ({ void *p=malloc(sizeof(o)); memcpy(p, &o, sizeof(o)); p; })
 
 obj_t *sys_range(obj_t *args) {
     ok(args->size >= 2);
