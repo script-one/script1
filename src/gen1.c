@@ -64,11 +64,9 @@ static bool semicolon() {
 
 // stmt
 static void gen_stmt(node_t *stmt) {
-    if (top == 0 || peek() == Block) {
+    if (peek() == Block) {
         indent(block_level);
-    } else {
-        emit(" ");
-    }
+    } 
     gen_code(stmt->node);
 #ifndef __PYTHON__
     if (semicolon()) emit(";");
