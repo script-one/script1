@@ -30,6 +30,10 @@ test-dart: $(OBJS)
 	chmod +x ./dart_test.sh
 	chmod +x ./dart_run.sh
 	./dart_test.sh
+test-ir: $(OBJS)
+	chmod +x ./ir_test.sh
+	chmod +x ./ir_run.sh
+	./ir_test.sh
 
 test-flutter: $(OBJS)
 	(./s1 ./prog/flutter/home_page.s1 -o ./out/flutter/lib/home_page.dart)
