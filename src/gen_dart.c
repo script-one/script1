@@ -12,10 +12,10 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
 
     emit(" {"); line(0); block_level++;
     for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
-        if (p->node->type == Id) {
+        if (p->node->type == Field) {
             indent(block_level);
-            emit("var ");
-            gen_id(p->node);
+            emit("var "); // p->node->array[1]=type not handled yet!
+            gen_id(p->node->array[0]);
             emit(";");
             line(0);
         } else if (p->node->type == Function) {
@@ -106,12 +106,6 @@ static void gen_params(link_t *head) {
     }
     if (head != NULL) emit("]");
     emit(")");
-}
-
-// (return|?) expr
-static void gen_return(int op, node_t *exp) {
-    emit("return ");
-    gen_code(exp);
 }
 
 // for id in expr stmt

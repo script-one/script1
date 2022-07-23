@@ -28,18 +28,6 @@ static char ebuf[1024], *ep=ebuf;
 #define BlockEnd    "}"
 #endif
 
-/*
-#define line(i) \
-  if (show_line) { \
-    if (i>0) { \
-      int len = 50-(int)(ep-ebuf); \
-      emit("%*s", max(len, 0), ""); \
-      emit(" %s (%d) \n", TailComment, i); \
-    } \
-    else { emit("\n"); }; ep = ebuf; \
-  }
-*/
-
 static void gen_str(node_t *node);
 static void gen_num(node_t *node);
 static void gen_id(node_t *node);
@@ -58,6 +46,7 @@ static void gen_class(node_t *nid, node_t *eid, node_t *nmap);
 static void gen_map(node_t *nmap);
 static void gen_args(link_t *head);
 static void gen_assign(node_t *term, node_t *type, node_t *exp);
+static void gen_throw(int op, node_t *exp);
 static void gen_return(int op, node_t *exp);
 static void gen_import(node_t *id1, node_t *id2);
 static void gen_while(node_t *exp, node_t *stmt);
@@ -136,8 +125,10 @@ static void gen_code(node_t *me) {
         gen_function(type, args[0], args[1], args[2], args[3], args[4]);
         pop(Function);
         ftop--;
+    } else if (type == Throw) {
+        gen_throw(type, args[0]);
     } else if (type == Return || type == '?') {
-        gen_return(type, args[0]); // gen_return(type, me->node);
+        gen_return(type, args[0]);
     } else if (type == Continue || type == Break) {
         gen_op0(type); 
     } else if (type == Params) { // params = (param)*

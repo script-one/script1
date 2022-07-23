@@ -151,17 +151,7 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
         gen_code(exp);
     }
 }
-/*
-// params = assign*
-static void gen_params(link_t *head) {
-    emit("(");
-    for (link_t *p = head; p != NULL; p = p->next) {
-        gen_code(p->node->array[0]); // id 
-        if (p->next != NULL) emit(",");
-    }
-    emit(")");
-}
-*/
+
 // params = assign*
 static void gen_params(link_t *head) {
     emit("(");
@@ -176,6 +166,12 @@ static void gen_params(link_t *head) {
         if (p->next != NULL) emit(",");
     }
     emit(")");
+}
+
+// throw expr
+static void gen_throw(int op, node_t *exp) {
+    emit("raise ");
+    gen_code(exp);
 }
 
 // (return|?) expr
@@ -220,7 +216,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
 static void gen_try(node_t *nbody, node_t *nexp, node_t *ncatch) {
     emit("try: ");
     gen_code(nbody);
-    emit("except ");
+    emit("except BaseException as ");
     gen_code(nexp);
     emit(": ");
     gen_code(ncatch);

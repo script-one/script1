@@ -42,7 +42,7 @@ def range(start, to, step=1):
 # len : default
 
 def error(msg):
-    return NameError(msg)
+    return Exception(msg)
 
 def random():
     return R.random()

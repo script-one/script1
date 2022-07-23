@@ -5,8 +5,6 @@ sys.path.append('sys')
 from s1 import *
 
 class Person: 
-    
-    
                                                    # (5) 
     def __init__(self, name,age):                  # (5) 
         self.name=name                             # (6) 

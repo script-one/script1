@@ -237,6 +237,11 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
     }
 }
 
+static void gen_throw(int op, node_t *exp) {
+    gen_code(exp);
+    eir(Throw);
+}
+
 // (return|?) expr
 static void gen_return(int op, node_t *exp) {
     gen_code(exp);

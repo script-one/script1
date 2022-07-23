@@ -106,7 +106,14 @@ static void gen_array(link_t *head) {
 
 static void gen_key(node_t *node) {
     node_t *nkey = node->array[0];
+#ifdef __PYTHON__
+    if (nkey->type == Throw) {
+        emit("raise");
+    } else
+        emit("%.*s", nkey->ptk->len, nkey->ptk->str);
+#else
     emit("%.*s", nkey->ptk->len, nkey->ptk->str);
+#endif
 }
 
 static void gen_pair(node_t *n1, node_t *n2) {

@@ -33,7 +33,7 @@ enum {
     Params, Param, ForIn, ForOf, ForTo, 
     Stmts, Stmt, Expr, Item, Term, 
     Assign, Type, Token, Pid, Key, 
-    Lambda, ClassBody, CExpr, 
+    Lambda, ClassBody, CExpr, Field,
   NodeTypeEnd,
   KeyBegin = 170, // node:type
     Import, As, If, While, For, 

@@ -96,12 +96,6 @@ static void gen_params(link_t *head) {
     emit(")");
 }
 
-// (return|?) expr
-static void gen_return(int op, node_t *exp) {
-    emit("return ");
-    gen_code(exp);
-}
-
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit("for (let ");

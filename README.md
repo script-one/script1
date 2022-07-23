@@ -11,7 +11,7 @@ If you write code in script1, you may use s1 to translate your code into JavaScr
 ## Install
 
 1. Install deno + python + dart
-2. run install.sh once before compile & run
+2. run install.sh once before run & test
 
 ## compile & run
 
@@ -52,16 +52,19 @@ hello script1
 
 ```js
 $ ./test.sh
-++ set -e      
+++ set -e
 ++ ./install.sh
 +++ set -e
-+++ export S1HOME=/c/ccc111/script1
-+++ S1HOME=/c/ccc111/script1
-+++ export PYTHONPATH=/c/ccc111/script1/sys/
-+++ PYTHONPATH=/c/ccc111/script1/sys/       
 +++ dart pub get
 Resolving dependencies...
 Got dependencies!
+++++ uname
++++ '[' MINGW64_NT-10.0-19043 == Darwin ']'
++++ pip install aiofile
+Requirement already satisfied: aiofile in c:\users\hero3c\appdata\local\programs\python\python39\lib\site-packages (3.7.4)
+Requirement already satisfied: caio~=0.9.0 in c:\users\hero3c\appdata\local\programs\python\python39\lib\site-packages (from aiofile) (0.9.6)
++++ pip install asyncio
+Requirement already satisfied: asyncio in c:\users\hero3c\appdata\local\programs\python\python39\lib\site-packages (3.4.3)
 ++ ./runs1.sh hello
 == JavaScript ==
 hello script1
@@ -183,26 +186,12 @@ ccc 52
 Person { name: "ccc", age: 52 }
 == Python ==
 <class '__main__.Person'>
-<__main__.Person object at 0x000002F489B79730>
-<__main__.Person object at 0x000002F489B79730>
+<__main__.Person object at 0x000002387E739700>
+<__main__.Person object at 0x000002387E739700>
 == Dart ==
 Person       
 ccc 52
 ccc 52
-++ ./runs1.sh global
-== JavaScript ==
-hello 你好!
-x= 3
-@x= 5
-== Python ==
-  File "C:\ccc111\script1\out\global.py", line 9
-    global.x=5                                         # (5) 
-          ^
-SyntaxError: invalid syntax
-== Dart ==
-hello 你好!       
-x= 3
-@x= 5
 ++ ./runs1.sh cond
 == JavaScript ==
 max(3,5)= 5
@@ -216,51 +205,9 @@ Error: Error
     at error (file:///C:/ccc111/script1/sys/js/base.js:39:12)
     at file:///C:/ccc111/script1/out/try.js:6:11
 == Python ==
-  File "C:\ccc111\script1\out\try.py", line 8
-    throw error('Error')                           # (2) 
-          ^
-SyntaxError: invalid syntax
+Error
 == Dart ==
 Exception: Error       
-++ ./runs1.sh lambda
-== JavaScript ==
-a= [ 1, 2, 3 ]
-b= [ 1, 4, 9 ]
-c= [ 2, 3, 4 ]
-== Python ==
-a= [1, 2, 3]
-b= [1, 4, 9]
-c= [2, 3, 4]
-== Dart ==
-a= [1, 2, 3]      
-b= [1, 4, 9]
-c= [2, 3, 4]
-++ ./runs1.sh lambda
-== JavaScript ==
-a= [ 1, 2, 3 ]
-b= [ 1, 4, 9 ]
-c= [ 2, 3, 4 ]
-== Python ==
-a= [1, 2, 3]
-b= [1, 4, 9]
-c= [2, 3, 4]
-== Dart ==
-a= [1, 2, 3]      
-b= [1, 4, 9]
-c= [2, 3, 4]
-++ ./runs1.sh lambda
-== JavaScript ==
-a= [ 1, 2, 3 ]
-b= [ 1, 4, 9 ]
-c= [ 2, 3, 4 ]
-== Python ==
-a= [1, 2, 3]
-b= [1, 4, 9]
-c= [2, 3, 4]
-== Dart ==
-a= [1, 2, 3]      
-b= [1, 4, 9]
-c= [2, 3, 4]
 ++ ./runs1.sh lambda
 == JavaScript ==
 a= [ 1, 2, 3 ]
@@ -283,23 +230,23 @@ c= [2, 3, 4]
 ++ ./libs1.sh obj
 ++ ./runs1.sh _calllib
 == JavaScript ==
-rUnif(5,10)= 6.697968082249961
-rInt()= 19
-guid()= a6cf33ff-7e16-f4b5-70c4-79a8bb9b850f
+rUnif(5,10)= 9.537528087724567
+rInt()= 16
+guid()= 8324e0cf-88c8-1ef4-5ee4-567ac6fe1b23
 diff(sin, PI/4)= 0.7067531099743674
 dot([1,2,3], [1,1,1])= 6
 obj2= { name: "snoopy", age: 3 }
 == Python ==
-rUnif(5,10)= 9.66511391381389
-rInt()= 12
-guid()= 81827462-2658-a50d-a304-21efbd3823df
+rUnif(5,10)= 9.146101223366248
+rInt()= 19
+guid()= ae9dfcc7-21d1-ecd7-ccd3-f5b001b14ad6
 diff(sin, PI/4)= 0.7067531099742563
 dot([1,2,3], [1,1,1])= 6
 obj2= {'name': 'snoopy', 'age': 3}
 == Dart ==
-rUnif(5,10)= 9.617655440706228      
-rInt()= 11      
-guid()= 973ad15f-c0f5-a648-173f-4bec4bc9ed02
+rUnif(5,10)= 6.917081521400971      
+rInt()= 19      
+guid()= f98b2adc-7137-1b9c-6df7-557149e0167e
 diff(sin, PI/4)= 0.7067531099742563
 dot([1,2,3], [1,1,1])= 6
 obj2= {name: snoopy, age: 3}      
@@ -309,7 +256,7 @@ b= [ "b1", [ "a", 2 ] ]
 d= [ "b", [ "a", 1 ] ]
 ++ ./runjs.sh _math
 sin(PI/4)= 0.7071067811865475
-random()= 0.501383436341361
+random()= 0.20518151197899592
 ln(E)= 1
 ++ ./runjs.sh _sha256
 json= {
@@ -318,8 +265,8 @@ json= {
 }
 digest= cde91f9fdaf2ad6d01d07bb2836f3f6640556232660faa3731c47ebf86683cb8
 ++ ./runjs.sh _datetime
-2022-07-23T07:49:19.114Z
-Sat Jul 23 2022 15:49:19 GMT+0800 (台北標準時間)
+2022-07-23T13:55:30.219Z
+Sat Jul 23 2022 21:55:30 GMT+0800 (台北標準時間)
 ++ ./runjs.sh _regexp
 [ "52", "166", "60" ]
 [ "age:52", "height:166", "weight:60" ]
@@ -334,6 +281,7 @@ Sat Jul 23 2022 15:49:19 GMT+0800 (台北標準時間)
 1 Peter Parker
 2 Clark Kent
 3 Bruce Wayne
+++ rm test.db
 ++ ./runjs.sh _console
 user: ccc
 user= ccc

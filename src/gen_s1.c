@@ -48,14 +48,6 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     }
 }
 
-// (return|?) expr
-static void gen_return(int op, node_t *exp) {
-    char name[20];
-    key_name(op, name);
-    emit("%s ", name);
-    gen_code(exp);
-}
-
 // params = assign*
 static void gen_params(link_t *head) {
     emit("(");

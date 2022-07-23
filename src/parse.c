@@ -265,7 +265,11 @@ node_t *function(int type) { // type=Function | Lambda
 
 // field=id(:type?)?
 node_t *field() {
-    return id(); // 暫時不接受 type
+    node_t *nid = id(), *ntype = NULL;
+    if (tk == ':') {
+        ntype = type();
+    }
+    return op2(Field, nid, ntype);
 }
 
 // class id extends id { function* }

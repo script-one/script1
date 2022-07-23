@@ -17,6 +17,7 @@ bak
 # out/*/*.py
 # out/*/*.ir
 __pycache__
+sys/__pycache__
 .DS_Store
 
 # dart
