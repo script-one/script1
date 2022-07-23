@@ -1,5 +1,5 @@
 {
     "imports": {
-      "sys": "./sys"
+      "sys/": "../sys/"
     }
-  }
+}

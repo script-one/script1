@@ -1,5 +1,5 @@
 // source file: prog/while.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 int sum([n])                                       // (1) 
 {                                                  // (1) 

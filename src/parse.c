@@ -123,7 +123,7 @@ node_t *factor() {
     }
 }
 
-// map = { str:expr)* }
+// map = { (str:expr)* }
 node_t *map() {
     node_t *r = node(Map);
     r->list = list();
@@ -185,7 +185,7 @@ node_t *type() {
     return tk_list(Type, "=),");
 }
 
-// assign = (term|id(:type?)?) (= expr)?
+// assign = (term|field) (= expr)?
 node_t *assign() {
     node_t *n = NULL, *t = NULL, *e = NULL;
     if (tk == Id) {
@@ -214,7 +214,7 @@ node_t *assign() {
     return op3(Assign, n, t, e);
 }
 
-// param = id(:type?)?=expr
+// param = field=expr
 node_t *param() {
     node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
 
@@ -263,11 +263,12 @@ node_t *function(int type) { // type=Function | Lambda
     return op5(type, nasync, nid, nret, nparam, nbody);
 }
 
+// field=id(:type?)?
 node_t *field() {
-    return id();
+    return id(); // 暫時不接受 type
 }
 
-// class id extends parent { function* }
+// class id extends id { function* }
 node_t *class() {
     skip(Class);
     node_t *nid = id();
@@ -295,7 +296,7 @@ node_t *class() {
 stmt = block                     |
        import str as id          |
        function                  |
-       class id { function* }    |
+       class                     |
        while expr stmt           | 
        if expr stmt (else stmt)? |
        for id in expr stmt       |

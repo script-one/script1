@@ -1,5 +1,5 @@
 // source file: prog/try.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 try                                                // (1) 
 {                                                  // (1) 

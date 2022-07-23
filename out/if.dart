@@ -1,5 +1,5 @@
 // source file: prog/if.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 num max([x,y])                                     // (1) 
 {                                                  // (1) 

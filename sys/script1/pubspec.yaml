@@ -1,0 +1,16 @@
+name: script1
+description: Script1 language - system library
+version: 0.0.3
+repository: https://github.com/script-one/script1.git
+homepage: https://script1.org
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  path: ^1.8.0
+  crypto: ^3.0.2
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0

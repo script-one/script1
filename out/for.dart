@@ -1,5 +1,5 @@
 // source file: prog/for.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 dynamic a=[5,4,3,2,1];                             // (1) 
 for (var o in a) log(o);                           // (3) 

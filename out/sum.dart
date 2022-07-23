@@ -1,7 +1,7 @@
 // source file: prog/sum.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
-int sum([n])                                       // (1) 
+dynamic sum([n])                                   // (1) 
 {                                                  // (1) 
     dynamic s=0;                                   // (2) 
     for (var i in range(1,(n+1))) s=(s+i);         // (3) 

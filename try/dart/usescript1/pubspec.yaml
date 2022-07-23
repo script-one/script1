@@ -1,0 +1,6 @@
+name: my_app
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+dependencies:
+  script1: ../script1/
+#  script1: ^0.0.1

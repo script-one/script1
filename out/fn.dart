@@ -1,5 +1,5 @@
 // source file: prog/fn.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 num inc([x])                                       // (1) 
 {                                                  // (1) 

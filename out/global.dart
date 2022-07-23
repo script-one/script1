@@ -1,5 +1,5 @@
 // source file: prog/global.s1
-import '../sys/s1.dart';
+import 'package:script1/script1.dart';
 void main() {
 log('hello 你好!');                              // (1) 
 dynamic x=3;                                       // (3) 

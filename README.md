@@ -8,251 +8,337 @@ That's why we build s1, a tool to translate script1 into JavaScript / Python and
 
 If you write code in script1, you may use s1 to translate your code into JavaScript for web, Python for machine learning, and Dart for mobile app.
 
-## run
+## Install
 
-1. convert *.s1 to *.js
-2. use deno to run *.js
+1. Install deno + python + dart
+2. run install.sh once before compile & run
+
+## compile & run
+
+### S1 => JavaScript
+
+* convert *.s1 to *.js
+* use deno to run *.js
 
 ```
-$ ./s1 prog/hello.s1 -o out/hello.js
-$ deno run out/hello.js
+$ ./s1 -m hello.s1 -o hello.js
+$ deno run hello.js
 hello script1
 ```
 
-## s1 to js test
+### S1 => Python
+
+* convert *.s1 to *.py
+* use python to run *.py
+
+```
+$ ./s1 -m hello.s1 -o hello.py
+$ python hello.py
+hello script1
+```
+
+### S1 => Dart
+
+* convert *.s1 to *.dart
+* use dart to run *.dart
+
+```
+$ ./s1 -m hello.s1 -o hello.dart
+$ dart hello.dart
+hello script1 
+```
+
+## test
 
 ```js
-$ ./js_test.sh
-++ ./js_run.sh hello
-// source file: prog/hello.s1
-import '../sys/s1.js'
-
-let name='script1'                                 // (1) 
-print('hello',name)                                // (2) 
-
+$ ./test.sh
+++ set -e      
+++ ./install.sh
++++ set -e
++++ export S1HOME=/c/ccc111/script1
++++ S1HOME=/c/ccc111/script1
++++ export PYTHONPATH=/c/ccc111/script1/sys/
++++ PYTHONPATH=/c/ccc111/script1/sys/       
++++ dart pub get
+Resolving dependencies...
+Got dependencies!
+++ ./runs1.sh hello
+== JavaScript ==
 hello script1
-++ ./js_run.sh while
-// source file: prog/while.s1
-import '../sys/s1.js'
-
-let sum=function (n) {                             // (1)
-  let i=1                                          // (2)
-  let s=0                                          // (3)
-  while (i<=n)    {                                // (4)
-    s=(s+i)                                        // (5)
-    i=(i+1)                                        // (6)
-  }                                                // (4)
-                                                   // (4)
-  return s                                         // (8)
-}                                                  // (1)
-print('sum(10)=',sum(10))                          // (11)
-
+== Python ==
+hello script1
+== Dart ==
+hello script1      
+++ ./runs1.sh while
+== JavaScript ==
 sum(10)= 55
-++ ./js_run.sh sum
-// source file: prog/sum.s1
-import '../sys/s1.js'
-
-let sum=function (n) {                             // (1)
-  let s=0                                          // (2)
-  for (let i=1;i<=n;i++) s=(s+i)                   // (3)
-                                                   // (3)
-  return s                                         // (4)
-}                                                  // (1)
-print('sum(10)=',sum(10))                          // (7)
-
+== Python ==
 sum(10)= 55
-++ ./js_run.sh fn
-// source file: prog/fn.s1
-import '../sys/s1.js'
-
-let inc=function (x) {                             // (1)
-  return (x+1)                                     // (1)
-}                                                  // (1)
-let add=function (x,y) {                           // (3)
-  return (x+y)                                     // (3)
-}                                                  // (3)
-print('inc(2)=',inc(2))                            // (5)
-print('add(2,3)=',add(2,3))                        // (6)
-
+== Dart ==
+sum(10)= 55      
+++ ./runs1.sh sum
+== JavaScript ==
+sum(10)= 55
+== Python ==
+sum(10)= 55
+== Dart ==
+sum(10)= 55      
+++ ./runs1.sh fn
+== JavaScript ==
 inc(2)= 3
 add(2,3)= 5
-++ ./js_run.sh for
-Error at line=15, pos=175. C halt at file=./src/parse.c line=315, tk=239(? 
-
-++ ./js_run.sh if
-// source file: prog/if.s1
-import '../sys/s1.js'
-
-let max=function (x,y) {                           // (1)
-  if (x>y) return x                                // (1)
- else return y                                     // (1)
-                                                   // (1)
-}                                                  // (1)
-print('max(3 5)=',max(3,5))                        // (3)
-
-max(3 5)= 5
-++ ./js_run.sh array
-// source file: prog/array.s1
-import '../sys/s1.js'
-
-function mean(a) {                                 // (1)
-  let s=0                                          // (2)
-  for (let i in a) s=(s+a[i])                      // (3)
-                                                   // (3)
-  return (s/a.length)                              // (4)
-}                                                  // (1)
-print('mean([1 2 3 4 5])=',mean([1,2,3,4,5]))      // (7)
-
-mean([1 2 3 4 5])= 3
-++ ./js_run.sh matrix
-// source file: prog/matrix.s1
-import '../sys/s1.js'
-
-let a=[[1,2],[4,5]]                                // (1)
-let b=[[1,1],[1,1]]                                // (2)
-print('a=',a)                                      // (4)
-print('b=',b)                                      // (5)
-
+== Python ==
+inc(2)= 3
+add(2,3)= 5
+== Dart ==
+inc(2)= 3      
+add(2,3)= 5
+++ ./runs1.sh for
+== JavaScript ==
+5
+4
+3
+2
+1
+1
+3
+5
+7
+9
+1
+3
+4
+5
+== Python ==
+5
+4
+3
+2
+1
+1
+3
+5
+7
+9
+1
+3
+4
+5
+== Dart ==
+5       
+4
+3
+2
+1
+1
+3
+5
+7
+9
+1
+3
+4
+5
+++ ./runs1.sh if
+== JavaScript ==
+max(3,5)= 5
+min(3,5)= 3
+== Python ==
+max(3,5)= 5
+min(3,5)= 3
+== Dart ==
+max(3,5)= 5      
+min(3,5)= 3
+++ ./runs1.sh matrix
+== JavaScript ==
 a= [ [ 1, 2 ], [ 4, 5 ] ]
 b= [ [ 1, 1 ], [ 1, 1 ] ]
-++ ./js_run.sh mt
-// source file: prog/mt.s1
-import '../sys/s1.js'
-
-let e2c={dog:'??,cat:'鞎?,a:'銝??,the:'?',chase:'餈?,bite:'??} // (1)      
-let translate=function (ewords) {                  // (3)
-  let cwords=[]                                    // (4)
-  for (let e of ewords)    {                       // (5)
-    cwords.push(e2c[e])                            // (6)
-  }                                                // (5)
-                                                   // (5)
-  return cwords                                    // (8)
-}                                                  // (3)
-let c=translate(['a','dog','chase','a','cat'])     // (11)
-print(c)                                           // (12)
-
+== Python ==
+a= [[1, 2], [4, 5]]
+b= [[1, 1], [1, 1]]
+== Dart ==
+a= [[1, 2], [4, 5]]      
+b= [[1, 1], [1, 1]]
+++ ./runs1.sh map
+== JavaScript ==
+{ name: "ccc", age: 52 }
+{ dog: "狗", cat: "貓", a: "一隻", the: "這隻", chase: "追", bite: "吃" }
+== Python ==
+{'name': 'ccc', 'age': 52}
+{'dog': '狗', 'cat': '貓', 'a': '一隻', 'the': '這隻', 'chase': '追', 'bite': '吃'}
+== Dart ==
+{name: ccc, age: 52}       
+{dog: 狗, cat: 貓, a: 一隻, the: 這隻, chase: 追, bite: 吃}
+++ ./runs1.sh mt
+== JavaScript ==
 [ "一隻", "狗", "追", "一隻", "貓" ]
-++ ./js_run.sh global
-// source file: prog/global.s1
-import '../sys/s1.js'
-
-global.print('hello 雿末!')                      // (1)
-let x=3                                            // (3)
-global.x=5                                         // (5)
-print('x=',x)                                      // (7) 
-print('@x=',global.x)                              // (8)
-
+== Python ==
+['一隻', '狗', '追', '一隻', '貓']
+== Dart ==
+[一隻, 狗, 追, 一隻, 貓]       
+++ ./runs1.sh class
+== JavaScript ==
+[Function: Person]
+ccc 52
+Person { name: "ccc", age: 52 }
+== Python ==
+<class '__main__.Person'>
+<__main__.Person object at 0x000002F489B79730>
+<__main__.Person object at 0x000002F489B79730>
+== Dart ==
+Person       
+ccc 52
+ccc 52
+++ ./runs1.sh global
+== JavaScript ==
 hello 你好!
 x= 3
 @x= 5
-++ ./js_run.sh obj
-// source file: prog/obj.s1
-import '../sys/s1.js'
-
-let ccc={name:'ccc',age:52,str:function () {       // (4)
-  return ('name='+(this.name+(' age='+this.age)))  // (5)
-}}                                                 // (1)
-print(ccc.str())                                   // (9)
-
-name=ccc age=52
-++ ./js_run.sh import
-// source file: prog/import.s1
-import '../sys/s1.js'
-
-import * as H from 'https://deno.land/std/hash/mod.ts' // (1)
-function hash(text) {                              // (3)
-  let h1=H.createHash('sha256')                    // (4)
-  h1.update(text)                                  // (5)
-  return str(h1)                                   // (6)
-}                                                  // (3)
-print('hash(hello)=',hash('hello'))                // (9)
-
-hash(hello)= 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
-++ ./js_run.sh sha256
-// source file: prog/sha256.s1
-import '../sys/s1.js'
-
-import * as H from 'https://deno.land/std/hash/mod.ts' // (1)
-function hash(text) {                              // (3)
-  let h1=H.createHash('sha256')                    // (4)
-  h1.update(text)                                  // (5)
-  return str(h1)                                   // (6)
-}                                                  // (3)
-let record={nonce:0,data:'john => mary $2.7'}      // (9)
-let json=JSON.stringify(record,null,2)             // (14)
-print('json=',json)                                // (15) 
-let digest=hash(json)                              // (17)
-print('digest=',digest)                            // (18)
-
+== Python ==
+  File "C:\ccc111\script1\out\global.py", line 9
+    global.x=5                                         # (5) 
+          ^
+SyntaxError: invalid syntax
+== Dart ==
+hello 你好!       
+x= 3
+@x= 5
+++ ./runs1.sh cond
+== JavaScript ==
+max(3,5)= 5
+== Python ==
+max(3,5)= 5
+== Dart ==
+max(3,5)= 5      
+++ ./runs1.sh try
+== JavaScript ==
+Error: Error
+    at error (file:///C:/ccc111/script1/sys/js/base.js:39:12)
+    at file:///C:/ccc111/script1/out/try.js:6:11
+== Python ==
+  File "C:\ccc111\script1\out\try.py", line 8
+    throw error('Error')                           # (2) 
+          ^
+SyntaxError: invalid syntax
+== Dart ==
+Exception: Error       
+++ ./runs1.sh lambda
+== JavaScript ==
+a= [ 1, 2, 3 ]
+b= [ 1, 4, 9 ]
+c= [ 2, 3, 4 ]
+== Python ==
+a= [1, 2, 3]
+b= [1, 4, 9]
+c= [2, 3, 4]
+== Dart ==
+a= [1, 2, 3]      
+b= [1, 4, 9]
+c= [2, 3, 4]
+++ ./runs1.sh lambda
+== JavaScript ==
+a= [ 1, 2, 3 ]
+b= [ 1, 4, 9 ]
+c= [ 2, 3, 4 ]
+== Python ==
+a= [1, 2, 3]
+b= [1, 4, 9]
+c= [2, 3, 4]
+== Dart ==
+a= [1, 2, 3]      
+b= [1, 4, 9]
+c= [2, 3, 4]
+++ ./runs1.sh lambda
+== JavaScript ==
+a= [ 1, 2, 3 ]
+b= [ 1, 4, 9 ]
+c= [ 2, 3, 4 ]
+== Python ==
+a= [1, 2, 3]
+b= [1, 4, 9]
+c= [2, 3, 4]
+== Dart ==
+a= [1, 2, 3]      
+b= [1, 4, 9]
+c= [2, 3, 4]
+++ ./runs1.sh lambda
+== JavaScript ==
+a= [ 1, 2, 3 ]
+b= [ 1, 4, 9 ]
+c= [ 2, 3, 4 ]
+== Python ==
+a= [1, 2, 3]
+b= [1, 4, 9]
+c= [2, 3, 4]
+== Dart ==
+a= [1, 2, 3]      
+b= [1, 4, 9]
+c= [2, 3, 4]
+++ ./libs1.sh obj
+++ ./libs1.sh calculus
+++ ./libs1.sh rnd
+++ ./libs1.sh vector
+++ ./libs1.sh file
+++ ./libs1.sh guid
+++ ./libs1.sh obj
+++ ./runs1.sh _calllib
+== JavaScript ==
+rUnif(5,10)= 6.697968082249961
+rInt()= 19
+guid()= a6cf33ff-7e16-f4b5-70c4-79a8bb9b850f
+diff(sin, PI/4)= 0.7067531099743674
+dot([1,2,3], [1,1,1])= 6
+obj2= { name: "snoopy", age: 3 }
+== Python ==
+rUnif(5,10)= 9.66511391381389
+rInt()= 12
+guid()= 81827462-2658-a50d-a304-21efbd3823df
+diff(sin, PI/4)= 0.7067531099742563
+dot([1,2,3], [1,1,1])= 6
+obj2= {'name': 'snoopy', 'age': 3}
+== Dart ==
+rUnif(5,10)= 9.617655440706228      
+rInt()= 11      
+guid()= 973ad15f-c0f5-a648-173f-4bec4bc9ed02
+diff(sin, PI/4)= 0.7067531099742563
+dot([1,2,3], [1,1,1])= 6
+obj2= {name: snoopy, age: 3}      
+++ ./runjs.sh _copy
+a= [ "a", 2 ]
+b= [ "b1", [ "a", 2 ] ]
+d= [ "b", [ "a", 1 ] ]
+++ ./runjs.sh _math
+sin(PI/4)= 0.7071067811865475
+random()= 0.501383436341361
+ln(E)= 1
+++ ./runjs.sh _sha256
 json= {
   "nonce": 0,
   "data": "john => mary $2.7"
 }
 digest= cde91f9fdaf2ad6d01d07bb2836f3f6640556232660faa3731c47ebf86683cb8
-++ ./js_run.sh try
-// source file: prog/try.s1
-import '../sys/s1.js'
+++ ./runjs.sh _datetime
+2022-07-23T07:49:19.114Z
+Sat Jul 23 2022 15:49:19 GMT+0800 (台北標準時間)
+++ ./runjs.sh _regexp
+[ "52", "166", "60" ]
+[ "age:52", "height:166", "weight:60" ]
+++ ./runjs.sh _fs
+{
+    "name":"snoopy",
+    "age":3
+}
 
-try  {                                             // (1)
-  throw Error('Error')                             // (2)
-}                                                  // (1)
- catch (error) {                                   // (3)
-  print(error)                                     // (4)
-}                                                  // (3)
-                                                   // (1)
-
-Error: Error
-    at file:///C:/ccc111/code/C/script1/out/try.js:5:9
-++ ./js_run.sh sqlite
-// source file: prog/sqlite.s1
-import '../sys/s1.js'
-
-import * as sqlite from 'https://deno.land/x/sqlite/mod.ts' // (1)
-let db=new sqlite.DB('test.db')                    // (4)
-db.query('CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)') // (5)
-let names=['Peter Parker','Clark Kent','Bruce Wayne'] // (7)
-for (let name of names) db.query('INSERT INTO people (name) VALUES (?)',[name]) // (11)
-                                                   // (10)
-for (let r of db.query('SELECT id, name FROM people')) print(r[0],r[1]) // (15)
-                                                   // (14)
-db.close()                                         // (18)
-
+{ name: "snoopy", age: 3 }
+++ ./runjs.sh _sqlite
 1 Peter Parker
 2 Clark Kent
 3 Bruce Wayne
-++ ./js_run.sh map
-// source file: prog/map.s1
-import '../sys/s1.js'
-
-let ccc={name:'ccc',age:52}                        // (1)
-print(ccc)                                         // (2)
-let e2c={dog:'??,cat:'鞎?,a:'銝??,the:'?',chase:'餈?,bite:'??} // (4)      
-print(e2c)                                         // (5)
-
-{ name: "ccc", age: 52 }
-{ dog: "狗", cat: "貓", a: "一隻", the: "這隻", chase: "追", bite: "吃" }
-++ ./js_run.sh class
-// source file: prog/class.s1
-import '../sys/s1.js'
-
-class Person {                                     // (2)
-  constructor(name,age)   {                        // (2)
-    this.name=name                                 // (3)
-    this.age=age                                   // (4)
-  }
-                                                   // (6)
-  __str()   {                                      // (6)
-    return (this.name+(' '+this.age))              // (7)
-  }
-}                                                  // (1)
-print(Person)                                      // (11)
-let p=new Person('ccc',52)                         // (13)
-print(str(p))                                      // (14)
-print(p)                                           // (15)
-
-[Function: Person]
-ccc 52
-Person { name: "ccc", age: 52 }
+++ ./runjs.sh _console
+user: ccc
+user= ccc
+++ ./runjs.sh _server
+start at : http://127.0.0.1:3001
 ```
 
 

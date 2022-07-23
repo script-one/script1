@@ -5,5 +5,5 @@ sys.path.append('sys')
 from s1 import *
 
 name='script1'                                     # (1) 
-log(('hello '+name))                               # (2) 
+log('hello',name)                                  # (2) 
 
