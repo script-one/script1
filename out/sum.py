@@ -6,7 +6,7 @@ from s1 import *
 
 def sum(n):                                        # (1) 
     s=0                                            # (2) 
-    for i in range(1,(n+1)): s=(s+i)               # (3) 
+    for i in range(1,(n+1)):s=(s+i)                # (3) 
                                                    # (3) 
     return s                                       # (4) 
                                                    # (1) 

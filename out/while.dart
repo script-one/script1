@@ -1,6 +1,6 @@
 // source file: prog/while.s1
 import 'package:script1/script1.dart';
-void main() {
+
 int sum([n])                                       // (1) 
 {                                                  // (1) 
     dynamic i=1;                                   // (2) 
@@ -13,5 +13,8 @@ int sum([n])                                       // (1)
                                                    // (4) 
     return s;                                      // (8) 
 }                                                  // (1) 
-log('sum(10)=',sum(10));                           // (11) 
-}
+dynamic main()                                     // (11) 
+{                                                  // (11) 
+    log('sum(10)=',sum(10));                       // (12) 
+}                                                  // (11) 
+

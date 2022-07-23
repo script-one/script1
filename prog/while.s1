@@ -8,4 +8,6 @@ fn:int sum(n) {
     return s
 }
 
+fn main(){
 log('sum(10)=', sum(10))
+}

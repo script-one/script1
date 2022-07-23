@@ -4,7 +4,7 @@ import '../sys/s1.js'
 export function sum(n)                             // (1) 
 {                                                  // (1) 
     let s=0;                                       // (2) 
-    for (let i of range(1,(n+1))) s=(s+i);         // (3) 
+    for (let i of range(1,(n+1)))s=(s+i);          // (3) 
                                                    // (3) 
     return s;                                      // (4) 
 }                                                  // (1) 
