@@ -1,3 +1,8 @@
+__pycache__
+sys/__pycache__/
+.DS_Store
+
+
 *.bak
 bak
 *.exe
@@ -16,9 +21,6 @@ bak
 # out/*/*.dart
 # out/*/*.py
 # out/*/*.ir
-__pycache__
-sys/__pycache__/
-.DS_Store
 
 # dart
 .packages

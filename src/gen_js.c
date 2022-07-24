@@ -1,3 +1,4 @@
+#define __JAVASCRIPT__
 #include <gen_j.c>
 
 // class = 'class' id 'extends' eid classBody
@@ -63,7 +64,6 @@ static void gen_import(node_t *str1, node_t *id2) {
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     if (n->type == Global) {
-        // emit("global.");
         emit("glob.");
     } else if (n->type == This) {
         emit("this.");
@@ -71,7 +71,7 @@ static void gen_pid(node_t *pid) {
     gen_code(n->array[0]);
 }
 
-// assign = term(:type?)?(= expr)?
+// assign = (term|pid(:type)?) (= expr)?
 static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     if (type) emit("let ");
     gen_code(term);
@@ -79,22 +79,6 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
         emit("=");
         gen_code(exp);
     }
-}
-
-// params = assign*
-static void gen_params(link_t *head) {
-    emit("(");
-    for (link_t *p = head; p != NULL; p = p->next) {
-        node_t *nid = p->node->array[0];
-        node_t *nexp = p->node->array[2];
-        gen_code(nid);
-        if (nexp) {
-            emit("=");
-            gen_code(p->node->array[2]);
-        }
-        if (p->next != NULL) emit(",");
-    }
-    emit(")");
 }
 
 // for id in expr stmt
@@ -131,3 +115,4 @@ void gen_js(node_t *root) {
     if (o_main) emit("if (typeof main == 'function') main()");
     emit("\n");
 }
+#undef __JAVASCRIPT__

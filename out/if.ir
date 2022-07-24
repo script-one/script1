@@ -1,5 +1,5 @@
 // source file: prog/if.s1
-,,
+
 // fn:num max(x,y) { 
 fn max	 // 0
 param x	 // 2

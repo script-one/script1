@@ -9,6 +9,16 @@ static bool semicolon() {
     return false;
 }
 
+static void gen_param_list(node_t *params) {
+    for (link_t *p = params->list->head; p != NULL; p = p->next) {
+        node_t *nparam = p->node;
+        node_t *nfield = nparam->array[0];
+        node_t *nid = nfield->array[0];
+        gen_code(nid);
+        if (p->next != NULL) emit(",");
+    }
+}
+
 // block = { stmts }
 static void gen_block(node_t *block) {
     line(block->ptk->line); // emit("\n");
@@ -66,7 +76,6 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
             line(nid->ptk->line); indent(block_level);
             if (nasync) emit("async ");  
             if (head_eq(name, len, "__init")) {
-                // gen_id(cid);
                 emit("def __init__")
             } else {
                 emit("def ");gen_code(nid);// emit("__");
@@ -76,8 +85,7 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
             // Self.type = This;
             emit("(");
             emit("self, ");
-            // gen_params(nparams);
-            gen_list(nparams->list->head, ",");
+            gen_param_list(nparams);
             emit(")");
             emit(":")
             gen_code(nbody);
@@ -106,7 +114,6 @@ static void gen_import(node_t *str1, node_t *id2) {
     }
     char *fname = p+1;
     if (memcmp(ext, ".s1", 3)==0) {
-        // emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
         emit("includePath(__file__, '%.*s')\n", (int) (fname-fpath), fpath);
         emit("import %.*s as ", (int) (ext-fname), fname);
     } else {
@@ -151,7 +158,7 @@ static void gen_term(node_t *key, node_t *pid, link_t *head) {
     }
 }
 
-// assign = term(:type?)?(= expr)?
+// assign = (term|pid(:type)?) (= expr)?
 static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     gen_code(term);
     if (exp) {
@@ -160,34 +167,12 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     }
 }
 
-// params = assign*
-static void gen_params(link_t *head) {
-    emit("(");
-    for (link_t *p = head; p != NULL; p = p->next) {
-        node_t *nid = p->node->array[0];
-        node_t *nexp = p->node->array[2];
-        gen_code(nid);
-        if (nexp) {
-            emit("=");
-            gen_code(p->node->array[2]);
-        }
-        if (p->next != NULL) emit(",");
-    }
-    emit(")");
-}
-
 // throw expr
 static void gen_throw(int op, node_t *exp) {
     emit("raise ");
     gen_code(exp);
 }
-/*
-// return expr
-static void gen_return(int op, node_t *exp) {
-    emit("return ");
-    gen_code(exp);
-}
-*/
+
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
     emit("while "); 
@@ -205,6 +190,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit(":");
     gen_code(stmt);
 }
+
 static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_t *params, node_t *block) {
     if (async) emit("async ");
     if (id){
@@ -215,7 +201,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
         gen_code(block);
     } else {
         emit("lambda ");
-        gen_list(params->list->head, ",");
+        gen_param_list(params);
         emit(":");
         gen_code(block);
     }

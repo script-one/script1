@@ -39,4 +39,3 @@ rm *.db
 ./runjs.sh _console
 ./runjs.sh _server
 # remove generated data
-

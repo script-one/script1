@@ -94,3 +94,28 @@ static void gen_pair(node_t *n1, node_t *n2) {
     emit(":");
     gen_code(n2);
 }
+
+// params = param*; param=field=exp; field=id(:type?)?
+static void gen_params(link_t *head) {
+    emit("(");
+#ifdef __DART__
+    if (head != NULL) emit("[");
+#endif
+    for (link_t *p = head; p != NULL; p = p->next) {
+        node_t *nparam = p->node;
+        node_t *nfield = nparam->array[0];
+        node_t *nexp = nparam->array[1];
+        node_t *nid = nfield->array[0];
+        // node_t *ntype = nfield->array[1];
+        gen_code(nid);
+        if (nexp) {
+            emit("=");
+            gen_code(nexp);
+        }
+        if (p->next != NULL) emit(",");
+    }
+#ifdef __DART__
+    if (head != NULL) emit("]");
+#endif
+    emit(")");
+}
