@@ -1,4 +1,5 @@
 window.global = window
+window.glob = {}
 
 export function keys(o) {
     if (o instanceof Map || o instanceof Set) return Array.from(o.keys())

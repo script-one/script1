@@ -63,7 +63,8 @@ static void gen_import(node_t *str1, node_t *id2) {
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     if (n->type == Global) {
-        emit("global.");
+        // emit("global.");
+        emit("glob.");
     } else if (n->type == This) {
         emit("this.");
     }

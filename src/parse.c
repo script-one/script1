@@ -360,14 +360,10 @@ node_t *stmt() {
         node_t *nexp = expr();
         node_t *ncatch = stmt();
         r->node = op3(Try, nbody, nexp, ncatch);
-    } else if (tk == Throw) {
+    } else if (tk == Throw || tk == Return) {
+        int op = tk;
         next();
         e = expr();
-        r->node = op1(Throw, e);
-    } else if (tk == Return || tk == '?') { // ?exp = return exp
-        token_t t = next();
-        e = expr();
-        int op = (t.tk == '?') ? '?' : Return;
         r->node = op1(op, e);
     } else if (tk == Continue || tk == Break) {
         token_t t = next();

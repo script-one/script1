@@ -118,7 +118,7 @@ static void gen_code(node_t *me) {
         ftop--;
     } else if (type == Throw) {
         gen_throw(type, args[0]);
-    } else if (type == Return || type == '?') {
+    } else if (type == Return) {
         gen_return(type, args[0]);
     } else if (type == Continue || type == Break) {
         gen_op0(type); 

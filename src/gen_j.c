@@ -17,12 +17,6 @@ static void gen_throw(int op, node_t *exp) {
     gen_code(exp);
 }
 
-// (return|?) expr
-static void gen_return(int op, node_t *exp) {
-    emit("return ");
-    gen_code(exp);
-}
-
 // block = { stmts }
 static void gen_block(node_t *block) {
     line(block->ptk->line); // emit("\n");

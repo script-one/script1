@@ -14,6 +14,12 @@ static void line(int i) {
   }
 }
 
+// return expr
+static void gen_return(int op, node_t *exp) {
+    emit("return ");
+    gen_code(exp);
+}
+
 static void gen_num(node_t *node) {
     gen_token(node);
 }
