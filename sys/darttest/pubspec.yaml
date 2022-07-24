@@ -1,7 +1,0 @@
-name: my_app
-environment:
-  sdk: '>=2.10.0 <3.0.0'
-dependencies:
-  js: ^0.6.0
-  sys:
-    path: /c/ccc111/script1/sys/

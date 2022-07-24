@@ -1,4 +1,4 @@
-import './s1.dart';
+import 'package:script1/script1.dart';
 
 void g1() {
     glob['x'] = 5;

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-Map global = new Map();
+Map glob = new Map();
 
 List keys(o) {
     return o.keys.toList();
@@ -36,8 +36,8 @@ Stream<dynamic> asyncRange(from, to, [step=1]) async* {
     }
 }
 
-List list(List a) {
-    return a;
+List list(Iterable a) {
+    return a.toList();
 }
 
 List push(List list, dynamic a) {
