@@ -1,7 +1,7 @@
 // source file: prog/cond.s1
-,
+
 // max:=fn (x,y) { x>y ? x : y }\n\n
-var max	 // 0
+get max	 // 0
 push	 // 2
 fn _	 // 3
 param x	 // 5

@@ -47,14 +47,7 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
         gen_code(exp);
     }
 }
-/*
-// params = param*; 
-static void gen_params(link_t *head) {
-    emit("(");
-    gen_list(head, ",");
-    emit(")");
-}
-*/
+
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit("for ");

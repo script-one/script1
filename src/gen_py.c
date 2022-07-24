@@ -13,7 +13,6 @@ static void gen_param_list(node_t *params) {
     for (link_t *p = params->list->head; p != NULL; p = p->next) {
         node_t *nparam = p->node;
         node_t *nfield = nparam->array[0];
-        // node_t *nexp = nparam->array[1];
         node_t *nid = nfield->array[0];
         gen_code(nid);
         if (p->next != NULL) emit(",");
@@ -77,7 +76,6 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
             line(nid->ptk->line); indent(block_level);
             if (nasync) emit("async ");  
             if (head_eq(name, len, "__init")) {
-                // gen_id(cid);
                 emit("def __init__")
             } else {
                 emit("def ");gen_code(nid);// emit("__");
@@ -87,8 +85,7 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
             // Self.type = This;
             emit("(");
             emit("self, ");
-            // gen_params(nparams);
-            gen_param_list(nparams); // gen_list(nparams->list->head, ",");
+            gen_param_list(nparams);
             emit(")");
             emit(":")
             gen_code(nbody);
@@ -117,7 +114,6 @@ static void gen_import(node_t *str1, node_t *id2) {
     }
     char *fname = p+1;
     if (memcmp(ext, ".s1", 3)==0) {
-        // emit("sys.path.append(os.path.join(os.path.dirname(__file__), '%.*s'))\n", (int) (fname-fpath), fpath);
         emit("includePath(__file__, '%.*s')\n", (int) (fname-fpath), fpath);
         emit("import %.*s as ", (int) (ext-fname), fname);
     } else {
@@ -206,16 +202,6 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
     } else {
         emit("lambda ");
         gen_param_list(params);
-        /*
-        for (link_t *p = params->list->head; p != NULL; p = p->next) {
-            node_t *nparam = p->node;
-            node_t *nfield = nparam->array[0];
-            // node_t *nexp = nparam->array[1];
-            node_t *nid = nfield->array[0];
-            gen_code(nid);
-            if (p->next != NULL) emit(",");
-        }
-        */
         emit(":");
         gen_code(block);
     }

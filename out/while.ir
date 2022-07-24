@@ -41,18 +41,22 @@ jmp -30	 // 46
 get s	 // 48
 ret	 // 50
 lev	 // 51
-// log('sum(10)=', sum(10))\n
-get log	 // 52
-push	 // 54
-str 'sum(10)='	 // 55
-arg	 // 57
-get sum	 // 58
-push	 // 60
-float 10	 // 61
-arg	 // 63
-call 1	 // 64
-arg	 // 66
-call 2	 // 67
-get exit	 // 69
-push	 // 71
-call 0	 // 72
+// fn main(){\n
+fn main	 // 52
+ent 0	 // 54
+// log('sum(10)=', sum(10))\n}\n
+get log	 // 56
+push	 // 58
+str 'sum(10)='	 // 59
+arg	 // 61
+get sum	 // 62
+push	 // 64
+float 10	 // 65
+arg	 // 67
+call 1	 // 68
+arg	 // 70
+call 2	 // 71
+lev	 // 73
+get exit	 // 74
+push	 // 76
+call 0	 // 77

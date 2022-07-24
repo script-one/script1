@@ -217,14 +217,18 @@ static void gen_pid(node_t *pid) {
     eir(Get), eir(name);
 }
 
-// assign = (term|id(:type?)?) (= expr)?
+// assign = (term|pid(:type)?) (= expr)?
 static void gen_assign(node_t *head, node_t *type, node_t *exp) {
-    if (head->type == Id) {
-        char *name = st_printf("%.*s", head->ptk->len, head->ptk->str);
+    if (head->type == Pid) {
+        node_t *npid = head;
+        node_t *nid = npid->node->array[0];
+        char *name = st_printf("%.*s", nid->ptk->len, nid->ptk->str);
         if (type || in_param) {
             eir(in_param?Param:Var); eir(name);
+            /*
             if (type && type->list != NULL)
                 gen_list(type->list->head, "");
+            */
         } else {
             eir(Get); eir(name); // eir_load(name);
         }
@@ -251,10 +255,27 @@ static void gen_return(int op, node_t *exp) {
 
 static int param_count = 0;
 
-// params = (id(:type?)?=exp)*
+// params = param*; param=field=exp; field=id(:type?)?
 static void gen_params(link_t *head) {
     in_param = true;
-    param_count = gen_list(head, ",");
+    param_count = 0;
+    for (link_t *p = head; p != NULL; p = p->next) {
+        node_t *nparam = p->node;
+        node_t *nfield = nparam->array[0];
+        // node_t *nexp = nparam->array[1];
+        node_t *nid = nfield->array[0];
+        // node_t *ntype = nfield->array[1];
+        gen_code(nid);
+        char *sid = st_token(nid->ptk);
+        eir(Param); eir(sid);
+        /*
+        if (nexp) {
+            emit("=");
+            gen_code(nexp);
+        }
+        */
+       param_count ++;
+    }
     in_param = false;
 }
 

@@ -81,37 +81,6 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     }
 }
 
-/*
-// params = assign*
-static void gen_params(link_t *head) {
-    emit("(");
-    for (link_t *p = head; p != NULL; p = p->next) {
-        node_t *nid = p->node->array[0];
-        node_t *nexp = p->node->array[2];
-        gen_code(nid);
-        if (nexp) {
-            emit("=");
-            gen_code(p->node->array[2]);
-        }
-        if (p->next != NULL) emit(",");
-    }
-    emit(")");
-}
-
-// field = id(:type?)?
-static void gen_field(node_t *nid, node_t *ntype) {
-    gen_code(nid);
-}
-*/
-
-/*
-// params = param*; 
-static void gen_params(link_t *head) {
-    emit("(");
-    gen_list(head, ",");
-    emit(")");
-}
-*/
 // for id in expr stmt
 static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     emit("for (let ");
