@@ -31,6 +31,23 @@ node_t *tok() {
     return n;
 }
 
+// type = id | str
+node_t *type() {
+    return (tk == Id)?id():
+           (tk == Str)?str():
+           op0(None);
+}
+
+// field=id(:type?)?
+node_t *field() {
+    node_t *nid = id(), *ntype = NULL;
+    if (tk == ':') {
+        next();
+        ntype = type();
+    }
+    return op2(Field, nid, ntype);
+}
+
 node_t *tk_list(int type, char *end) {
     node_t *r = node(type);
     r->list = list();
@@ -71,11 +88,6 @@ node_t *pid() {
     if (tk == '@') { pre = Global; next(); }
     else if (tk == '$') { pre = This; next(); }
     node_t *nid = id();
-
-    // char id_name[20];
-    // sprintf(id_name, "%.*s", nid->ptk->len, nid->ptk->str);
-    // env_lookup(id_name);
-
     r->node = op1(pre, nid);
     return r;
 }
@@ -140,7 +152,7 @@ node_t *map() {
     return r;
 }
 
-// item = Str | array | lambda | map | factor
+// item = str | array | lambda | map | factor
 node_t *item() {
     if (tk == Str) {
         return str();
@@ -180,14 +192,6 @@ node_t *expr() {
     return e1;
 }
 
-// type = id | str
-node_t *type() {
-    return (tk == Id)?id():
-           (tk == Str)?str():
-           op0(None);
-    // return tk_list(Type, "=),");
-}
-
 // assign = (term|pid(:type)?) (= expr)?
 node_t *assign() {
     node_t *n = NULL, *t = NULL, *e = NULL;
@@ -219,17 +223,12 @@ node_t *assign() {
 
 // param = field=expr
 node_t *param() {
-    node_t *nid = id(), *ntype = NULL, *nexpr=NULL;
-
-    if (tk == ':') {
-        next();
-        ntype = type();
-    }
+    node_t *nfield = field(), *nexpr=NULL;
     if (tk == '=') {
         next();
         nexpr = expr();
     }
-    return op3(Assign, nid, ntype, nexpr);
+    return op2(Param, nfield, nexpr);
 }
 
 // params = param*
@@ -264,15 +263,6 @@ node_t *function(int type) { // type=Function | Lambda
         nbody = block();
     }
     return op5(type, nasync, nid, nret, nparam, nbody);
-}
-
-// field=id(:type?)?
-node_t *field() {
-    node_t *nid = id(), *ntype = NULL;
-    if (tk == ':') {
-        ntype = type();
-    }
-    return op2(Field, nid, ntype);
 }
 
 // class id extends id { function* }

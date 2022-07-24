@@ -1,3 +1,4 @@
+#define __IR__
 #include <gen0.c>
 #include <vm/ir.c>
 
@@ -297,3 +298,4 @@ void gen_ir(node_t *root) {
     emit("\n");
     dump_ir();
 }
+#undef __IR__

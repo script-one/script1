@@ -1,3 +1,4 @@
+#define __DART__
 #include <gen_j.c>
 
 // class = 'class' id 'extends' eid classBody
@@ -80,7 +81,7 @@ static void gen_pid(node_t *pid) {
     }
 }
 
-// assign = term(:type?)?(= expr)?
+// assign = (term|pid(:type)?) (= expr)?
 static void gen_assign(node_t *term, node_t *type, node_t *exp) {
     // if (type) emit("var ");
     if (type) emit("dynamic ");
@@ -89,24 +90,6 @@ static void gen_assign(node_t *term, node_t *type, node_t *exp) {
         emit("=");
         gen_code(exp);
     }
-}
-
-// params = assign*
-static void gen_params(link_t *head) {
-    emit("(");
-    if (head != NULL) emit("[");
-    for (link_t *p = head; p != NULL; p = p->next) {
-        node_t *nid = p->node->array[0];
-        node_t *nexp = p->node->array[2];
-        gen_code(nid);
-        if (nexp) {
-            emit("=");
-            gen_code(p->node->array[2]);
-        }
-        if (p->next != NULL) emit(",");
-    }
-    if (head != NULL) emit("]");
-    emit(")");
 }
 
 // for id in expr stmt
@@ -144,3 +127,4 @@ void gen_dart(node_t *root) {
     if (!has_main && o_main) emit("}");
     emit("\n");
 }
+#undef __DART__
