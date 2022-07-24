@@ -18,16 +18,7 @@ static char ebuf[1024], *ep=ebuf;
   if (ofp) fprintf(ofp, "%.*s", (int) (ep-lep), lep); \
 }
 
-#ifdef __PYTHON__
-#define TailComment "#"
-#define BlockBegin  " "
-#define BlockEnd    " "
-#else
-#define TailComment "//"
-#define BlockBegin  "{"
-#define BlockEnd    "}"
-#endif
-
+static bool semicolon();
 static void gen_str(node_t *node);
 static void gen_num(node_t *node);
 static void gen_id(node_t *node);

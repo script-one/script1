@@ -52,25 +52,13 @@ static void gen_args(link_t *head) {
     emit(")");
 }
 
-#ifndef __PYTHON__
-// should emit semicolon
-static bool semicolon() {
-    char *p = ep-1;
-    while (p > ebuf && strchr("\t ", *p)) p--;
-    // return !(p==ebuf || strchr("};", *p));
-    return !(p==ebuf || strchr(";", *p));
-}
-#endif
-
 // stmt
 static void gen_stmt(node_t *stmt) {
     if (peek() == Block) {
         indent(block_level);
     } 
     gen_code(stmt->node);
-#ifndef __PYTHON__
     if (semicolon()) emit(";");
-#endif
     line(stmt->ptk->line);
 }
 
@@ -83,20 +71,6 @@ static void gen_stmts(node_t *node) {
     }
 }
 
-/*
-// block = { stmts }
-static void gen_block(node_t *block) {
-    line(block->ptk->line); // emit("\n");
-    #ifndef __PYTHON__
-        indent(block_level-1); emit(BlockBegin); line(block->ptk->line);
-    #endif
-    gen_stmts(block->node); // stmts
-    #ifndef __PYTHON__
-        indent(block_level-1); emit(BlockEnd);
-    #endif
-}
-*/
-// ------------- moved from gen_j.c to here -------------------
 // array = [ expr* ]
 static void gen_array(link_t *head) {
     emit("[");
@@ -106,14 +80,7 @@ static void gen_array(link_t *head) {
 
 static void gen_key(node_t *node) {
     node_t *nkey = node->array[0];
-#ifdef __PYTHON__
-    if (nkey->type == Throw) {
-        emit("raise");
-    } else
-        emit("%.*s", nkey->ptk->len, nkey->ptk->str);
-#else
     emit("%.*s", nkey->ptk->len, nkey->ptk->str);
-#endif
 }
 
 static void gen_pair(node_t *n1, node_t *n2) {

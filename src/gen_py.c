@@ -1,5 +1,13 @@
 #define __PYTHON__
+#define TailComment "#"
+#define BlockBegin  " "
+#define BlockEnd    " "
+
 #include <gen1.c>
+
+static bool semicolon() {
+    return false;
+}
 
 // block = { stmts }
 static void gen_block(node_t *block) {
