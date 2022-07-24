@@ -5,6 +5,12 @@ import inspect
 
 null =  None
 
+class Glob:
+    def __init__(self):
+        pass
+
+glob = Glob()
+
 def addPath(path):
     sys.path.append(path)
 
@@ -29,17 +35,8 @@ def keys(dict):
 def values(dict):
     return dict.values()
 
-'''
-pyrange = range
-
-def range(start, to, step=1):
-    a=[]
-    for i in pyrange(start, to, step):
-        a.append(i)
-    return a
-'''
-
 # len : default
+# range : default
 
 def error(msg):
     return Exception(msg)
@@ -57,14 +54,6 @@ def array(n, value):
 
 def join(a, spliter=' '):
     return spliter.join([str(x) for x in a])
-    # return spliter.join(a)
-
-'''
-def map(l, f):
-    # cannot use python keyword map() here
-    # l = map(f, l)
-    return [f(x) for x in l]
-'''
 
 pymap = map
 pyfilter = filter
@@ -86,8 +75,6 @@ import logging
 
 def log(*args):
     print(join(args))
-    # [print(arg, end=' ') for arg in args]
-    # print(' ')
 
 def warning(*args):
     logging.warning(join(args))
@@ -98,10 +85,6 @@ import datetime
 
 def date(year, month, day):
     return datetime.datetime(year, month, day)
-
-'''
-def time(year, month, day):
-'''
 
 def now():
     return datetime.datetime.now()
@@ -120,9 +103,6 @@ async def readText(fpath):
 async def writeText(fpath, text):
     async with async_open(fpath, mode='w') as f:
         await f.write(text)
-
-# async def run(f):
-#    return asyncio.run(f)
 
 # hash -- https://docs.python.org/3/library/hashlib.html
 

@@ -1,4 +1,8 @@
-import './s1.dart';
+import 'package:script1/script1.dart';
+
+void g1() {
+    glob['x'] = 5;
+}
 
 void main() {
     log('hello');
@@ -10,7 +14,11 @@ void main() {
     log(values(map));
     log(list(range(1,10)));
     log(list(range(1,10,2)));
-    global['name'] = 'dart';
-    log(global);
+    glob['name'] = 'dart';
+    log(glob);
+    glob['x'] = 3;
+    log('@x=', glob['x']);
+    g1();
+    log('@x=', glob['x']);
     // global.name = "dart in script1";
 }

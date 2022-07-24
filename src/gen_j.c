@@ -1,14 +1,19 @@
+#define TailComment "//"
+#define BlockBegin  "{"
+#define BlockEnd    "}"
+
 #include <gen1.c>
+
+// should emit semicolon or not?
+static bool semicolon() {
+    char *p = ep-1;
+    while (p > ebuf && strchr("\t ", *p)) p--;
+    return !(p==ebuf || strchr(";", *p));
+}
 
 // throw expr
 static void gen_throw(int op, node_t *exp) {
     emit("throw ");
-    gen_code(exp);
-}
-
-// (return|?) expr
-static void gen_return(int op, node_t *exp) {
-    emit("return ");
     gen_code(exp);
 }
 

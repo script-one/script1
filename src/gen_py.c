@@ -1,5 +1,13 @@
 #define __PYTHON__
+#define TailComment "#"
+#define BlockBegin  " "
+#define BlockEnd    " "
+
 #include <gen1.c>
+
+static bool semicolon() {
+    return false;
+}
 
 // block = { stmts }
 static void gen_block(node_t *block) {
@@ -112,7 +120,7 @@ static void gen_import(node_t *str1, node_t *id2) {
 static void gen_pid(node_t *pid) {
     node_t *n = pid->node;
     if (n->type == Global) {
-        emit("global.");
+        emit("glob.");
     } else if (n->type == This) {
         emit("self.");
     }
@@ -173,13 +181,13 @@ static void gen_throw(int op, node_t *exp) {
     emit("raise ");
     gen_code(exp);
 }
-
-// (return|?) expr
+/*
+// return expr
 static void gen_return(int op, node_t *exp) {
     emit("return ");
     gen_code(exp);
 }
-
+*/
 // while expr stmt
 static void gen_while(node_t *exp, node_t *stmt) {
     emit("while "); 

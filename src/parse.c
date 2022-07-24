@@ -180,20 +180,23 @@ node_t *expr() {
     return e1;
 }
 
-// type = [^=),]*
+// type = id | str
 node_t *type() {
-    return tk_list(Type, "=),");
+    return (tk == Id)?id():
+           (tk == Str)?str():
+           op0(None);
+    // return tk_list(Type, "=),");
 }
 
-// assign = (term|field) (= expr)?
+// assign = (term|pid(:type)?) (= expr)?
 node_t *assign() {
     node_t *n = NULL, *t = NULL, *e = NULL;
     if (tk == Id) {
         scan_save();
-        n = id();
+        n = pid();
         if (tk == ':') { // 如果沒有 : 會傳回 NULL
             next();
-            t = type(); // 如果是空的，會傳回 node with empty list
+            t = type();
         }
         if (tk == '=') {
             next();
@@ -357,19 +360,15 @@ node_t *stmt() {
         node_t *nexp = expr();
         node_t *ncatch = stmt();
         r->node = op3(Try, nbody, nexp, ncatch);
-    } else if (tk == Throw) {
+    } else if (tk == Throw || tk == Return) {
+        int op = tk;
         next();
         e = expr();
-        r->node = op1(Throw, e);
-    } else if (tk == Return || tk == '?') { // ?exp = return exp
-        token_t t = next();
-        e = expr();
-        int op = (t.tk == '?') ? '?' : Return;
         r->node = op1(op, e);
     } else if (tk == Continue || tk == Break) {
         token_t t = next();
         r->node = op0(t.tk);
-    } else { // term(:type?)?(= expr)?
+    } else {
         r->node = assign();
     }
     return r;

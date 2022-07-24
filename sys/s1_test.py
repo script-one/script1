@@ -11,3 +11,15 @@ log(keys(map1))
 log(values(map1))
 log(list(range(1,10)))
 log(list(range(1,10,2)))
+
+log('null=', null)
+
+glob.x = 3
+log('@x=', glob.x)
+
+def g1():
+    glob.x = 5
+
+g1()
+log('@x=', glob.x)
+

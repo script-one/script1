@@ -3,4 +3,4 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies:
   script1:
-    path: ./sys/script1/
+    path: /ccc111/script1/sys/dart/script1/
