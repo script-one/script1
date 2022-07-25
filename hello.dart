@@ -4,3 +4,4 @@ void main() {
 dynamic name='script1';                            // (1) 
 log('hello',name);                                 // (2) 
 }
+
