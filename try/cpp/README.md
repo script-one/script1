@@ -1,5 +1,8 @@
 # C++
 
+* https://www.geeksforgeeks.org/features-of-c-20/
+* [Effective Modern C++](https://moodle.ufsc.br/pluginfile.php/2377667/mod_resource/content/0/Effective_Modern_C__.pdf)
+
 * [山姆大叔談 C++](https://ithelp.ithome.com.tw/users/20120425/ironman/2507)
 
 * [DAY 3：只能死一次，不能鞭屍，談 std::unique_ptr<T>，卷一](https://ithelp.ithome.com.tw/articles/10213866)
