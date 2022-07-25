@@ -41,7 +41,7 @@ jmp -30	 // 46
 get s	 // 48
 ret	 // 50
 lev	 // 51
-// fn main(){\n
+// fn main(){\n    
 fn main	 // 52
 ent 0	 // 54
 // log('sum(10)=', sum(10))\n}\n

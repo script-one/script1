@@ -9,5 +9,5 @@ fn:int sum(n) {
 }
 
 fn main(){
-log('sum(10)=', sum(10))
+    log('sum(10)=', sum(10))
 }
