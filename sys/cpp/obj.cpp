@@ -26,7 +26,11 @@ class Obj {
     Obj() {
         type = NONE;
     }
-
+/*
+    Obj(const Obj &o) {
+        this = &o;
+    }
+*/
     Obj(double f1) {
         type = FLOAT;
         f = f1;
@@ -68,7 +72,8 @@ class Obj {
             a.f += b.f;
             return a;
         } else if (a.type == STRING && b.type == STRING) {
-            return Obj(*a.pstr+*b.pstr);
+            string s = *a.pstr+*b.pstr;
+            return Obj(s);
         }
         return Obj();
     }
@@ -107,6 +112,17 @@ class Obj {
             }
             os << "]";
         }
+        else if (o.type == MAP) {
+            os << "{";
+            for(map<string,Obj*>::iterator i = o.pmap->begin(); i != o.pmap->end(); ++i)
+            {
+                string key = i->first;
+                Obj* obj = i->second;
+                os << key << ":" << *obj;
+                if (next(i) != o.pmap->end()) os << ",";
+            }
+            os << "}";
+        }
         else os << "(obj:type error)";
         return os;
     }
@@ -115,33 +131,6 @@ class Obj {
         // 
     }
 };
-
-/*
-class Array : public Obj {
-    public:
-    vector<Obj> v; 
-
-    Array():v() {
-        type = OBJECT;
-    }
-    Array(initializer_list<Obj> a):v(a) {
-        type = OBJECT;
-        // copy(a.begin(), a.end(), *this);
-    }
-
-    friend ostream& operator<<(ostream& os, const Array& a) {
-        auto v = a.v;
-        int len = v.size();
-        os << "[";
-        for (int i=0; i<len; i++) {
-            os << v[i];
-            if (i < len-1) os << ",";
-        }
-        os << "]";
-        return os;
-    }
-};
-*/
 
 void obj_test() {
     // test
@@ -192,10 +181,14 @@ void array_test() {
     auto x = Obj(&c);
     cout << "&c=" << &c << endl;
     cout << "x=" << x << endl;
-    vector<Obj*> e = {&a, &dog, &x};
-    e.push_back(&cat);
-    auto y = Obj(&e);
-    cout << y << endl;
+    vector<Obj*> a1 = {&a, &dog, &x};
+    a1.push_back(&cat);
+    auto a1o = Obj(&a1);
+    cout << a1o << endl;
+    map<string, Obj*> m1 = {{"a", &a}, {"dog", &dog}, {"cat", &cat}};
+    auto m1o = Obj(&m1);
+    a1.push_back(&m1o);
+    cout << a1o << endl;
     // cout << e.v[2] << endl;
     // e.v.push_back(oc);
     // cout << e.v[2] << endl;
