@@ -2,7 +2,7 @@
 import 'package:script1/script1.dart';
 void main() {
 dynamic e2c={'dog':'狗','cat':'貓','a':'一隻','the':'這隻','chase':'追','bite':'吃'}; // (1) 
-List translate([ewords])                           // (3) 
+dynamic translate([ewords])                        // (3) 
 {                                                  // (3) 
     dynamic cwords=[];                             // (4) 
     for (var e in ewords)                          // (5) 

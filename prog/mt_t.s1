@@ -1,0 +1,15 @@
+e2c:'map<string,string>'={'dog':'狗', 'cat':'貓', 'a':'一隻', 'the':'這隻', 'chase':'追', 'bite':'吃'}
+
+fn translate(ewords:'vector<string>'=[]) {
+  cwords:'vector<string>'=[]
+  for e in ewords {
+    push(cwords, e2c[e])
+  }
+  return cwords
+}
+
+fn:int main() {
+    c := translate(['a','dog','chase','a','cat'])
+    log(str(c))
+}
+ 

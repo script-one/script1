@@ -5,3 +5,4 @@ set -e
 ./runcpp.sh sum_t
 ./runcpp.sh fn_t
 ./runcpp.sh for
+./runcpp.sh array_t

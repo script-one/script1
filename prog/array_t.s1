@@ -1,0 +1,9 @@
+fn:double mean(a:'vector<double>') {
+    s:=0.0
+    for x in a s = s+x
+    return s/len(a)
+}
+
+fn:int main() {
+    log('mean([1 2 3 4 5])=', str(mean([1.0,2,3,4,5])))
+}

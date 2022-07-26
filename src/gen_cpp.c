@@ -91,8 +91,10 @@ static void gen_assign(node_t *head, node_t *type, node_t *exp) {
     if (type && head->type == Pid) {
         if (type->type == None) {
             emit("auto ");
-        } else 
-            emit("%.*s ", type->ptk->len, type->ptk->str);
+        } else {
+            gen_type(type);
+            emit(" ");
+        }
     }
     gen_code(head);
     if (exp) {

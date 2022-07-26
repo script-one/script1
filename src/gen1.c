@@ -104,9 +104,27 @@ static void gen_key(node_t *node) {
 }
 
 static void gen_pair(node_t *n1, node_t *n2) {
-    gen_code(n1);
-    emit(":");
-    gen_code(n2);
+    #ifdef __CPP__
+        emit("{");
+        gen_code(n1);
+        emit(",");
+        gen_code(n2);
+        emit("}");
+    #else
+        gen_code(n1);
+        emit(":");
+        gen_code(n2);
+    #endif
+}
+
+static void gen_type(node_t *type) {
+    if (type->type == Id) {
+        emit("%.*s", type->ptk->len, type->ptk->str);
+    } else if (type->type == Str) {
+        emit("%.*s", type->ptk->len-2, type->ptk->str+1);
+    } else { // None:
+        // emit nothing
+    }
 }
 
 // params = param*; param=field=exp; field=id(:type?)?
@@ -122,8 +140,10 @@ static void gen_params(link_t *head) {
         node_t *nid = nfield->array[0];
         #ifdef __CPP__
             node_t *ntype = nfield->array[1];
-            gen_code(ntype);
-            emit(" ");
+            if (ntype) {
+                gen_type(ntype);
+                emit(" ");
+            }
         #endif
         gen_code(nid);
         if (nexp) {
