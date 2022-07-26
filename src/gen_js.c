@@ -14,11 +14,12 @@ static void gen_class(node_t *nid, node_t *eid, node_t *nbody) {
     emit(" {"); /*line(0);*/ block_level++;
     for (link_t *p = nbody->list->head; p != NULL; p = p->next) {
         if (p->node->type != Function) continue;
-        node_t *nasync  = p->node->array[0];
-        node_t *nid  = p->node->array[1];
-        node_t *nret = p->node->array[2];
-        node_t *nparams = p->node->array[3];
-        node_t *nbody= p->node->array[4];
+        node_t **args = p->node->array;
+        node_t *nasync  = args[0];
+        node_t *nid  = args[1];
+        node_t *nret = args[2];
+        node_t *nparams = args[3];
+        node_t *nbody= args[4];
 
         char *name = nid->ptk->str; int len=nid->ptk->len;
         line(nid->ptk->line); indent(block_level);

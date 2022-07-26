@@ -1,6 +1,6 @@
 class Person {
-    name
-    age
+    name:String
+    age:int
     
     fn __init(name, age) {
         $name = name

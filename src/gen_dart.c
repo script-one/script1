@@ -13,18 +13,29 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
 
     emit(" {"); line(0); block_level++;
     for (link_t *p = cbody->list->head; p != NULL; p = p->next) {
+        node_t **args = p->node->array;
         if (p->node->type == Field) {
             indent(block_level);
-            emit("var "); // p->node->array[1]=type not handled yet!
-            gen_id(p->node->array[0]);
+            /* 這段暫時不做，因為會有 null safety 的問題
+               1. 若 type 不加 ? 則必須 initialize
+               2. 若 type 加 ? 則後面 + 等動作會報 Error (不能加 null) 
+                  (於是可能得再加上 ! 去解決)
+
+            if (args[1]) { 
+              emit("%.*s ", args[1]->ptk->len, args[1]->ptk->str);
+            } else 
+              emit("var ");
+            */
+            emit("var ");
+            gen_id(args[0]);
             emit(";");
             line(0);
         } else if (p->node->type == Function) {
-            node_t *nasync  = p->node->array[0];
-            node_t *nid  = p->node->array[1];
-            node_t *nret = p->node->array[2];
-            node_t *nparams = p->node->array[3];
-            node_t *nbody= p->node->array[4];
+            node_t *nasync  = args[0];
+            node_t *nid  = args[1];
+            node_t *nret = args[2];
+            node_t *nparams = args[3];
+            node_t *nbody= args[4];
 
             char *name = nid->ptk->str; int len=nid->ptk->len;
             line(nid->ptk->line); indent(block_level); 
@@ -33,8 +44,6 @@ static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
             } else {
                 gen_code(nid);
             }
-            // node_t *ntype = nval->array[1], *params = nval->array[2], *block=nval->array[3];
-            // if (ntype) gen_code(ntype);
             if (nret) {
                 if (nasync) emit("Future<");
                 gen_code(nret);
@@ -83,7 +92,6 @@ static void gen_pid(node_t *pid) {
 
 // assign = (term|pid(:type)?) (= expr)?
 static void gen_assign(node_t *term, node_t *type, node_t *exp) {
-    // if (type) emit("var ");
     if (type) emit("dynamic ");
     gen_code(term);
     if (exp) {
