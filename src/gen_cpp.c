@@ -120,7 +120,7 @@ static void gen_function(int type, node_t *async, node_t *id, node_t *ret, node_
         gen_code(body);
         emit("; } ");
     } else {
-        if (ret) { gen_code(ret); emit(" "); } else emit("void ");
+        if (ret) { gen_code(ret); emit(" "); } else emit("auto ");
         gen_code(id); // if (id) gen_code(id);
         gen_code(params);
         if (async) emit(" async ");

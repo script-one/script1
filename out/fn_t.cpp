@@ -1,7 +1,7 @@
 // source file: prog/fn_t.s1
 #include <s1.cpp>
 
-int inc(int x)                                     // (1) 
+auto inc(int x)                                    // (1) 
 {                                                  // (1) 
     return (x+1);                                  // (1) 
 }                                                  // (1) 
