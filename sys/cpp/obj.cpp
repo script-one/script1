@@ -47,6 +47,21 @@ class Obj {
         pmap = m1;
     }
 
+    Obj *get(int i) {
+        if (type == ARRAY && i < parray->size()) {
+            return (*parray)[i];
+        }
+        return NULL;
+    }
+
+    Obj *get(string key) {
+        if (type == MAP) {
+            auto it = pmap->find(key);  
+            return it->second;
+        }
+        return NULL;
+    }
+
     // https://www.tutorialspoint.com/cplusplus/assignment_operators_overloading.htm
     void operator=(const Obj &b) { 
         type = b.type;
@@ -185,6 +200,8 @@ void json_test() {
     auto m1o = Obj(&m1);
     a1.push_back(&m1o);
     cout << a1o << endl;
+    cout << "m1.get(dog)=" << *(m1o.get("dog")) << endl;
+    cout << "a1.get(2)=" << *(a1o.get(2)) << endl;
     // cout << e.v[2] << endl;
     // e.v.push_back(oc);
     // cout << e.v[2] << endl;
