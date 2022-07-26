@@ -1,0 +1,8 @@
+fn:int inc(x:int) { return x+1; }
+
+add:= fn:double (x:double,y:double) { x+y }
+
+fn:int main() {
+    log('inc(2)=', str(inc(2)))
+    log('add(2,3)=', str(add(2,3)))
+}

@@ -9,8 +9,10 @@
 using namespace std;
 
 void log(auto a, string b="", string c="", string d="", string e="", string f="", string g="", string h="") {
-  cout << a << b << c << d << e << f << g << h;
+  cout << a << " " << b << " " << c << " " << d << " " << e << " " << f << " " << g << " " << h << endl;
 }
+
+#define str(x) std::to_string(x)
 
 vector<int> range(int from, int to, int step=1) {
     vector<int> r;

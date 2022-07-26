@@ -54,6 +54,7 @@ static void gen_for_in(node_t *id, node_t *exp, node_t *stmt) {
     gen_code(id);
     emit(" in ");
     gen_code(exp);
+    emit(" ");
     gen_code(stmt);
 }
 

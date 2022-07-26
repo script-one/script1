@@ -45,10 +45,6 @@ static void gen_cexpr(node_t *e1, node_t *e2, node_t *e3) {
     gen_code(e3);
 }
 
-static void gen_str(node_t *node) {
-    emit("\'%.*s\'", node->ptk->len-2, node->ptk->str+1);
-}
-
 // class = 'class' id 'extends' eid map
 static void gen_class(node_t *cid, node_t *eid, node_t *cbody) {
     emit("class ");

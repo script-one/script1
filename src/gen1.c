@@ -14,6 +14,14 @@ static void line(int i) {
   }
 }
 
+static void gen_str(node_t *node) {
+#ifdef __CPP__
+    emit("\"%.*s\"", node->ptk->len-2, node->ptk->str+1);
+#else
+    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
+#endif
+}
+
 // return expr
 static void gen_return(int op, node_t *exp) {
     emit("return ");
@@ -79,9 +87,15 @@ static void gen_stmts(node_t *node) {
 
 // array = [ expr* ]
 static void gen_array(link_t *head) {
-    emit("[");
-    gen_list(head, ",");
-    emit("]");
+    #ifdef __CPP__
+        emit("{");
+        gen_list(head, ",");
+        emit("}");
+    #else
+        emit("[");
+        gen_list(head, ",");
+        emit("]");
+    #endif
 }
 
 static void gen_key(node_t *node) {
@@ -106,7 +120,11 @@ static void gen_params(link_t *head) {
         node_t *nfield = nparam->array[0];
         node_t *nexp = nparam->array[1];
         node_t *nid = nfield->array[0];
-        // node_t *ntype = nfield->array[1];
+        #ifdef __CPP__
+            node_t *ntype = nfield->array[1];
+            gen_code(ntype);
+            emit(" ");
+        #endif
         gen_code(nid);
         if (nexp) {
             emit("=");

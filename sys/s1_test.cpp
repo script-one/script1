@@ -1,4 +1,4 @@
-#include "s1.cpp"
+#include <s1.cpp>
 
 int main() {
     log("hello ", "world!\n");

@@ -1,4 +1,4 @@
-fn:num inc(x) { return x+1; }
+fn:int inc(x) { return x+1; }
 
 add:= fn(x,y) { x+y }
 

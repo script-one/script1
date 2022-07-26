@@ -1,0 +1,13 @@
+fn:int sum(n:int) {
+    i:=1
+    s:=0
+    while (i<=n) {
+        s=s+i
+        i=i+1
+    }
+    return s
+}
+
+fn:int main(){
+    log('sum(10)=', str(sum(10)))
+}

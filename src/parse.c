@@ -198,10 +198,10 @@ node_t *assign() {
     if (tk == Id) {
         scan_save();
         n = pid();
-        if (tk == ':') { // 如果沒有 : 會傳回 NULL
+        if (tk == ':') {
             next();
             t = type();
-        }
+        } // else t=NULL
         if (tk == '=') {
             next();
             e = expr();

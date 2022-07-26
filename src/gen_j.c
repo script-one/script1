@@ -32,10 +32,6 @@ static void gen_while(node_t *exp, node_t *stmt) {
     gen_code(stmt);
 }
 
-static void gen_str(node_t *node) {
-    emit("'%.*s'", node->ptk->len-2, node->ptk->str+1);
-}
-
 static void gen_term(node_t *key, node_t *pid, link_t *head) {
     if (key) {
         gen_code(key);

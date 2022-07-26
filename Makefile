@@ -4,7 +4,7 @@ OBJS = s1 vm1
 
 all: $(OBJS)
 
-s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c src/gen_py.c src/gen_ir.c
+s1: src/s1.c src/gen_js.c src/gen_s1.c src/gen_dart.c src/gen_py.c src/gen_cpp.c src/gen_ir.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 vm1: src/vm/vm1.c

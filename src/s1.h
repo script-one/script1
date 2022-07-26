@@ -110,4 +110,5 @@ void gen_s1(node_t *root);
 void gen_js(node_t *root);
 void gen_dart(node_t *root);
 void gen_py(node_t *root);
+void gen_cpp(node_t *root);
 void gen_ir(node_t *root);
