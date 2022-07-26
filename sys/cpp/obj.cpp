@@ -26,11 +26,7 @@ class Obj {
     Obj() {
         type = NONE;
     }
-/*
-    Obj(const Obj &o) {
-        this = &o;
-    }
-*/
+
     Obj(double f1) {
         type = FLOAT;
         f = f1;
@@ -132,7 +128,7 @@ class Obj {
     }
 };
 
-void obj_test() {
+void op_test() {
     // test
     Obj s("Hello");
     Obj a(5.0), b(2.0);
@@ -175,7 +171,7 @@ void obj_test() {
     cout << "a+b=" << (a+b) << endl;
 }
 
-void array_test() {
+void json_test() {
     auto a=Obj("a"), dog=Obj("dog"), cat=Obj("cat");
     vector<Obj*> c = {&cat};
     auto x = Obj(&c);
@@ -197,6 +193,6 @@ void array_test() {
 }
 
 int main() {
-    obj_test();
-    array_test();
+    op_test();
+    json_test();
 }
