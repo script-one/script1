@@ -1,7 +1,7 @@
 #include <s1.cpp>
 
 int main() {
-    log("hello ", "world!\n");
+    log("hello", "world!", 3.14169);
     for (auto i:range(2,7)) {
         cout << i << endl;
     }
@@ -35,4 +35,5 @@ int main() {
     auto mappedNums = map1<vector<int>>(nums, [](int &x) { return x*x; });
     each<vector<int>>(mappedNums, [](int &x) { cout << x << endl; });
 
+    // cout << str(100) << str("hello") << "\n";
 }
