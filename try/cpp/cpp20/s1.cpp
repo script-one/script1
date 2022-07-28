@@ -9,6 +9,7 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <concepts>
 using namespace std;
 
 // variadic template : 參考 A Tour Of C++: 7.4 節
@@ -53,7 +54,19 @@ template <typename T> string join(vector<T> v, string spliter) {
 }
 */
 
-string join(vector<any> v, string spliter) {
+template<typename T, typename ... U>
+concept IsAnyOf = (std::same_as<T, U> || ...);
+
+template<typename T>
+concept IsPrintable = std::integral<T> || std::floating_point<T> ||
+    IsAnyOf<std::remove_cvref_t<std::remove_pointer_t<std::decay_t<T>>>, char, wchar_t>;
+
+void println(IsPrintable auto const ... arguments)
+{
+    (std::wcout << ... << arguments) << '\n';
+}
+
+string join(IsPrintable auto v, string spliter) {
     stringstream ss;
     for (const any &x : v) {
         ss << x;

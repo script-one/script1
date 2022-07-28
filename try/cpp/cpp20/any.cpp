@@ -31,10 +31,13 @@ int main() {
     // cout << x << '\n';
     // cout << a[0] << "\n";
     // auto k = 3.14159;
+    /*
     variant<string, double> k = 3.14159;
     stringstream ss;  
     ss<<k;
     string s;  
     ss>>s;
-    cout << "s=" << s << '\n';   
+    cout << "s=" << s << '\n';
+    */
+      
 }

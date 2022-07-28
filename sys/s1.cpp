@@ -5,17 +5,44 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <any>
+#include <sstream>
 #include <algorithm>
 #include <functional>
 using namespace std;
 
+// variadic template : 參考 A Tour Of C++: 7.4 節
+template<typename T, typename... Tail>
+void log(T head, Tail... tail)
+{
+    cout << head << ' ';
+    if constexpr(sizeof...(tail)>0) {
+        log(tail...);
+    } else {
+        cout << endl;
+    }
+}
+
+// 摺疊運算式 C++17: 參考 參考 A Tour Of C++: 7.4.1 節
+/*
+template<typename... T>
+void log(T&&...args)
+{
+    (cout <<... << args) << '\n';
+}
+*/
+/*
 void log(auto a, string b="", string c="", string d="", string e="", string f="", string g="", string h="") {
   cout << a << " " << b << " " << c << " " << d << " " << e << " " << f << " " << g << " " << h << endl;
 }
+*/
 
-#define str(x) to_string(x)
+// #define str(x) to_string(x)
+#define str(x) ({ string s = stringstream() << x; s; })
+
 #define len(x) x.size()
 
+/*
 template <typename T> string join(vector<T> v, string spliter) {
     string s;
     for (const T &x : v) {
@@ -24,7 +51,19 @@ template <typename T> string join(vector<T> v, string spliter) {
     }
     return s;
 }
-
+*/
+/*
+string join(vector<any> v, string spliter) {
+    stringstream ss;
+    for (const any &x : v) {
+        ss << x;
+        ss << spliter;
+    }
+    string s;
+    ss >> s;
+    return s;
+}
+*/
 vector<int> range(int from, int to, int step=1) {
     vector<int> r;
     for (int i = from; i < to; i+=step)

@@ -10,23 +10,6 @@
 
 using namespace std;
 
-// 本 Obj 物件盡量不用動態分配，利用字面常數字串，並自行在最後釋放所有 newstr() 出來的字串。
-vector<string*> strpool;
-
-string *newstr(string s) {
-    string *p = new string(s);
-    strpool.push_back(p);
-    return p;
-}
-
-void destroy() {
-    for (auto p:strpool) {
-        cout << "delete:" << *p << '\n';
-        delete p;
-    }
-}
-
-
 #define i32(f) (int32_t)floor(f)
 
 typedef enum { NONE, FLOAT, STRING, ARRAY, MAP } Type;
@@ -43,14 +26,19 @@ class Obj {
 
     Obj() { type = NONE; }
     Obj(double f1) { type = FLOAT; f = f1; }
-    Obj(string *str1) { type = STRING; pstr = str1; }
+    Obj(string str1) { type = STRING; str = str1; }
     Obj(vector<Obj*> *a1) { type = ARRAY; parray = a1; }
     Obj(map<string, Obj*> *m1) { type = MAP; pmap = m1; }
-    Obj(const Obj&) = default; // 使用預設的複製建構子
-    Obj(Obj&&) = default; // 使用預設的移動建構子
+    // Obj(const Obj&) = default; // 使用預設的複製建構子
+    // Obj(Obj&&) = default; // 使用預設的移動建構子
     // Obj(Obj&&) = delete; // 禁止預設的移動建構子，這樣的話
     // return Obj(...), return xxx 就會被禁止使用，然後出現一大堆警告
     // 說 error: use of deleted function 'Obj::Obj(Obj&&)
+    Obj(const Obj& b) { // 複製建構子
+        type = b.type;
+        if (type == STRING) delete pstr;
+    }
+    // Obj(Obj&&) = default; // 使用預設的移動建構子
 
     // uniary
     Obj operator-() const { return Obj(-f); }
@@ -77,7 +65,7 @@ class Obj {
     void operator=(const Obj &b) { 
         type = b.type;
         if (type == FLOAT) f = b.f;
-        else if (type == STRING) pstr = b.pstr;
+        else if (type == STRING) str = b.str;
         else if (type == ARRAY) parray = b.parray;
         else if (type == MAP) pmap = b.pmap;
         else throw "Error: Obj::= type not supported!";
@@ -88,10 +76,13 @@ class Obj {
     }
     void operator=(const string &b) { 
         type = STRING;
-        *pstr = b;
+        str = b;
     }
 
-    ~Obj();
+    ~Obj() {
+        // cout << "desctruct:" << *this << endl;
+        cout << "desctruct obj:type=" << this->type << endl;
+    }
 };
 
 // ref -- https://en.cppreference.com/w/cpp/language/operators
@@ -101,8 +92,8 @@ Obj operator+(Obj a, const Obj& b) {
         a.f += b.f;
         return a;
     } else if (a.type == STRING && b.type == STRING) {
-        string *s = newstr(*a.pstr+*b.pstr); // 用 newstr(...) 才能在最後回收！
-        return Obj(s);
+        string s = a.str+b.str;
+        return s;
     }
     throw "Error: Obj a+b fail!"s;
 }
@@ -126,7 +117,7 @@ Obj operator!=(Obj &a, const Obj &b) { return a.f != b.f; }
 ostream& operator<<(ostream& os, const Obj& o) {
     if (o.type == NONE) os << "(Obj:none)";
     else if (o.type == FLOAT) os << o.f;
-    else if (o.type == STRING) os << "\"" << *o.pstr << "\"";
+    else if (o.type == STRING) os << "\"" << o.str << "\"";
     else if (o.type == ARRAY) {
         os << "[";
         vector<Obj*> *v = o.parray;
@@ -153,18 +144,11 @@ ostream& operator<<(ostream& os, const Obj& o) {
     return os;
 }
 
-Obj::~Obj() {
-    // cout << "desctruct obj:type=" << this->type << endl;
-    // cout << "desctruct obj=" << *this << endl;
-}
-
-static string shello = "Hello"s, sworld = "World"s;
-
 void op_test() {
-    Obj s(&shello);
+    Obj s("Hello");
     Obj a(5.0), b(2.0);
     cout << "s=" << s << endl;
-    cout << "s+World=" << s+Obj(&sworld) << endl;
+    cout << "s+World=" << s+Obj("World") << endl;
     cout << "a=" << a << endl;
     cout << "b=" << b << endl;
     cout << "a+b=" << a+b << endl;
@@ -206,8 +190,7 @@ void op_test() {
     };
 }
 
-string sa="A"s, sdog="Dog"s, scat="Cat"s;
-static Obj a=Obj(&sa), dog=Obj(&sdog), cat=Obj(&scat), cat2=Obj(cat);
+static Obj a=Obj("a"), dog=Obj("dog"), cat=Obj("cat"), cat2=Obj(cat);
 
 void json_test() {
     // auto a=Obj("a"), dog=Obj("dog"), cat=Obj("cat"), cat2=Obj(cat);
@@ -216,6 +199,7 @@ void json_test() {
     auto x = Obj(&c);
     cout << "&c=" << &c << '\n';
     cout << "x=" << x << endl;
+    /*
     vector<Obj*> a1 = {&a, &dog, &x};
     a1.push_back(&cat);
     a1.push_back(&cat2);
@@ -227,8 +211,9 @@ void json_test() {
     cout << a1o << endl;
     cout << "m1[dog]=" << m1o["dog"] << endl;
     cout << "a1[2]=" << a1o[2] << endl;
+    */
 }
-
+/*
 void mt_test() {
     map<string, Obj*> e2c={{"a",&a},{"dog", &dog},{"cat", &cat}}; // ,,{"the","這隻"},{"chase","追"},{"bite","吃"}}};
     vector<string> ewords={ "a", "dog" };
@@ -237,14 +222,12 @@ void mt_test() {
     {
         auto c = e2c[e];
         cwords.push_back(*c->pstr);
-        cout << *c << ' ';
+        cout << c;
     }
-    cout << '\n';
 }
-
+*/
 int main() {
     op_test();
     json_test();
-    mt_test();
-    destroy();
+    // mt_test();
 }
