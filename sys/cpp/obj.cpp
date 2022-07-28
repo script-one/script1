@@ -20,16 +20,16 @@ string *newstr(string s) {
 }
 
 void destroy() {
+    cout << "===== destroy =======\n";
     for (auto p:strpool) {
         cout << "delete:" << *p << '\n';
         delete p;
     }
 }
 
-
 #define i32(f) (int32_t)floor(f)
 
-typedef enum { NONE, FLOAT, STRING, ARRAY, MAP } Type;
+typedef enum { NONE, FLOAT, STRING, ARRAY, MAP, ARRAY_F64 } Type;
 
 class Obj {
     public:
@@ -39,13 +39,17 @@ class Obj {
         string *pstr;
         vector<Obj*> *parray;
         map<string, Obj*> *pmap;
+        vector<double> *parray_f64; // 為了效能而設計的。
+        // 之後也可以再加入 parray_i8, parray_u8, ...
     };
 
     Obj() { type = NONE; }
     Obj(double f1) { type = FLOAT; f = f1; }
+    Obj(string str1) { type = STRING; pstr = newstr(str1); } // Obj("Hello"s) 中 "Hello"s 是臨時變數，離開 scope 就會被回收。所以需要 new
     Obj(string *str1) { type = STRING; pstr = str1; }
     Obj(vector<Obj*> *a1) { type = ARRAY; parray = a1; }
     Obj(map<string, Obj*> *m1) { type = MAP; pmap = m1; }
+    Obj(vector<double> *a1) { type = ARRAY_F64; parray_f64 = a1; }
     Obj(const Obj&) = default; // 使用預設的複製建構子
     Obj(Obj&&) = default; // 使用預設的移動建構子
     // Obj(Obj&&) = delete; // 禁止預設的移動建構子，這樣的話
@@ -56,9 +60,12 @@ class Obj {
     Obj operator-() const { return Obj(-f); }
     Obj operator!() const { return Obj(!f); }
     Obj operator~() const { return Obj(~i32(f)); }
-    Obj& operator[](size_t i) {
+    // Obj& operator[](size_t i) { // 不能加 & ，否則 return (*parray_f64)[i] 會報錯！
+    Obj operator[](size_t i) {
         if (type == ARRAY && i < parray->size()) {
             return *(*parray)[i];
+        } else if (type == ARRAY_F64 && i < parray->size()) {
+            return (*parray_f64)[i];
         } else {
             throw "Error: Obj[i] fail!"s;
         }
@@ -80,15 +87,18 @@ class Obj {
         else if (type == STRING) pstr = b.pstr;
         else if (type == ARRAY) parray = b.parray;
         else if (type == MAP) pmap = b.pmap;
+        else if (type == ARRAY_F64) parray_f64 = b.parray_f64;
         else throw "Error: Obj::= type not supported!";
     }
+
     void operator=(const double &b) { 
         type = FLOAT;
         f = b;
     }
-    void operator=(const string &b) { 
+
+    void operator=(string *p) { 
         type = STRING;
-        *pstr = b;
+        pstr = p;
     }
 
     ~Obj();
@@ -149,6 +159,17 @@ ostream& operator<<(ostream& os, const Obj& o) {
         }
         os << "}";
     }
+    else if (o.type == ARRAY_F64) {
+        os << "[";
+        vector<double> *v = o.parray_f64;
+        int len = v->size();
+        for (int i=0; i<len; i++) {
+            double f = (*v)[i];
+            os << f;
+            if (i < len-1) os << ",";
+        }
+        os << "]";
+    }
     else os << "(obj:type error)";
     return os;
 }
@@ -158,10 +179,11 @@ Obj::~Obj() {
     // cout << "desctruct obj=" << *this << endl;
 }
 
-static string shello = "Hello"s, sworld = "World"s;
+string shello = "Hello"s, sworld = "World"s;
 
 void op_test() {
-    Obj s(&shello);
+    // Obj t{&"Hello"s}; // error: taking address of temporary [-fpermissive]
+    Obj s{&shello};
     Obj a(5.0), b(2.0);
     cout << "s=" << s << endl;
     cout << "s+World=" << s+Obj(&sworld) << endl;
@@ -193,7 +215,7 @@ void op_test() {
     a = s;
     cout << "a=s" << endl;
     cout << "a=" << (a) << endl;
-    a = "World";
+    a = &sworld;
     cout << "a=World" << endl;
     cout << "a=" << (a) << endl;
     cout << "s=" << (s) << endl;
@@ -206,8 +228,8 @@ void op_test() {
     };
 }
 
-string sa="A"s, sdog="Dog"s, scat="Cat"s;
-static Obj a=Obj(&sa), dog=Obj(&sdog), cat=Obj(&scat), cat2=Obj(cat);
+string scat="Cat"s;
+static Obj a{"A"}, dog{"Dog"s}, cat{&scat}, cat2{cat};
 
 void json_test() {
     // auto a=Obj("a"), dog=Obj("dog"), cat=Obj("cat"), cat2=Obj(cat);
@@ -242,9 +264,16 @@ void mt_test() {
     cout << '\n';
 }
 
+void f64_test() {
+    vector<double> vf64 = {3.14159, 2.71828};
+    Obj of64{&vf64};
+    cout << of64 << '\n';
+}
+
 int main() {
     op_test();
     json_test();
     mt_test();
+    f64_test();
     destroy();
 }
