@@ -5,6 +5,7 @@
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <sstream>
 #include <math.h>
 #include <stdint.h>
 
@@ -252,16 +253,19 @@ void json_test() {
 }
 
 void mt_test() {
-    map<string, Obj*> e2c={{"a",&a},{"dog", &dog},{"cat", &cat}}; // ,,{"the","這隻"},{"chase","追"},{"bite","吃"}}};
-    vector<string> ewords={ "a", "dog" };
-    vector<string> cwords={};
+    cout << "=========== mt_test =========\n";
+    map<string, string> e2c={{"a","A"},{"dog", "DOG"},{"cat", "CAT"}, {"chase", "CHASE"}}; // ,,{"the","這隻"},{"chase","追"},{"bite","吃"}}};
+    vector<string> ewords={ "a", "dog", "chase", "a", "cat" };
+    // vector<string> cwords={};
+    stringstream ss;
     for (auto e:ewords)
     {
         auto c = e2c[e];
-        cwords.push_back(*c->pstr);
-        cout << *c << ' ';
+        // cwords.push_back(c);
+        ss << e << ":" << c << ' ';
+        // cout << *c << ' ';
     }
-    cout << '\n';
+    cout << ss.str() << '\n';
 }
 
 void f64_test() {
